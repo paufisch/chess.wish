@@ -1,3 +1,11 @@
+
+# Suicide chess
+
+In this project we want to impelemt a slightly simplified version of chess in C++, featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
+
+The implementation builds on the Lama template project. So far this repository contains the copied lama project.
+
+
 # Lama
 
 This is a simple C++ implementation of the game "Lama" by AMIGO. You can read the game's rules [here](https://www.amigo.games/content/ap/rule/19420--031-2019-Lama_Manual_002_LAYOUT[1].pdf). The implementation features a client/server architecture for multiplayer scenarios.
