@@ -7,7 +7,7 @@
 
 
 // Main app class
-class Lama : public wxApp
+class Chess : public wxApp
 {
 public:
     virtual bool OnInit();

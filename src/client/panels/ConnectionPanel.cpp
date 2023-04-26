@@ -9,11 +9,13 @@
 ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
 
     wxColor white = wxColor(255, 255, 255);
-    this->SetBackgroundColour(white);
+    wxColor red = wxColor(136,26,50);
+    wxColor dark_blue = wxColor(55,65,135);
+    this->SetBackgroundColour(red);
 
     wxBoxSizer* verticalLayout = new wxBoxSizer(wxVERTICAL);
 
-    ImagePanel* logo = new ImagePanel(this, "assets/lama_logo.png", wxBITMAP_TYPE_ANY, wxDefaultPosition, wxSize(200, 250));
+    ImagePanel* logo = new ImagePanel(this, "../assets/chess_logo.png", wxBITMAP_TYPE_ANY, wxDefaultPosition, wxSize(200, 250));
     verticalLayout->Add(logo, 0, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 10);
 
     this->_serverAddressField = new InputField(
@@ -22,6 +24,7 @@ ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
         100, // width of label
         default_server_host, // default value (variable from "default.conf")
         240 // width of field
+
     );
     verticalLayout->Add(this->_serverAddressField, 0, wxTOP | wxLEFT | wxRIGHT, 10);
 

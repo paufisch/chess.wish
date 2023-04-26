@@ -19,7 +19,7 @@ GameWindow::GameWindow(const wxString& title, const wxPoint& pos, const wxSize& 
     this->SetBackgroundColour(lightBlue);
 
     // Set the minimum size of the window. The user won't be able to resize the window to a size smaller than this
-    this->SetMinSize(wxSize(1000, 720));
+    this->SetMinSize(wxSize(500, 500));
 
 }
 

@@ -2,7 +2,7 @@
 
 
 // Application entry point
-bool Lama::OnInit()
+bool Chess::OnInit()
 {
     // Allow loading of JPEG  and PNG image files
     wxImage::AddHandler(new wxJPEGHandler());
@@ -10,7 +10,7 @@ bool Lama::OnInit()
 
     // Open main game window
     GameWindow* gameWindow = new GameWindow(
-            "LAMA", // title of window,
+            "CHESS", // title of window,
             wxDefaultPosition, // position of the window
             wxDefaultSize // size of the window
     );

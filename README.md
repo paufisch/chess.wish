@@ -11,7 +11,7 @@ The implementation builds on the Lama template project. So far this repository c
 This is a simple C++ implementation of the game "Lama" by AMIGO. You can read the game's rules [here](https://www.amigo.games/content/ap/rule/19420--031-2019-Lama_Manual_002_LAYOUT[1].pdf). The implementation features a client/server architecture for multiplayer scenarios.
 It uses [wxWidgets](https://www.wxwidgets.org/) for the GUI, [sockpp](https://github.com/fpagliughi/sockpp) for the network interface, [rapidjson](https://rapidjson.org/md_doc_tutorial.html) for object serialization, and [googletest](https://github.com/google/googletest) for the unit tests. 
 
-![Lama-logo](./assets/lama_logo.png?raw=true)
+![Lama-logo](./assets/chess_logo.png?raw=true)
 
 This is a template project for the students of the course Software Engineering. In order to adapt this template to a different game, you will only need knowledge in wxWidgets and maybe about some basic functions of rapidjson to serialize certain data types. By sticking to the template you won't need to dig into sockpp at all.
 
