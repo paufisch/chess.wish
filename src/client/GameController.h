@@ -17,7 +17,7 @@ public:
     static void updateGameState(game_state* newGameState);
     static void startGame();
     static void drawCard();
-    static void fold();
+    static void resign();
     static void playCard(card* cardToPlay);
 
     static wxEvtHandler* getMainThreadEventHandler();

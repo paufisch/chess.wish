@@ -5,7 +5,7 @@
 #include "client_request.h"
 #include "play_card_request.h"
 #include "draw_card_request.h"
-#include "fold_request.h"
+#include "resign_request.h"
 #include "join_game_request.h"
 #include "start_game_request.h"
 
@@ -99,7 +99,7 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
             return draw_card_request::from_json(json);
         }
         else if (request_type == RequestType::fold) {
-            return fold_request::from_json(json);
+            return resign_request::from_json(json);
         }
         else if (request_type == RequestType::join_game) {
             return join_game_request::from_json(json);

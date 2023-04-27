@@ -18,7 +18,7 @@
 class game_state : public unique_serializable {
 private:
 
-    static const int _max_nof_players = 6;
+    static const int _max_nof_players = 2;
     static const int _min_nof_players = 2;
 
     std::vector<player*> _players;
