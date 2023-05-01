@@ -8,9 +8,7 @@
 
 ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
 
-    wxColor white = wxColor(255, 255, 255);
     wxColor red = wxColor(136,26,50);
-    wxColor dark_blue = wxColor(55,65,135);
     this->SetBackgroundColour(red);
 
     wxBoxSizer* verticalLayout = new wxBoxSizer(wxVERTICAL);

@@ -46,6 +46,8 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
     // show our own player
     this->buildThisPlayer(gameState, me);
 
+    this->buildBoard(gameState, me);
+
     // update layout
     this->Layout();
 }
@@ -186,6 +188,40 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me) {
             innerLayout->Add(playerStatus, 0, wxALIGN_CENTER | wxBOTTOM, 8);
         }
     }
+}
+
+//this function should builds the chess board
+void MainGamePanel::buildBoard(game_state* gameState, player* me){
+
+    if(!gameState->is_started()) {
+        wxGridSizer *grid = new wxGridSizer(8, 8, 0, 0);
+
+        wxPanel **cells = new wxPanel *[64];
+        wxColor white = wxColor(255, 255, 255);
+        wxColor pink = wxColor(160, 60, 200);
+
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+
+                cells[j * 8 + i] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(50, 50));
+                if (((j % 2 == 0) && (i % 2 == 1)) || ((j % 2 == 1) && (i % 2 == 0))) {
+                    cells[j * 8 + i]->SetBackgroundColour(pink);
+                } else {
+                    cells[j * 8 + i]->SetBackgroundColour(white);
+                }
+                grid->Add(cells[j * 8 + i], 0, wxEXPAND);
+            }
+        }
+        grid->SetMinSize(wxSize(400, 400));
+
+
+        this->SetSizer(grid);
+    }
+
+    //wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
+    //sizer->Add(panel,1, wxEXPAND);
+    //this->SetSizerAndFit(sizer);
+
 }
 
 

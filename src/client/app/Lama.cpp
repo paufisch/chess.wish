@@ -10,7 +10,7 @@ bool Chess::OnInit()
 
     // Open main game window
     GameWindow* gameWindow = new GameWindow(
-            "CHESS", // title of window,
+            "SUICIDE CHESS", // title of window,
             wxDefaultPosition, // position of the window
             wxDefaultSize // size of the window
     );
