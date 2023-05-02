@@ -193,35 +193,75 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me) {
 //this function should builds the chess board
 void MainGamePanel::buildBoard(game_state* gameState, player* me){
 
-    if(!gameState->is_started()) {
+    if(!gameState->is_started())
+    {
+        //new version added some figures
         wxGridSizer *grid = new wxGridSizer(8, 8, 0, 0);
+        wxColor white = wxColor(255, 255, 255);
+        wxColor pink = wxColor(160, 60, 200);
+        wxBitmap b_pawn("../assets/black_pawn.png", wxBITMAP_TYPE_PNG);
+        wxBitmap b_king("../assets/black_king.png", wxBITMAP_TYPE_PNG);
+        // Add bitmaps for other pieces
 
-        wxPanel **cells = new wxPanel *[64];
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+
+                wxBitmapButton *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+                if ((i+j)%2 == 0) {
+                    button->SetBackgroundColour(white);
+                } else {
+                    button->SetBackgroundColour(pink);
+                }
+                grid->Add(button, 1, wxEXPAND | wxALL, 0);
+
+                // Add bitmaps to appropriate buttons
+                if (i == 1) {
+                    button->SetBitmap(b_pawn);
+                } else if (i == 0 && j == 4) {
+                    button->SetBitmap(b_king);
+                }
+                // Add bitmaps for other pieces
+            }
+        }
+        grid->SetMinSize(wxSize(800, 800));
+        this->SetSizer(grid);
+
+        //old version (just a grid)
+        /*
+        wxGridSizer *grid = new wxGridSizer(8, 8, 0, 0);
+        auto *buttons = new wxButton *[8*8];
         wxColor white = wxColor(255, 255, 255);
         wxColor pink = wxColor(160, 60, 200);
 
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
 
-                cells[j * 8 + i] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(50, 50));
-                if (((j % 2 == 0) && (i % 2 == 1)) || ((j % 2 == 1) && (i % 2 == 0))) {
-                    cells[j * 8 + i]->SetBackgroundColour(pink);
+                buttons[j * 8 + i] = new wxButton(this, wxID_ANY);
+                if ((i+j)%2 == 0) {
+                    buttons[j * 8 + i]->SetBackgroundColour(pink);
                 } else {
-                    cells[j * 8 + i]->SetBackgroundColour(white);
+                    buttons[j * 8 + i]->SetBackgroundColour(white);
                 }
-                grid->Add(cells[j * 8 + i], 0, wxEXPAND);
+
+                if (j == 0 && i == 4) {
+                    // Add a king to the fifth square of the top row
+                    wxBitmap bitmap;
+                    bitmap.LoadFile("../assets/black_king.png", wxBITMAP_TYPE_PNG);
+                    wxStaticBitmap* staticBitmap = new wxStaticBitmap(buttons[j*8+i], wxID_ANY, bitmap, wxDefaultPosition, wxSize(100,100));
+                } else if (j == 1) {
+                    // Add a pawn to each square of the second row
+                    wxBitmap bitmap;
+                    bitmap.LoadFile("../assets/black_pawn.png", wxBITMAP_TYPE_PNG);
+                    wxStaticBitmap* staticBitmap = new wxStaticBitmap(buttons[j*8+i], wxID_ANY, bitmap, wxDefaultPosition, wxSize(100,100));
+                }
+
+                grid->Add(buttons[j * 8 + i], 1, wxEXPAND | wxALL, 0);
             }
         }
-        grid->SetMinSize(wxSize(400, 400));
-
-
+        grid->SetMinSize(wxSize(800, 800));
         this->SetSizer(grid);
+        */
     }
-
-    //wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    //sizer->Add(panel,1, wxEXPAND);
-    //this->SetSizerAndFit(sizer);
-
 }
 
 
