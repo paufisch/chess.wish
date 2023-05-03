@@ -21,7 +21,7 @@ move_piece_request* move_piece_request::from_json(const rapidjson::Value& json) 
     if (json.HasMember("coordinate_from_1") && json.HasMember("coordinate_from_2") && json.HasMember("coordinate_to_1") && json.HasMember("coordinate_to_2")) {
         return new move_piece_request(props, json["coordinate_from_1"].GetInt(), json["coordinate_from_2"].GetInt(), json["coordinate_to_1"].GetInt(), json["coordinate_to_2"].GetInt());
     } else {
-        throw LamaException("Could not find 'card_id' or 'value' in play_card_request");
+        throw LamaException("Could not find the coordinates in move_piece_request");
     }
 }
 
