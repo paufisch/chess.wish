@@ -14,9 +14,14 @@ public:
 
 private:
 
+    wxGridSizer* board;
+    wxBoxSizer* outerLayout;
+    wxBoxSizer* innerLayout;
+
+
     void buildOtherPlayerLabels(game_state* gameState, player* otherPlayer, double playerAngle, int side);
-    void buildThisPlayer(game_state* gameState, player* me);
-    void buildBoard(game_state* gameState, player* me);
+    void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
+    wxGridSizer* buildBoard(game_state* gameState, player* me);
     wxStaticText* buildStaticText(std::string content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
     wxPoint getPointOnEllipse(double horizontalRadius, double verticalRadius, double angle);
 
