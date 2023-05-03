@@ -40,164 +40,94 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 
 void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* otherPlayer) {
 
-    // Setup two nested box sizers, in order to align our player's UI to the bottom center
+    // Setup two nested box sizer structure
     wxBoxSizer* outerLayout = new wxBoxSizer(wxHORIZONTAL);
     this->SetSizer(outerLayout);
     wxBoxSizer* boardLayout = new wxBoxSizer(wxVERTICAL);
-    outerLayout->Add(boardLayout, 0, wxEXPAND | wxALL, 10);
+    outerLayout->Add(boardLayout, 0, wxEXPAND);
     wxBoxSizer* innerLayout = new wxBoxSizer(wxVERTICAL);
-    outerLayout->Add(innerLayout, 1, wxEXPAND | wxALL, 10);
+    outerLayout->Add(innerLayout, 0, wxEXPAND);
     wxBoxSizer* otherInformation = new wxBoxSizer(wxVERTICAL);
-    innerLayout->Add(otherInformation, 1, wxALIGN_TOP);
+    innerLayout->Add(otherInformation, 1, wxEXPAND | wxTOP, 5);
+    wxPanel *place_holder = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(50,200));
+    innerLayout->Add(place_holder, 3, wxEXPAND);
     wxBoxSizer* myInformation = new wxBoxSizer(wxVERTICAL);
-    innerLayout->Add(myInformation, 1, wxALIGN_BOTTOM);
+    innerLayout->Add(myInformation, 1, wxEXPAND | wxBOTTOM, 5);
 
 
     // if the game has not yet started we say so
     if(!gameState->is_started()) {
 
         // show button that allows our player to start the game
-        wxButton* startGameButton = new wxButton(this, wxID_ANY, "Start Game!", wxDefaultPosition, wxSize(160, 64));
+        wxButton* startGameButton = new wxButton(this, wxID_ANY, "Start Game!", wxDefaultPosition, wxSize(200, 18));
+        startGameButton->SetForegroundColour(wxColour(0,0,0));
         startGameButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
             GameController::startGame();
         });
-        myInformation->Add(startGameButton, 1, wxEXPAND, 8);
+        myInformation->Add(startGameButton, 1, wxEXPAND);
 
         // Show our name
-        wxStaticText* playerName = buildStaticText(
-                me->get_player_name(),
-                wxDefaultPosition,
-                wxSize(200, 18),
-                wxALIGN_CENTER,
-                true
-        );
-        myInformation->Add(playerName, 1, wxEXPAND | wxALL, 8);
+        wxStaticText* playerName = buildStaticText(me->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
+        myInformation->Add(playerName, 1, wxEXPAND);
 
         //add other player
-        wxStaticText *other_name = buildStaticText(
-                otherPlayer->get_player_name(),
-                wxDefaultPosition,
-                wxSize(200, 18),
-                wxALIGN_CENTER,
-                true
-        );
-        otherInformation->Add(other_name, 1,  wxEXPAND | wxALL, 8);
+        wxStaticText *other_name = buildStaticText(otherPlayer->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
+        otherInformation->Add(other_name, 1,  wxEXPAND);
 
-        wxStaticText *text_wait = buildStaticText(
-                "waiting...",
-                wxDefaultPosition,
-                wxSize(200, 18),
-                wxALIGN_CENTER
-        );
-        otherInformation->Add(text_wait,0, wxEXPAND | wxALL, 8);
+        //display waiting
+        wxStaticText *text_wait = buildStaticText("waiting...",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
+        otherInformation->Add(text_wait,0, wxEXPAND);
 
     } else {
 
         //build board
         MainGamePanel::board = MainGamePanel::buildBoard(gameState, me);
-        boardLayout->Add(MainGamePanel::board, 0, wxALIGN_CENTER | wxLEFT, 8);
+        boardLayout->Add(MainGamePanel::board, 0, wxALIGN_CENTER);
 
-        // if our player folded, we display that as status
-        if (me->has_folded()) {
-            wxStaticText *playerStatus = buildStaticText(
-                    "Folded!",
-                    wxDefaultPosition,
-                    wxSize(200, 32),
-                    wxALIGN_CENTER
-            );
-            myInformation->Add(playerStatus, 1, wxEXPAND | wxALL, 8);
+        //if it's our turn
+        if (gameState->get_current_player() == me) {
 
-        // if we haven't folded yet, and it's our turn, display Fold button
-        } else if (gameState->get_current_player() == me) {
-
-
-            wxButton *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(80, 32));
+            wxButton *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
             resignButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
                 GameController::resign();
             });
-            myInformation->Add(resignButton, 1, wxEXPAND | wxALL, 8);
+
+            myInformation->Add(resignButton, 1, wxEXPAND);
 
             // Show our name
-            wxStaticText *playerName = buildStaticText(
-                    me->get_player_name(),
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    true
-            );
+            wxStaticText *playerName = buildStaticText(me->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
             myInformation->Add(playerName, 1, wxEXPAND);
 
             //display other players name
-            wxStaticText *other_name = buildStaticText(
-                    otherPlayer->get_player_name(),
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    true
-            );
-            otherInformation->Add(other_name, 1, wxEXPAND | wxALL, 8);
+            wxStaticText *other_name = buildStaticText(otherPlayer->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
+            otherInformation->Add(other_name, 1, wxEXPAND);
 
             //display that other player is waiting
             std::string statusText = "waiting...";
-            wxStaticText *status_txt = buildStaticText(
-                    statusText,
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    false
-            );
-            otherInformation->Add(status_txt, 1, wxEXPAND | wxALL, 8);
+            wxStaticText *status_txt = buildStaticText(statusText,wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
+            otherInformation->Add(status_txt, 1, wxEXPAND);
 
         // if it's not our turn, display "waiting..."
         } else {
+             //display waiting
+             wxStaticText *playerStatus = buildStaticText("waiting...",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
+             myInformation->Add(playerStatus, 1, wxEXPAND);
 
-            // show our name
-            wxStaticText* playerName = buildStaticText(
-                    me->get_player_name(),
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    true
-            );
-            myInformation->Add(playerName, 1, wxEXPAND | wxALL, 8);
+             // show our name
+             wxStaticText* playerName = buildStaticText(me->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
+             myInformation->Add(playerName, 1, wxEXPAND);
 
-            wxStaticText *playerStatus = buildStaticText(
-                    "waiting...",
-                    wxDefaultPosition,
-                    wxSize(200, 32),
-                    wxALIGN_CENTER
-            );
-            myInformation->Add(playerStatus, 1, wxEXPAND | wxALL, 8);
+             // Show other player name
+             wxStaticText *other_name = buildStaticText(otherPlayer->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
+             otherInformation->Add(other_name, 1, wxEXPAND);
 
-            // Show other player name
-            wxStaticText *other_name = buildStaticText(
-                    otherPlayer->get_player_name(),
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    true
-            );
-            otherInformation->Add(other_name, 1, wxEXPAND | wxALL, 8);
-
-            // Show other player's status label
-            std::string statusText = "their turn";
-            bool bold = true;
-            if(otherPlayer->has_folded()) {
-                statusText = "Folded!";
-                bold = false;
-            }
-
-            wxStaticText *status_txt = buildStaticText(
-                    statusText,
-                    wxDefaultPosition,
-                    wxSize(200, 18),
-                    wxALIGN_CENTER,
-                    bold
-            );
-            otherInformation->Add(status_txt, 1, wxEXPAND | wxALL, 8);
+             // Show other player's status label
+             wxStaticText *status_txt = buildStaticText("their turn",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
+             otherInformation->Add(status_txt, 1, wxEXPAND);
         }
     }
 }
+
 
 //this function builds the chess board
 wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
@@ -246,6 +176,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
 
 wxStaticText* MainGamePanel::buildStaticText(std::string content, wxPoint position, wxSize size, long textAlignment, bool bold) {
     wxStaticText* staticText = new wxStaticText(this, wxID_ANY, content, position, size, textAlignment);
+    staticText->SetForegroundColour(wxColor(0,0,0));
     if(bold) {
         wxFont font = staticText->GetFont();
         font.SetWeight(wxFONTWEIGHT_BOLD);
@@ -254,7 +185,3 @@ wxStaticText* MainGamePanel::buildStaticText(std::string content, wxPoint positi
     return staticText;
 }
 
-
-wxPoint MainGamePanel::getPointOnEllipse(double horizontalRadius, double verticalRadius, double angle) {
-    return wxPoint((int) (sin(angle) * horizontalRadius), (int) (cos(angle) * verticalRadius));
-}
