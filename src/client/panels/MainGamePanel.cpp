@@ -198,9 +198,12 @@ void MainGamePanel::buildBoard(game_state* gameState, player* me){
         //new version added some figures
         wxGridSizer *grid = new wxGridSizer(8, 8, 0, 0);
         wxColor white = wxColor(255, 255, 255);
-        wxColor pink = wxColor(160, 60, 200);
-        wxBitmap b_pawn("../assets/black_pawn.png", wxBITMAP_TYPE_PNG);
-        wxBitmap b_king("../assets/black_king.png", wxBITMAP_TYPE_PNG);
+        wxColor pink = wxColor(245, 175, 230);
+        wxColor green = wxColor(225, 245, 150);
+        wxBitmap b_pawn("../assets/black-pawn.png", wxBITMAP_TYPE_PNG);
+        wxBitmap b_king("../assets/black-king.png", wxBITMAP_TYPE_PNG);
+        wxBitmap w_pawn("../assets/white-pawn.png", wxBITMAP_TYPE_PNG);
+        wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
         // Add bitmaps for other pieces
 
         for (int i = 0; i < 8; ++i) {
@@ -208,7 +211,7 @@ void MainGamePanel::buildBoard(game_state* gameState, player* me){
 
                 wxBitmapButton *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
                 if ((i+j)%2 == 0) {
-                    button->SetBackgroundColour(white);
+                    button->SetBackgroundColour(green);
                 } else {
                     button->SetBackgroundColour(pink);
                 }
@@ -219,6 +222,13 @@ void MainGamePanel::buildBoard(game_state* gameState, player* me){
                     button->SetBitmap(b_pawn);
                 } else if (i == 0 && j == 4) {
                     button->SetBitmap(b_king);
+                } else if (i == 6) {
+                    button->SetBitmap(w_pawn);
+                } else if (i==7 && j == 4) {
+                    button->SetBitmap(w_king);
+                } else {
+                    //button->SetBitmap(wxNullBitmap);
+                    //button->Show(false);
                 }
                 // Add bitmaps for other pieces
             }
