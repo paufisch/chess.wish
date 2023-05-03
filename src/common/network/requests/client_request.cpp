@@ -3,11 +3,11 @@
 //
 
 #include "client_request.h"
-#include "play_card_request.h"
-#include "draw_card_request.h"
-#include "fold_request.h"
+#include "select_piece_request.h"
+#include "move_piece_request.h"
 #include "join_game_request.h"
 #include "start_game_request.h"
+#include "resign_request.h"
 
 #include <iostream>
 
@@ -15,17 +15,17 @@
 const std::unordered_map<std::string, RequestType> client_request::_string_to_request_type = {
         {"join_game", RequestType::join_game },
         {"start_game", RequestType::start_game},
-        {"play_card", RequestType::play_card},
-        {"draw_card", RequestType::draw_card},
-        {"fold", RequestType::fold}
+        {"select_piece", RequestType::select_piece},
+        {"move_piece", RequestType::move_piece},
+        {"resign", RequestType::resign}
 };
 // for serialization
 const std::unordered_map<RequestType, std::string> client_request::_request_type_to_string = {
         { RequestType::join_game, "join_game" },
         { RequestType::start_game, "start_game"},
-        { RequestType::play_card, "play_card"},
-        { RequestType::draw_card, "draw_card"},
-        {RequestType::fold, "fold"}
+        { RequestType::select_piece, "select_piece"},
+        { RequestType::move_piece, "move_piece"},
+        {RequestType::resign, "resign"}
 };
 
 // protected constructor. only used by subclasses
@@ -92,14 +92,14 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
         const RequestType request_type = client_request::_string_to_request_type.at(type);
 
         // Check which type of request it is and call the respective from_json constructor
-        if (request_type == RequestType::play_card) {
-            return play_card_request::from_json(json);
+        if (request_type == RequestType::move_piece) {
+            return move_piece_request::from_json(json);
         }
-        else if (request_type == RequestType::draw_card) {
-            return draw_card_request::from_json(json);
+        else if (request_type == RequestType::select_piece) {
+            return select_piece_request::from_json(json);
         }
-        else if (request_type == RequestType::fold) {
-            return fold_request::from_json(json);
+        else if (request_type == RequestType::resign) {
+            return resign_request::from_json(json);
         }
         else if (request_type == RequestType::join_game) {
             return join_game_request::from_json(json);
