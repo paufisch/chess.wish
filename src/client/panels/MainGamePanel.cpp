@@ -130,7 +130,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 
 
 //this function builds the chess board
-wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
+wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
 
     //new version added some figures
@@ -144,31 +144,73 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
     wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
 
     // Add bitmaps for other pieces
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
-            if ((i+j)%2 == 0) {
-                button->SetBackgroundColour(green);
-            } else {
-                button->SetBackgroundColour(pink);
-            }
-            grid->Add(button, 1, wxEXPAND | wxALL, 0);
-            // Add bitmaps to appropriate buttons
-            if (i == 1) {
-                button->SetBitmap(b_pawn);
-            } else if (i == 0 && j == 4) {
-                button->SetBitmap(b_king);
-            } else if (i == 6) {
-                button->SetBitmap(w_pawn);
-            } else if (i==7 && j == 4) {
-                button->SetBitmap(w_king);
-            } else {
-                //button->SetBitmap(wxNullBitmap);
-                //button->Show(false);
+
+    if (me->get_player_name() == "white") {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                                                  wxBU_AUTODRAW);
+                if ((i + j) % 2 == 0) {
+                    button->SetBackgroundColour(green);
+                } else {
+                    button->SetBackgroundColour(pink);
+                }
+                grid->Add(button, 1, wxEXPAND | wxALL, 0);
+                // Add bitmaps to appropriate buttons
+                if (i == 1) {
+                    button->SetBitmap(b_pawn);
+                } else if (i == 0 && j == 4) {
+                    button->SetBitmap(b_king);
+                } else if (i == 6) {
+                    button->SetBitmap(w_pawn);
+                } else if (i == 7 && j == 4) {
+                    button->SetBitmap(w_king);
+                } else {
+                    //button->SetBitmap(wxNullBitmap);
+                    //button->Show(false);
+                }
             }
         }
+        grid->SetMinSize(wxSize(800, 800));
+    } else {
+        for (int i = 7; i >= 0; --i) {
+            for (int j = 7; j >= 0; --j) {
+                auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                                                  wxBU_AUTODRAW);
+                if ((i + j) % 2 == 0) {
+                    button->SetBackgroundColour(green);
+                } else {
+                    button->SetBackgroundColour(pink);
+                }
+                grid->Add(button, 1, wxEXPAND | wxALL, 0);
+                // Add bitmaps to appropriate buttons
+                if (i == 1) {
+                    button->SetBitmap(b_pawn);
+                } else if (i == 0 && j == 4) {
+                    button->SetBitmap(b_king);
+                } else if (i == 6) {
+                    button->SetBitmap(w_pawn);
+                } else if (i == 7 && j == 4) {
+                    button->SetBitmap(w_king);
+                } else {
+                    //button->SetBitmap(wxNullBitmap);
+                    //button->Show(false);
+                }
+            }
+        }
+        grid->SetMinSize(wxSize(800, 800));
     }
-    grid->SetMinSize(wxSize(800, 800));
+
+    //try to access buttons in grid
+    /*
+    wxSizerItem* item = grid->GetItem(33);
+    if (item != NULL) {
+        wxButton* button = static_cast<wxButton*>(item->GetWindow());
+        button->SetBitmap(w_pawn);
+        // do something with the button
+    }
+    */
+
     return grid;
 
 }
