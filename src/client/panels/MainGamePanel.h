@@ -8,28 +8,15 @@
 class MainGamePanel : public wxPanel {
 
 public:
-    MainGamePanel(wxWindow* parent);
+    explicit MainGamePanel(wxWindow* parent);
     void buildGameState(game_state* gameState, player* me);
 
-
 private:
-
     wxGridSizer* board;
-    wxBoxSizer* outerLayout;
-    wxBoxSizer* innerLayout;
-
-
-    void buildOtherPlayerLabels(game_state* gameState, player* otherPlayer, double playerAngle, int side);
     void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
     wxGridSizer* buildBoard(game_state* gameState, player* me);
-    wxStaticText* buildStaticText(std::string content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
-    wxPoint getPointOnEllipse(double horizontalRadius, double verticalRadius, double angle);
+    wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
 
-    // define key constant layout values
-    wxSize const panelSize = wxSize(960, 680); // also set in the constructor implementation
-    wxPoint const tableCenter = wxPoint(480, 300);
-    double const otherPlayerLabelDistanceFromCenter = 275.0;
-    double const twoPi = 6.28318530718;
 };
 
 

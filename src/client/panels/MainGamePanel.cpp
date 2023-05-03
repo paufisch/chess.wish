@@ -16,7 +16,7 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 
     // find our own player object in the list of players
     int myPosition = -1;
-    std::vector<player*>::iterator it = std::find_if(players.begin(), players.end(), [me](const player* x) {
+    auto it = std::find_if(players.begin(), players.end(), [me](const player* x) {
         return x->get_id() == me->get_id();
     });
     if (it < players.end()) {
@@ -29,7 +29,7 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 
     //get other player
     player* otherPlayer = players.at((myPosition + 1) % 2);
-    
+
     // show our own player
     this->buildThisPlayer(gameState, me, otherPlayer);
 
@@ -41,17 +41,17 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* otherPlayer) {
 
     // Setup two nested box sizer structure
-    wxBoxSizer* outerLayout = new wxBoxSizer(wxHORIZONTAL);
+    auto* outerLayout = new wxBoxSizer(wxHORIZONTAL);
     this->SetSizer(outerLayout);
-    wxBoxSizer* boardLayout = new wxBoxSizer(wxVERTICAL);
+    auto* boardLayout = new wxBoxSizer(wxVERTICAL);
     outerLayout->Add(boardLayout, 0, wxEXPAND);
-    wxBoxSizer* innerLayout = new wxBoxSizer(wxVERTICAL);
+    auto innerLayout = new wxBoxSizer(wxVERTICAL);
     outerLayout->Add(innerLayout, 0, wxEXPAND);
-    wxBoxSizer* otherInformation = new wxBoxSizer(wxVERTICAL);
+    auto* otherInformation = new wxBoxSizer(wxVERTICAL);
     innerLayout->Add(otherInformation, 1, wxEXPAND | wxTOP, 5);
-    wxPanel *place_holder = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(50,200));
+    auto *place_holder = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(50,200));
     innerLayout->Add(place_holder, 3, wxEXPAND);
-    wxBoxSizer* myInformation = new wxBoxSizer(wxVERTICAL);
+    auto* myInformation = new wxBoxSizer(wxVERTICAL);
     innerLayout->Add(myInformation, 1, wxEXPAND | wxBOTTOM, 5);
 
 
@@ -59,7 +59,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
     if(!gameState->is_started()) {
 
         // show button that allows our player to start the game
-        wxButton* startGameButton = new wxButton(this, wxID_ANY, "Start Game!", wxDefaultPosition, wxSize(200, 18));
+        auto* startGameButton = new wxButton(this, wxID_ANY, "Start Game!", wxDefaultPosition, wxSize(200, 18));
         startGameButton->SetForegroundColour(wxColour(0,0,0));
         startGameButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
             GameController::startGame();
@@ -87,7 +87,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
         //if it's our turn
         if (gameState->get_current_player() == me) {
 
-            wxButton *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
+            auto *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
             resignButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
                 GameController::resign();
             });
@@ -134,7 +134,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
 
 
     //new version added some figures
-    wxGridSizer *grid = new wxGridSizer(8, 8, 0, 0);
+    auto *grid = new wxGridSizer(8, 8, 0, 0);
     wxColor white = wxColor(255, 255, 255);
     wxColor pink = wxColor(245, 175, 230);
     wxColor green = wxColor(225, 245, 150);
@@ -146,7 +146,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
     // Add bitmaps for other pieces
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            wxBitmapButton *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
+            auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize, wxBU_AUTODRAW);
             if ((i+j)%2 == 0) {
                 button->SetBackgroundColour(green);
             } else {
@@ -174,8 +174,8 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me){
 }
 
 
-wxStaticText* MainGamePanel::buildStaticText(std::string content, wxPoint position, wxSize size, long textAlignment, bool bold) {
-    wxStaticText* staticText = new wxStaticText(this, wxID_ANY, content, position, size, textAlignment);
+wxStaticText* MainGamePanel::buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold) {
+    auto* staticText = new wxStaticText(this, wxID_ANY, content, position, size, textAlignment);
     staticText->SetForegroundColour(wxColor(0,0,0));
     if(bold) {
         wxFont font = staticText->GetFont();
