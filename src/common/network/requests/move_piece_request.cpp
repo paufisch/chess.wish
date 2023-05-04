@@ -11,7 +11,7 @@ move_piece_request::move_piece_request(std::string game_id, std::string player_i
 { }
 
 // private constructor for deserialization
-move_piece_request::move_piece_request(client_request::base_class_properties props, int coordinate_form_1, int coordinate_from_2, int coordinate_to_1, int coordinate_to_2) :
+move_piece_request::move_piece_request(client_request::base_class_properties props, int coordinate_from_1, int coordinate_from_2, int coordinate_to_1, int coordinate_to_2) :
         client_request(props),
         _coordinate_from_1(coordinate_from_1), _coordinate_from_2(coordinate_from_2), _coordinate_to_1(coordinate_to_1), _coordinate_to_2(coordinate_to_2)
 { }
