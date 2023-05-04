@@ -11,10 +11,15 @@ public:
     explicit MainGamePanel(wxWindow* parent);
     void buildGameState(game_state* gameState, player* me);
 
+
+
 private:
     wxGridSizer* board;
+    bool is_selected; //bool indicating whether a piece is selected
+    int id;
     void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
     wxGridSizer* buildBoard(game_state* gameState, player* me);
+    void OnButtonClicked(wxCommandEvent &evt);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
 
 };

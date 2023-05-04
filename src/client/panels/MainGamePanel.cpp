@@ -4,7 +4,7 @@
 
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
-
+    is_selected = false;
 }
 
 void MainGamePanel::buildGameState(game_state* gameState, player* me) {
@@ -145,11 +145,12 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
     // Add bitmaps for other pieces
 
-    if (me->get_player_name() == "white") {
+    if (me->get_player_name() == "white") { //of course change this if the player has an attribute colour
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize,
-                                                  wxBU_AUTODRAW);
+                auto *button = new wxBitmapButton(this, (i*8+j), wxNullBitmap, wxDefaultPosition, wxSize(100,100),
+                                                  wxBU_NOTEXT);
+                button->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGamePanel::OnButtonClicked, this);
                 if ((i + j) % 2 == 0) {
                     button->SetBackgroundColour(green);
                 } else {
@@ -175,8 +176,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     } else {
         for (int i = 7; i >= 0; --i) {
             for (int j = 7; j >= 0; --j) {
-                auto *button = new wxBitmapButton(this, wxID_ANY, wxNullBitmap, wxDefaultPosition, wxDefaultSize,
+                auto *button = new wxBitmapButton(this, (i*8+j), wxNullBitmap, wxDefaultPosition, wxDefaultSize,
                                                   wxBU_AUTODRAW);
+
                 if ((i + j) % 2 == 0) {
                     button->SetBackgroundColour(green);
                 } else {
@@ -214,6 +216,32 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     return grid;
 
 }
+
+
+void MainGamePanel::OnButtonClicked(wxCommandEvent &evt) {
+    //if we have a selected piece move it to the clicked button
+    if (MainGamePanel::is_selected) {
+
+        wxGridSizer *grid = MainGamePanel::board;
+        //get the selected piece
+        wxSizerItem *item = grid->GetItem(MainGamePanel::id);
+        wxButton *button = static_cast<wxButton *>(item->GetWindow());
+        wxBitmap piece = button->GetBitmap();
+        // move the piece to the new button
+        int new_id = evt.GetId();
+        wxSizerItem *new_item = grid->GetItem(new_id);
+        wxButton *new_button = static_cast<wxButton *>(new_item->GetWindow());
+        new_button->SetBitmap(piece);
+        button->SetBitmap(wxNullBitmap);
+
+        MainGamePanel::is_selected = false;
+        // if we have no piece selected, select a piece
+    } else {
+        MainGamePanel::is_selected = true;
+        MainGamePanel::id = evt.GetId();
+    }
+}
+
 
 
 wxStaticText* MainGamePanel::buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold) {
