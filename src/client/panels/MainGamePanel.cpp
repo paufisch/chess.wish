@@ -145,76 +145,103 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
     // Add bitmaps for other pieces
 
-    if (me->get_player_name() == "white") { //of course change this if the player has an attribute colour
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                auto *button = new wxBitmapButton(this, (i*8+j), wxNullBitmap, wxDefaultPosition, wxSize(100,100),
-                                                  wxBU_NOTEXT);
-                button->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &MainGamePanel::OnButtonClicked, this);
-                if ((i + j) % 2 == 0) {
-                    button->SetBackgroundColour(green);
-                } else {
-                    button->SetBackgroundColour(pink);
-                }
-                grid->Add(button, 1, wxEXPAND | wxALL, 0);
-                // Add bitmaps to appropriate buttons
+    auto *panels = new wxPanel *[8*8];
+    for (int i = 7; i >= 0; --i) {
+        for (int j = 0; j < 8; ++j) {
+
+            panels[i*8+j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+            //panels[j * 8 + i]->Bind(wxEVT_LEFT_DOWN, &MyFrame::OnPanelClick, this);
+
+            if ((i + j) % 2 == 0) {
+                panels[i*8+j]->SetBackgroundColour(green);
+            } else {
+                panels[i*8+j]->SetBackgroundColour(pink);
+            }
+
+            wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
+            //vbox->AddStretchSpacer();
+            // Add chess figures as bitmaps to the panels
+            if(me->get_player_name() == "white"){
                 if (i == 1) {
-                    button->SetBitmap(b_pawn);
-                } else if (i == 0 && j == 4) {
-                    button->SetBitmap(b_king);
-                } else if (i == 6) {
-                    button->SetBitmap(w_pawn);
-                } else if (i == 7 && j == 4) {
-                    button->SetBitmap(w_king);
-                } else {
-                    //button->SetBitmap(wxNullBitmap);
-                    //button->Show(false);
+                wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                } else if ((i == 0) && (j == 4)) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                }else if (i == 6) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                } else if ((i == 7) && (j == 4)) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER | wxALL, 5);
+                }
+            } else {
+                if (i == 1) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                } else if ((i == 0) && (j == 4)) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                }else if (i == 6) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                } else if ((i == 7) && (j == 4)) {
+                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
+                    vbox->Add(sbmp, 1, wxALIGN_CENTER | wxALL, 5);
                 }
             }
-        }
-        grid->SetMinSize(wxSize(800, 800));
-    } else {
-        for (int i = 7; i >= 0; --i) {
-            for (int j = 7; j >= 0; --j) {
-                auto *button = new wxBitmapButton(this, (i*8+j), wxNullBitmap, wxDefaultPosition, wxDefaultSize,
-                                                  wxBU_AUTODRAW);
 
-                if ((i + j) % 2 == 0) {
-                    button->SetBackgroundColour(green);
+            panels[i*8+j]->SetSizer(vbox);
+
+            panels[i*8+j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
+
+                //if no panel is selected, select one!
+                if(MainGamePanel::selected_panel == nullptr) {
+                    MainGamePanel::selected_panel = panels[i*8+j];
+
+                //else move previously selected piece to new position
                 } else {
-                    button->SetBackgroundColour(pink);
+                    wxSizer *sizer = MainGamePanel::selected_panel->GetSizer();//sizer of source panel
+                    wxSizer *box = panels[i*8+j]->GetSizer();//sizer of destination panel
+
+                    //if the selected panel contains a piece move it
+                    if(sizer->GetItemCount() > 0){
+                        int idx  = sizer->GetItemCount() - 1;//piece id
+                        wxStaticBitmap *child = dynamic_cast<wxStaticBitmap*>(sizer->GetItem(idx)->GetWindow());
+                        wxBitmap piece = child->GetBitmap();
+                        //remove piece from old position
+                        MainGamePanel::selected_panel->RemoveChild(child);
+                        sizer->Detach(child);
+                        child->Destroy();
+
+                        //check if the destination panel contains a piece
+                        if(box->GetItemCount()>0){
+                            int idx2 = box->GetItemCount() -1;
+                            wxStaticBitmap *child2 = dynamic_cast<wxStaticBitmap*>(box->GetItem(idx2)->GetWindow());//get contained piece
+                            //remove piece from old position
+                            panels[i*8+j]->RemoveChild(child2);
+                            box->Detach(child2);
+                            child2->Destroy();
+                            wxStaticBitmap* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
+                            box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                        } else {
+                            wxStaticBitmap* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
+                            box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                        }
+                    } else {
+                        //here we should display a warning to select a different piece.
+                    }
+                    box->Layout();
+                    MainGamePanel::selected_panel = nullptr;
                 }
-                grid->Add(button, 1, wxEXPAND | wxALL, 0);
-                // Add bitmaps to appropriate buttons
-                if (i == 1) {
-                    button->SetBitmap(b_pawn);
-                } else if (i == 0 && j == 4) {
-                    button->SetBitmap(b_king);
-                } else if (i == 6) {
-                    button->SetBitmap(w_pawn);
-                } else if (i == 7 && j == 4) {
-                    button->SetBitmap(w_king);
-                } else {
-                    //button->SetBitmap(wxNullBitmap);
-                    //button->Show(false);
-                }
-            }
+            });
+
+            grid->Add(panels[i*8+j],1, wxEXPAND | wxALL, 0);
         }
-        grid->SetMinSize(wxSize(800, 800));
     }
 
-    //try to access buttons in grid
-    /*
-    wxSizerItem* item = grid->GetItem(33);
-    if (item != NULL) {
-        wxButton* button = static_cast<wxButton*>(item->GetWindow());
-        button->SetBitmap(w_pawn);
-        // do something with the button
-    }
-    */
-
+    grid->SetMinSize(wxSize(800, 800));
     return grid;
-
 }
 
 
