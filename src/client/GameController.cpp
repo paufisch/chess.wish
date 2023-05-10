@@ -85,22 +85,8 @@ void GameController::connectToServer() {
 
 void GameController::updateGameState(game_state* newGameState) {
 
-    // the existing game state is now old
-    game_state* oldGameState = GameController::_currentGameState;
-
     // save the new game state as our current game state
     GameController::_currentGameState = newGameState;
-
-    if(oldGameState != nullptr) {
-
-        // check if a new round started, and display message accordingly
-        if(oldGameState->get_round_number() > 0 && oldGameState->get_round_number() < newGameState->get_round_number()) {
-            GameController::showNewRoundMessage(oldGameState, newGameState);
-        }
-
-        // delete the old game state, we don't need it anymore
-        delete oldGameState;
-    }
 
     if(GameController::_currentGameState->is_finished()) {
         GameController::showGameOverMessage();
@@ -153,36 +139,6 @@ void GameController::showStatus(const std::string& message) {
 }
 
 
-void GameController::showNewRoundMessage(game_state* oldGameState, game_state* newGameState) {
-    std::string title = "Round Completed";
-    std::string message = "The players gained the following minus points:\n";
-    std::string buttonLabel = "Start next round";
-
-    // add the point differences of all players to the messages
-    for(int i = 0; i < oldGameState->get_players().size(); i++) {
-
-        player* oldPlayerState = oldGameState->get_players().at(i);
-        player* newPlayerState = newGameState->get_players().at(i);
-
-        int scoreDelta = newPlayerState->get_score() - oldPlayerState->get_score();
-        std::string scoreText = std::to_string(scoreDelta);
-        if(scoreDelta > 0) {
-            scoreText = "+" + scoreText;
-        }
-
-        std::string playerName = newPlayerState->get_player_name();
-        if(newPlayerState->get_id() == GameController::_me->get_id()) {
-            playerName = "You";
-        }
-        message += "\n" + playerName + ":     " + scoreText;
-    }
-
-    wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE);
-    dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel(buttonLabel));
-    dialogBox.ShowModal();
-}
-
-
 void GameController::showGameOverMessage() {
     std::string title = "Game Over!";
     std::string message = "Final score:\n";
@@ -190,9 +146,6 @@ void GameController::showGameOverMessage() {
 
     // sort players by score
     std::vector<player*> players = GameController::_currentGameState->get_players();
-    std::sort(players.begin(), players.end(), [](const player* a, const player* b) -> bool {
-        return a->get_score() < b->get_score();
-    });
 
     // list all players
     for(int i = 0; i < players.size(); i++) {

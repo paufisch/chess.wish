@@ -7,7 +7,7 @@
 #include "sockpp/tcp_connector.h"
 
 
-class ResponseListenerThread : public wxThread {
+class ResponseListenerThread : public wxThread{
 
 public:
     ResponseListenerThread(sockpp::tcp_connector* connection);
@@ -18,8 +18,6 @@ protected:
 
 private:
     void outputError(std::string title, std::string message);
-
-
     sockpp::tcp_connector* _connection;
 
 };
