@@ -14,12 +14,9 @@ public:
 
 
 private:
-    wxGridSizer* board;
-    bool is_selected; //bool indicating whether a piece is selected
-    int id;
+    wxGridSizer* board{};
     void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
     wxGridSizer* buildBoard(game_state* gameState, player* me);
-    void OnButtonClicked(wxCommandEvent &evt);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
     wxPanel* selected_panel;
 };

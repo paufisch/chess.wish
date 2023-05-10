@@ -4,7 +4,8 @@
 
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
-    is_selected = false;
+    selected_panel = nullptr;
+
 }
 
 void MainGamePanel::buildGameState(game_state* gameState, player* me) {
@@ -147,46 +148,46 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
     auto *panels = new wxPanel *[8*8];
     for (int i = 7; i >= 0; --i) {
-        for (int j = 0; j < 8; ++j) {
-
+        for (int j = 0; j < 8; ++j)
+        {
             panels[i*8+j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-            //panels[j * 8 + i]->Bind(wxEVT_LEFT_DOWN, &MyFrame::OnPanelClick, this);
+            auto *vbox = new wxBoxSizer(wxVERTICAL);
 
-            if ((i + j) % 2 == 0) {
+            if ((i + j) % 2 == 0){
                 panels[i*8+j]->SetBackgroundColour(green);
             } else {
                 panels[i*8+j]->SetBackgroundColour(pink);
             }
 
-            wxBoxSizer *vbox = new wxBoxSizer(wxVERTICAL);
-            //vbox->AddStretchSpacer();
             // Add chess figures as bitmaps to the panels
+            //whites perspective
             if(me->get_player_name() == "white"){
                 if (i == 1) {
-                wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
+                auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 } else if ((i == 0) && (j == 4)) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 }else if (i == 6) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 } else if ((i == 7) && (j == 4)) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER | wxALL, 5);
                 }
+            //blacks perspective
             } else {
                 if (i == 1) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 } else if ((i == 0) && (j == 4)) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 }else if (i == 6) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 } else if ((i == 7) && (j == 4)) {
-                    wxStaticBitmap *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
+                    auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER | wxALL, 5);
                 }
             }
@@ -207,7 +208,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                     //if the selected panel contains a piece move it
                     if(sizer->GetItemCount() > 0){
                         int idx  = sizer->GetItemCount() - 1;//piece id
-                        wxStaticBitmap *child = dynamic_cast<wxStaticBitmap*>(sizer->GetItem(idx)->GetWindow());
+                        auto *child = dynamic_cast<wxStaticBitmap*>(sizer->GetItem(idx)->GetWindow());
                         wxBitmap piece = child->GetBitmap();
                         //remove piece from old position
                         MainGamePanel::selected_panel->RemoveChild(child);
@@ -217,15 +218,15 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         //check if the destination panel contains a piece
                         if(box->GetItemCount()>0){
                             int idx2 = box->GetItemCount() -1;
-                            wxStaticBitmap *child2 = dynamic_cast<wxStaticBitmap*>(box->GetItem(idx2)->GetWindow());//get contained piece
+                            auto *child2 = dynamic_cast<wxStaticBitmap*>(box->GetItem(idx2)->GetWindow());//get contained piece
                             //remove piece from old position
                             panels[i*8+j]->RemoveChild(child2);
                             box->Detach(child2);
                             child2->Destroy();
-                            wxStaticBitmap* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
+                            auto* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
                             box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                         } else {
-                            wxStaticBitmap* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
+                            auto* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
                             box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                         }
                     } else {
@@ -243,32 +244,6 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     grid->SetMinSize(wxSize(800, 800));
     return grid;
 }
-
-
-void MainGamePanel::OnButtonClicked(wxCommandEvent &evt) {
-    //if we have a selected piece move it to the clicked button
-    if (MainGamePanel::is_selected) {
-
-        wxGridSizer *grid = MainGamePanel::board;
-        //get the selected piece
-        wxSizerItem *item = grid->GetItem(MainGamePanel::id);
-        wxButton *button = static_cast<wxButton *>(item->GetWindow());
-        wxBitmap piece = button->GetBitmap();
-        // move the piece to the new button
-        int new_id = evt.GetId();
-        wxSizerItem *new_item = grid->GetItem(new_id);
-        wxButton *new_button = static_cast<wxButton *>(new_item->GetWindow());
-        new_button->SetBitmap(piece);
-        button->SetBitmap(wxNullBitmap);
-
-        MainGamePanel::is_selected = false;
-        // if we have no piece selected, select a piece
-    } else {
-        MainGamePanel::is_selected = true;
-        MainGamePanel::id = evt.GetId();
-    }
-}
-
 
 
 wxStaticText* MainGamePanel::buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold) {
