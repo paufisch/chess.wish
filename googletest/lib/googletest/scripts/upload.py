@@ -1154,7 +1154,7 @@ class MercurialVCS(VersionControlSystem):
 
 # NOTE: The SplitPatch function is duplicated in engine.py, keep them in sync.
 def SplitPatch(data):
-  """Splits a patch into separate pieces for each file.
+  """Splits a patch into separate piece for each file.
 
   Args:
     data: A string containing the output of svn diff.

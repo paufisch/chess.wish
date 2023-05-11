@@ -1440,7 +1440,7 @@ MATHJAX_RELPATH        = http://cdn.mathjax.org/mathjax/latest
 
 MATHJAX_EXTENSIONS     =
 
-# The MATHJAX_CODEFILE tag can be used to specify a file with javascript pieces
+# The MATHJAX_CODEFILE tag can be used to specify a file with javascript piece
 # of code that will be used on startup of the MathJax code. See the MathJax site
 # (see: http://docs.mathjax.org/en/latest/output.html) for more details. For an
 # example see the documentation.
