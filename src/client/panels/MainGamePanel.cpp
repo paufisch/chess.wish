@@ -79,10 +79,11 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
         wxStaticText *text_wait = buildStaticText("waiting...",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
         otherInformation->Add(text_wait,0, wxEXPAND);
 
+    //if the game has started we can build the chess board
     } else {
 
         //build board
-        MainGamePanel::board = MainGamePanel::buildBoard(gameState, me);
+        MainGamePanel::board = MainGamePanel::buildBoard(gameState, me);//this is actually the grid sizer
         boardLayout->Add(MainGamePanel::board, 0, wxALIGN_CENTER);
 
         //if it's our turn
@@ -195,45 +196,54 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
             panels[i*8+j]->SetSizer(vbox);
 
             panels[i*8+j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
+                //if its our turn we can move pieces
+                if (gameState->get_current_player() == me) {
+                    //if no panel is selected, select one!
+                    if (MainGamePanel::selected_panel == nullptr) {
+                        MainGamePanel::selected_panel = panels[i * 8 + j];
 
-                //if no panel is selected, select one!
-                if(MainGamePanel::selected_panel == nullptr) {
-                    MainGamePanel::selected_panel = panels[i*8+j];
-
-                //else move previously selected piece to new position
-                } else {
-                    wxSizer *sizer = MainGamePanel::selected_panel->GetSizer();//sizer of source panel
-                    wxSizer *box = panels[i*8+j]->GetSizer();//sizer of destination panel
-
-                    //if the selected panel contains a piece move it
-                    if(sizer->GetItemCount() > 0){
-                        int idx  = sizer->GetItemCount() - 1;//piece id
-                        auto *child = dynamic_cast<wxStaticBitmap*>(sizer->GetItem(idx)->GetWindow());
-                        wxBitmap piece = child->GetBitmap();
-                        //remove piece from old position
-                        MainGamePanel::selected_panel->RemoveChild(child);
-                        sizer->Detach(child);
-                        child->Destroy();
-
-                        //check if the destination panel contains a piece
-                        if(box->GetItemCount()>0){
-                            int idx2 = box->GetItemCount() -1;
-                            auto *child2 = dynamic_cast<wxStaticBitmap*>(box->GetItem(idx2)->GetWindow());//get contained piece
-                            //remove piece from old position
-                            panels[i*8+j]->RemoveChild(child2);
-                            box->Detach(child2);
-                            child2->Destroy();
-                            auto* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
-                            box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                        } else {
-                            auto* newBitmap = new wxStaticBitmap(panels[i*8+j], wxID_ANY, piece);
-                            box->Add(newBitmap, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                        }
+                        //else move previously selected piece to new position
                     } else {
-                        //here we should display a warning to select a different piece.
+                        wxSizer *sizer = MainGamePanel::selected_panel->GetSizer();//sizer of source panel
+                        wxSizer *box = panels[i * 8 + j]->GetSizer();//sizer of destination panel
+
+                        //if the selected panel contains a piece move it
+                        if (sizer->GetItemCount() > 0) {
+                            int idx = sizer->GetItemCount() - 1;//piece id
+                            auto *child = dynamic_cast<wxStaticBitmap *>(sizer->GetItem(idx)->GetWindow());
+                            wxBitmap piece = child->GetBitmap();
+                            //remove piece from old position
+                            MainGamePanel::selected_panel->RemoveChild(child);
+                            sizer->Detach(child);
+                            child->Destroy();
+
+                            //check if the destination panel contains a piece
+                            if (box->GetItemCount() > 0) {
+                                int idx2 = box->GetItemCount() - 1;
+                                auto *child2 = dynamic_cast<wxStaticBitmap *>(box->GetItem(
+                                        idx2)->GetWindow());//get contained piece
+                                //remove piece from old position
+                                panels[i * 8 + j]->RemoveChild(child2);
+                                box->Detach(child2);
+                                child2->Destroy();
+                                auto *newBitmap = new wxStaticBitmap(panels[i * 8 + j], wxID_ANY, piece);
+                                box->Add(newBitmap, 1,
+                                         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                            } else {
+                                auto *newBitmap = new wxStaticBitmap(panels[i * 8 + j], wxID_ANY, piece);
+                                box->Add(newBitmap, 1,
+                                         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                            }
+                        } else {
+                            //here we should display a warning to select a different piece.
+                        }
+                        box->Layout();
+                        MainGamePanel::selected_panel = nullptr;
                     }
-                    box->Layout();
-                    MainGamePanel::selected_panel = nullptr;
+                // if it's not our turn we display a error message
+                } else {
+                    //TODO: put error message here
+                    GameController::showError("Error", "It's not your turn!");
                 }
             });
 
