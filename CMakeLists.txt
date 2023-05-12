@@ -26,7 +26,6 @@ set(CLIENT_SOURCE_FILES
         # game state
         src/common/game_state/cards/card.cpp src/common/game_state/cards/card.h
         src/common/game_state/game_state.cpp src/common/game_state/game_state.h
-        src/common/game_state/player/hand.cpp src/common/game_state/player/hand.h
         src/common/game_state/player/player.cpp src/common/game_state/player/player.h
         src/common/game_state/cards/draw_pile.cpp src/common/game_state/cards/draw_pile.h
         src/common/game_state/cards/discard_pile.cpp src/common/game_state/cards/discard_pile.h
@@ -60,7 +59,6 @@ set(SERVER_SOURCE_FILES
         # game state
         src/common/game_state/cards/card.cpp src/common/game_state/cards/card.h
         src/common/game_state/game_state.cpp src/common/game_state/game_state.h
-        src/common/game_state/player/hand.cpp src/common/game_state/player/hand.h
         src/common/game_state/player/player.cpp src/common/game_state/player/player.h
         src/common/game_state/cards/draw_pile.cpp src/common/game_state/cards/draw_pile.h
         src/common/game_state/cards/discard_pile.cpp src/common/game_state/cards/discard_pile.h
