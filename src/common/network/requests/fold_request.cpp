@@ -19,6 +19,6 @@ fold_request* fold_request::from_json(const rapidjson::Value &json) {
 }
 
 void fold_request::write_into_json(rapidjson::Value &json,
-                                   rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
+                                     rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     client_request::write_into_json(json, allocator);
 }

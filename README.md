@@ -1,23 +1,19 @@
 
 # Suicide chess
 
-In this project we want to impelemt a slightly simplified version of chess in C++, featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
+In this project implements a slightly simplified version of chess in C++, featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
 
-The implementation builds on the Lama template project. So far this repository contains the copied lama project.
+![Lama-logo](./assets/chess_logo.png?raw=true)
+
+Further rule simplification compared to normal chess:
+- Castling is not possible
+- No en passant
+- ...
 
 
-# Lama
 
-This is a simple C++ implementation of the game "Lama" by AMIGO. You can read the game's rules [here](https://www.amigo.games/content/ap/rule/19420--031-2019-Lama_Manual_002_LAYOUT[1].pdf). The implementation features a client/server architecture for multiplayer scenarios.
-It uses [wxWidgets](https://www.wxwidgets.org/) for the GUI, [sockpp](https://github.com/fpagliughi/sockpp) for the network interface, [rapidjson](https://rapidjson.org/md_doc_tutorial.html) for object serialization, and [googletest](https://github.com/google/googletest) for the unit tests. 
+The implementation builds on the template Lama project and uses [wxWidgets](https://www.wxwidgets.org/) for the GUI, [sockpp](https://github.com/fpagliughi/sockpp) for the network interface, [rapidjson](https://rapidjson.org/md_doc_tutorial.html) for object serialization, and [googletest](https://github.com/google/googletest) for the unit tests. 
 
-![Lama-logo](./assets/lama_logo.png?raw=true)
-
-This is a template project for the students of the course Software Engineering. In order to adapt this template to a different game, you will only need knowledge in wxWidgets and maybe about some basic functions of rapidjson to serialize certain data types. By sticking to the template you won't need to dig into sockpp at all.
-
-## Code Reuse
-#### You may reuse as much of this code as you want!
-We even encourage it! Therefore, we also encourage you to **read through this documentation, as it explains the way this template project works and how it can be adapted to different use cases.** At the very least, we highly encourage your team to at least use the `server_network_manager` and `clientNetworkManager` to simplify (TCP) communication between client and server.
 
 ## 1. Compile instructions
 This project only works on UNIX systems (Linux / MacOS). We recommend using [Ubuntu](https://ubuntu.com/#download), as it offers the easiest way to setup wxWidgets. Therefore, we explain installation only for Ubuntu systems. The following was tested on a Ubuntu 20.4 system, but should also work for earlier versions of Ubuntu.
