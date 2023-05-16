@@ -9,13 +9,13 @@
 
 
 game_state::game_state() : unique_serializable() {
-    this->_draw_pile = new draw_pile();
-    this->_discard_pile = new discard_pile();
+    // this->_draw_pile = new draw_pile();
+    // this->_discard_pile = new discard_pile();
     this->_players = std::vector<player*>();
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
-    this->_play_direction = new serializable_value<int>(1);
+    // this->_play_direction = new serializable_value<int>(1);
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 }

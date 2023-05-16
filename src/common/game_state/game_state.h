@@ -9,21 +9,19 @@
 #include <string>
 #include "../../rapidjson/include/rapidjson/document.h"
 #include "player/player.h"
-#include "cards/draw_pile.h"
-#include "cards/discard_pile.h"
 #include "../serialization/serializable.h"
 #include "../serialization/serializable_value.h"
 #include "../serialization/unique_serializable.h"
+#include "board.h"
 
 class game_state : public unique_serializable {
 private:
 
-    static const int _max_nof_players = 6;
+    static const int _max_nof_players = 2;
     static const int _min_nof_players = 2;
 
     std::vector<player*> _players;
-    draw_pile* _draw_pile;
-    discard_pile* _discard_pile;
+    board _board;
     serializable_value<bool>* _is_started;
     serializable_value<bool>* _is_finished;
     serializable_value<int>* _round_number;
@@ -37,8 +35,7 @@ private:
     // deserialization constructor
     game_state(
             std::string id,
-            draw_pile* draw_pile,
-            discard_pile* discard_pile,
+            board board,
             std::vector<player*>& players,
             serializable_value<bool>* is_started,
             serializable_value<bool>* is_finished,
@@ -62,9 +59,12 @@ public:
     std::vector<player*>& get_players();
     int get_round_number() const;
 
-    draw_pile* get_draw_pile() const;
-    discard_pile* get_discard_pile() const;
+    //draw_pile* get_draw_pile() const;
+    //discard_pile* get_discard_pile() const;
     player* get_current_player() const;
+    std::vector<std::vector<bool>> select_piece(int i, int j);
+    bool move_piece(int i_from, int j_from, int i_to, int j_to);
+    player* resign(player* loser);
 
 #ifdef LAMA_SERVER
 // server-side state update functions
