@@ -92,7 +92,27 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
         const RequestType request_type = client_request::_string_to_request_type.at(type);
 
         // Check which type of request it is and call the respective from_json constructor
-        if (request_type == RequestType::move_piece) {
+        if (request_type == RequestType::move_piece) {//void piece::write_into_json(rapidjson::Value &json,
+//                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
+//    unique_serializable::write_into_json(json, allocator);
+//}
+
+//piece *piece::from_json(const rapidjson::Value &json) {//void piece::write_into_json(rapidjson::Value &json,
+//                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
+//    unique_serializable::write_into_json(json, allocator);
+//}
+
+//piece *piece::from_json(const rapidjson::Value &json) {
+//    if (json.HasMember("id") && json.HasMember("value")) {
+//        return new piece(json["id"].GetString(), serializable_value<int>::from_json(json["value"].GetObject()));
+//    } else {
+//        throw LamaException("Could not parse json of card. Was missing 'id' or 'val'.");
+//
+//    if (json.HasMember("id") && json.HasMember("value")) {
+//        return new piece(json["id"].GetString(), serializable_value<int>::from_json(json["value"].GetObject()));
+//    } else {
+//        throw LamaException("Could not parse json of card. Was missing 'id' or 'val'.");
+//
             return move_piece_request::from_json(json);
         }
         else if (request_type == RequestType::select_piece) {

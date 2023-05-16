@@ -7,7 +7,7 @@
 
 
 #include <string>
-#include "hand.h"
+#include "../color.h"
 #include "../../serialization/uuid_generator.h"
 #include "../../../../rapidjson/include/rapidjson/document.h"
 #include "../../serialization/unique_serializable.h"
@@ -16,9 +16,7 @@
 class player : public unique_serializable {
 private:
     serializable_value<std::string>* _player_name;
-    serializable_value<bool>* _has_folded;
-    serializable_value<int>* _score;
-    hand* _hand;
+    serializable_value<Color>* _color;
 
 #ifdef LAMA_SERVER
     std::string _game_id;
@@ -27,36 +25,29 @@ private:
     /*
      * Deserialization constructor
      */
-    player(std::string id,
-           serializable_value<std::string>* name,
-           serializable_value<int>* score,
-           hand* hand,
-           serializable_value<bool>* has_folded);
+    player(std::string id, serializable_value<std::string>* name, serializable_value<Color>* color);
+
+    player(std::string id, serializable_value<std::string>* name, std::string color);
 
 public:
 // constructors
-    explicit player(std::string name);   // for client
+    explicit player(std::string name, Color color);   // for client
     ~player();
 
 #ifdef LAMA_SERVER
-    player(std::string id, std::string name);  // for server
+    player(std::string id, std::string name, Color color);  // for server
 
     std::string get_game_id();
     void set_game_id(std::string game_id);
 #endif
 
     // accessors
-    int get_score() const noexcept;
-    bool has_folded() const noexcept;
-    int get_nof_cards() const noexcept;
-    const hand* get_hand() const noexcept;
     std::string get_player_name() const noexcept;
+    bool get_color() const noexcept;
 
 #ifdef LAMA_SERVER
     // state update functions
-    bool fold(std::string& err);
-    bool add_card(card* card, std::string& err);
-    bool remove_card(std::string card_id, card*& card, std::string& err);
+    //bool fold(std::string& err);
 
     void wrap_up_round(std::string& err);
     void setup_round(std::string& err);

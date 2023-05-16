@@ -9,22 +9,92 @@
 #include "pieces/knight.h"
 #include "pieces/pawn.h"
 #include "pieces/bishop.h"
-
-
-
-//Maybe it has to be changed
+#include <iostream>
+//Maybe this has to be changed
 #include "../../exceptions/LamaException.h"
+
+
+// for deserialization
+const std::unordered_map<std::string, PieceType> piece::_string_to_piece_type = {
+        {"rook", PieceType::rook},
+        {"knight", PieceType::knight},
+        {"bishop", PieceType::bishop},
+        {"king", PieceType::king},
+        {"queen", PieceType::queen},
+        {"pawn", PieceType::pawn}
+};
+
+
+const std::unordered_map<std::string, Color> piece::_string_to_color = {
+        {"white", Color::white},
+        {"black", Color::black},
+};
+
+
+// for serialization
+const std::unordered_map<PieceType, std::string> piece::_piece_type_to_string = {
+        { PieceType::rook, "rook" },
+        { PieceType::knight, "knight"},
+        { PieceType::bishop, "bishop"},
+        { PieceType::king, "king"},
+        { PieceType::queen, "queen"},
+        { PieceType::pawn, "pawn"}
+};
+
+
+const std::unordered_map<Color, std::string> piece::_color_to_string = {
+        { Color::white, "white" },
+        { Color::black, "white"},
+
+};
+
+
+// protected constructor. only used by subclasses
+piece::piece(piece::base_class_properties props) :
+    _type(props._type),
+    _piece_ID(props._piece_ID),
+    _color(props._color)
+{}
+
+
+// used by subclasses to retrieve information from the json stored by this superclass
+piece::base_class_properties piece::extract_base_class_properties(const rapidjson::Value& json) {
+    if (json.HasMember("piece_ID") && json.HasMember("color")) {
+        std::string piece_ID = json["piece_ID"].GetString();
+        Color color = _string_to_color.at(json["color"].GetString());
+        return create_base_class_properties(
+                piece::_string_to_piece_type.at(json["type"].GetString()),
+                piece_ID,
+                color
+        );
+    }
+    else
+    {
+        throw LamaException("Client Request did not contain piece_ID or color");
+    }
+}
+
+
+piece::base_class_properties piece::create_base_class_properties(
+        PieceType type,
+        std::string piece_ID,
+        Color color)
+{
+    piece::base_class_properties res;
+    res._piece_ID = piece_ID;
+    res._color = color;
+    res._type = type;
+    return res;
+}
 
 
 piece::piece(std::string id) : unique_serializable(id) { }
 
-piece::piece(std::string id,
-             serializable_value<std::string>* piece_ID,
-             serializable_value<std::string>* color,
-             serializable_value<PieceType>* pieceType)
 
-        : unique_serializable(id), piece_ID(piece_ID), color(color), type(pieceType)
+piece::piece(std::string id, std::string piece_ID, Color color, PieceType type)
+        : unique_serializable(id), _piece_ID(piece_ID), _color(color), _type(type)
 { }
+
 
 std::vector<std::vector<bool>> piece::legal_moves(unsigned row, unsigned col) {
     // Default implementation, to be overridden by subclasses
@@ -33,90 +103,46 @@ std::vector<std::vector<bool>> piece::legal_moves(unsigned row, unsigned col) {
 }
 
 
+void piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
 
+    rapidjson::Value type_val(_piece_type_to_string.at(get_type()).c_str(), allocator);
+    json.AddMember("type", type_val, allocator);
 
-//void piece::write_into_json(rapidjson::Value &json,
-//                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-//    unique_serializable::write_into_json(json, allocator);
-//}
+    rapidjson::Value piece_ID_val(_piece_ID.c_str(), allocator);
+    json.AddMember("piece_ID", piece_ID_val, allocator);
 
-//piece *piece::from_json(const rapidjson::Value &json) {
-//    if (json.HasMember("id") && json.HasMember("value")) {
-//        return new piece(json["id"].GetString(), serializable_value<int>::from_json(json["value"].GetObject()));
-//    } else {
-//        throw LamaException("Could not parse json of card. Was missing 'id' or 'val'.");
-//    }
-//}
-
-void piece::write_into_json(rapidjson::Value &json,
-                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-    //unique_serializable::write_into_json(json, allocator);
-
-    json.SetObject();
-    json.AddMember("id", rapidjson::Value(get_id().c_str(), allocator).Move(), allocater);
-    json.AddMember("type", rapidjson::Value(get_piece_type_name().c_str(), allocator).Move(), allocator);
-    json.AddMember("color", rapidjson::Value(get_color().c_str(), allocator).Move(), allocator);
+    rapidjson::Value color_val(_color_to_string.at(get_color()).c_str(), allocator);
+    json.AddMember("color", piece_ID_val, allocator);
 }
+
 
 piece* piece::from_json(const rapidjson::Value& json) {
-    std::string id = json["id"].GetString();
-    std::string type = json["type"].GetString();
-    std::string color = json["color"].GetString();
+    if (json.HasMember("type") && json["type"].IsString()) {
+        const std::string type = json["type"].GetString();
+        const PieceType piece_type = piece::_string_to_piece_type.at(type);
 
-    PieceType pieceType = get_piece_type_from_name(type);
-
-    switch(pieceType) {
-        case PieceType::rook:
-            return new rook(id, piece_ID, color);
-        case PieceType::king:
-            return new king(id, color);
-        case PieceType::queen:
-            return new queen(id, color);
-        case PieceType::bishop:
-            return new bishop(id, color);
-        case PieceType::knight:
-            return new knight(id, color);
-        case PieceType::pawn:
-            return new pawn(id, color);
+        if (piece_type == PieceType::rook) {
+            return rook::from_json(json);
+        }
+        else if (piece_type == PieceType::knight) {
+            return knight::from_json(json);
+        }
+        else if (piece_type == PieceType::bishop) {
+            return bishop::from_json(json);
+        }
+        else if (piece_type == PieceType::king) {
+            return king::from_json(json);
+        }
+        else if (piece_type == PieceType::queen) {
+            return queen::from_json(json);
+        }
+        else if (piece_type == PieceType::pawn) {
+            return pawn::from_json(json);
+        } else {
+            throw LamaException("Encountered unknown Piece type " + type);
+        }
     }
-
-    return nullptr; // Should never happen
-}
-
-std::string piece::get_piece_type_name() const {
-    switch(pieceType) {
-        case PieceType::rook:comment
-            return "rook";
-        case PieceType::king:
-            return "king";
-        case PieceType::queen:
-            return "queen";
-        case PieceType::bishop:
-            return "bishop";
-        case PieceType::knight:
-            return "knight";
-        case PieceType::pawn:
-            return "pawn";
-    }
-}
-
-PieceType piece::get_piece_type_from_name(const std::string& name) {
-    if(name == "rook") {
-        return PieceType::rook;
-    } else if(name == "king") {
-        return PieceType::king;
-    } else if(name == "queen") {
-        return PieceType::queen;
-    } else if(name == "bishop") {
-        return PieceType::bishop;
-    } else if(name == "knight") {
-        return PieceType::knight;
-    } else if(name == "pawn") {
-        return PieceType::pawn;
-    } else {
-        // Should never happen
-        throw std::invalid_argument("Unknown piece type: " + name);
-    }
+    throw LamaException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
 
 
