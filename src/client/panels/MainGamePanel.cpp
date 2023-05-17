@@ -146,9 +146,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
 
     // Add bitmaps for other pieces
-
     auto *panels = new wxPanel *[8*8];
-    for (int i = 7; i >= 0; --i) {
+    for (int i = 7; i >= 0; --i)
+    {
         for (int j = 0; j < 8; ++j)
         {
             panels[i*8+j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
@@ -162,7 +162,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
             // Add chess figures as bitmaps to the panels
             //whites perspective
-            if(me->get_player_name() == "white"){
+            //TODO: check what get_color is returning
+            if(me->get_color() == 1){
+                //TODO: change this to build the board from the gamestate->get_board or smth. like this
                 if (i == 1) {
                 auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
@@ -178,6 +180,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                 }
             //blacks perspective
             } else {
+                //TODO: change this to build the board from the gamestate->get_board or smth like this
                 if (i == 1) {
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
@@ -199,11 +202,19 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                 //if its our turn we can move pieces
                 if (gameState->get_current_player() == me) {
                     //if no panel is selected, select one!
+                    //TODO: this should maybe be a function of the gamestate
                     if (MainGamePanel::selected_panel == nullptr) {
-                        MainGamePanel::selected_panel = panels[i * 8 + j];
+                        //TODO: select piece request (distinguish between black and white)
+                        GameController::selectPiece(i,j);
+                        //MainGamePanel::selected_panel = panels[i * 8 + j];
+                        //TODO: display valid moves
 
                         //else move previously selected piece to new position
                     } else {
+                        //TODO: move piece request
+                        //TODO: check how the game state is updated
+                        GameController::movePiece(i,j);
+                        /*
                         wxSizer *sizer = MainGamePanel::selected_panel->GetSizer();//sizer of source panel
                         wxSizer *box = panels[i * 8 + j]->GetSizer();//sizer of destination panel
 
@@ -239,10 +250,10 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         }
                         box->Layout();
                         MainGamePanel::selected_panel = nullptr;
+                        */
                     }
                 // if it's not our turn we display a error message
                 } else {
-                    //TODO: put error message here
                     GameController::showError("Error", "It's not your turn!");
                 }
             });

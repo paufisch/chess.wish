@@ -1,9 +1,9 @@
 #include "GameController.h"
 #include "../common/network/requests/join_game_request.h"
 #include "../common/network/requests/start_game_request.h"
-#include "../common/network/requests/draw_card_request.h"
 #include "../common/network/requests/fold_request.h"
-#include "../common/network/requests/play_card_request.h"
+#include "../common/network/requests/select_piece_request.h"
+#include "../common/network/requests/move_piece_request.h"
 #include "network/ClientNetworkManager.h"
 
 
@@ -106,20 +106,24 @@ void GameController::startGame() {
 }
 
 
-void GameController::drawCard() {
-    draw_card_request request = draw_card_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
-    ClientNetworkManager::sendRequest(request);
-}
-
-
 void GameController::resign() {
     fold_request request = fold_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
 }
 
 
-void GameController::playCard(card* cardToPlay) {
-    play_card_request request = play_card_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), cardToPlay->get_id());
+void GameController::selectPiece(int i, int j) {
+    //i,j are the indices of the selected piece
+    select_piece_prequest request = select_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
+    ClientNetworkManager::sendRequest(request);
+
+}
+
+
+void GameController::movePiece(int i, int j) {
+    //i,j are indices of the destination panel
+    //i,j are the indices of the selected piece
+    move_piece_prequest request = move_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
     ClientNetworkManager::sendRequest(request);
 }
 
