@@ -163,7 +163,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
             // Add chess figures as bitmaps to the panels
             //whites perspective
             //TODO: check what get_color is returning
-            if(me->get_color() == 1){
+            if(me->get_color() == 0){
                 //TODO: change this to build the board from the gamestate->get_board or smth. like this
                 if (i == 1) {
                 auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn);
