@@ -22,11 +22,11 @@ private:
 
     std::vector<player*> _players;
     board _board;
+    player* winner;
     serializable_value<bool>* _is_started;
     serializable_value<bool>* _is_finished;
     serializable_value<int>* _round_number;
     serializable_value<int>* _current_player_idx;
-    serializable_value<int>* _play_direction;  // 1 or -1 depending on which direction is played in
     serializable_value<int>* _starting_player_idx;
 
     // from_diff constructor
@@ -35,12 +35,12 @@ private:
     // deserialization constructor
     game_state(
             std::string id,
-            board board,
             std::vector<player*>& players,
+            board board,
+            player* winner,
             serializable_value<bool>* is_started,
             serializable_value<bool>* is_finished,
             serializable_value<int>* current_player_idx,
-            serializable_value<int>* play_direction,
             serializable_value<int>* round_number,
             serializable_value<int>* starting_player_idx);
 
@@ -59,8 +59,6 @@ public:
     std::vector<player*>& get_players();
     int get_round_number() const;
 
-    //draw_pile* get_draw_pile() const;
-    //discard_pile* get_discard_pile() const;
     player* get_current_player() const;
     std::vector<std::vector<bool>> select_piece(int i, int j);
     bool move_piece(int i_from, int j_from, int i_to, int j_to);
@@ -72,8 +70,6 @@ public:
     bool remove_player(player* player, std::string& err);
     bool add_player(player* player, std::string& err);
     bool start_game(std::string& err);
-    bool draw_card(player* player, std::string& err);
-    bool play_card(player* player, const std::string& card_id, std::string& err);
     bool fold(player* player, std::string& err);
 
     // end of round functions
