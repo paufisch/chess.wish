@@ -63,6 +63,7 @@ public:
     std::vector<std::vector<bool>> select_piece(int i, int j);
     bool move_piece(int i_from, int j_from, int i_to, int j_to);
     player* resign(player* loser);
+    board* get_board();
 
 #ifdef LAMA_SERVER
 // server-side state update functions
