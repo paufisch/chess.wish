@@ -22,16 +22,18 @@ private:
     board(std::string id);
 
     // deserialization constructor
-    board(
-            std::string id,
-            std::vector<std::vector<piece*>>& board_layout);
-
+    board(std::string id, std::vector<std::vector<piece*>>& board_layout);
 public:
+    static std::vector<std::vector<piece*>> vector_to_board(const std::vector<piece*> vector) ;
+
+    std::vector<piece*> board_to_vector(std::vector<std::vector<piece*>> board) const;
+
+
     board();
     ~board();
 
 // accessors
-    piece* get_Piece(int i, int j);
+    piece* get_piece(int i, int j);
 
 // serializable interface
     static board* from_json(const rapidjson::Value& json);
