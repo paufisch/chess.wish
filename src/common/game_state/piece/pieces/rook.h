@@ -19,7 +19,7 @@ private:
 
 public:
 
-    std::vector<std::vector<bool>> legal_moves(unsigned row, unsigned col) override;
+    std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
     static rook* from_json(const rapidjson::Value& json);

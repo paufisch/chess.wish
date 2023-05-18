@@ -15,6 +15,8 @@
 #include "../color.h"
 #include "../board.h"
 
+
+
 enum PieceType {
     rook,
     knight,

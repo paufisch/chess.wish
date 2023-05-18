@@ -7,12 +7,22 @@
 
 
 #include "../piece.h"
+#include <string>
+#include "../../../../../rapidjson/include/rapidjson/document.h"
+#include "../../board.h"
 
 class bishop : public piece{
-public:
-    bishop(std::string id, serializable_value<std::string>* piece_ID, serializable_value<std::string>* color);
+private:
 
-    std::vector<std::vector<bool>> legal_moves(unsigned row, unsigned col) override;
+    bishop(base_class_properties);
+    bishop(std::string piece_ID, Color color, PieceType type);
+
+public:
+
+    std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
+
+    void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
+    static bishop* from_json(const rapidjson::Value& json);
 };
 
 
