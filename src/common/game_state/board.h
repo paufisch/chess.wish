@@ -36,6 +36,25 @@ public:
 // accessors
     piece* get_piece(int i, int j);
 
+// fill_board (0,0) = a1, (8,0) = a8
+    void fill_white_king();
+    void fill_black_king();
+
+    void fill_white_pawns();
+    void fill_black_pawns();
+
+    void fill_white_rooks();
+    void fill_black_rooks();
+
+    void fill_white_knights();
+    void fill_black_knights();
+
+    void fill_white_queen();
+    void fill_black_queen();
+
+    void fill_white_bishops();
+    void fill_black_bishops();
+
 // serializable interface
     static board* from_json(const rapidjson::Value& json);
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
