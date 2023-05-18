@@ -108,7 +108,7 @@ bool game_state::is_player_in_game(player *player) const {
 
 //Maybe further restrictions needed !resign !king_taken !round_limit
 bool game_state::is_allowed_to_play_now(player *player) const {
-    return (player == get_current_player());
+    return (player == get_current_player()) && (0 == (_is_finished->get_value()));
 }
 
 std::vector<player*>& game_state::get_players() {
@@ -136,6 +136,7 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
 
 player* game_state::resign(player* loser){
     _loser = loser;
+    _is_finished->set_value(1);
     return _loser;
 }
 
