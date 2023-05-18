@@ -5,20 +5,23 @@
 #include "server_response.h"
 #include "request_response.h"
 #include "full_state_response.h"
+#include "select_piece_response.h"
 
 #include "../../exceptions/LamaException.h"
 
 // for deserialization
 const std::unordered_map<std::string, ResponseType> server_response::_string_to_response_type = {
         {"req_response", ResponseType::req_response },
-        {"state_diff_msg", ResponseType::state_diff_msg},
-        {"full_state_msg", ResponseType::full_state_msg}
+        //{"state_diff_msg", ResponseType::state_diff_msg},
+        {"full_state_msg", ResponseType::full_state_msg},
+        {"select_piece_msg", ResponseType::select_piece_msg}
 };
 // for serialization
 const std::unordered_map<ResponseType, std::string> server_response::_response_type_to_string = {
         { ResponseType::req_response,   "req_response" },
-        { ResponseType::state_diff_msg, "state_diff_msg"},
-        { ResponseType::full_state_msg, "full_state_msg"}
+        //{ ResponseType::state_diff_msg, "state_diff_msg"},
+        { ResponseType::full_state_msg, "full_state_msg"},
+        {ResponseType::select_piece_msg, "select_piece_msg"}
 };
 
 server_response::server_response(server_response::base_class_properties params):
@@ -66,9 +69,10 @@ server_response *server_response::from_json(const rapidjson::Value& json) {
 
         if (response_type == ResponseType::req_response) {
             return request_response::from_json(json);
-        }
-        else if (response_type == ResponseType::full_state_msg) {
+        } else if (response_type == ResponseType::full_state_msg) {
             return full_state_response::from_json(json);
+        } else if (response_type == ResponseType::select_piece_msg) {
+            return select_piece_response::from_json(json);
         } else {
             throw LamaException("Encountered unknown ServerResponse type " + response_type);
         }
