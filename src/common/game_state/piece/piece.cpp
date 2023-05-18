@@ -10,7 +10,6 @@
 #include "pieces/pawn.h"
 #include "pieces/bishop.h"
 #include <iostream>
-//Maybe this has to be changed
 #include "../../exceptions/LamaException.h"
 
 
@@ -44,17 +43,9 @@ const std::unordered_map<PieceType, std::string> piece::_piece_type_to_string = 
 
 const std::unordered_map<Color, std::string> piece::_color_to_string = {
         { Color::white, "white" },
-        { Color::black, "white"},
+        { Color::black, "black"},
 
 };
-
-
-// protected constructor. only used by subclasses
-piece::piece(piece::base_class_properties props) :
-    _type(props._type),
-    _piece_ID(props._piece_ID),
-    _color(props._color)
-{}
 
 
 // used by subclasses to retrieve information from the json stored by this superclass
@@ -62,6 +53,7 @@ piece::base_class_properties piece::extract_base_class_properties(const rapidjso
     if (json.HasMember("piece_ID") && json.HasMember("color")) {
         std::string piece_ID = json["piece_ID"].GetString();
         Color color = _string_to_color.at(json["color"].GetString());
+
         return create_base_class_properties(
                 piece::_string_to_piece_type.at(json["type"].GetString()),
                 piece_ID,
@@ -87,13 +79,25 @@ piece::base_class_properties piece::create_base_class_properties(
     return res;
 }
 
+piece::~piece() {
+    _board = nullptr;
+}
 
 piece::piece(std::string id) : unique_serializable(id) { }
 
 
-piece::piece(std::string id, std::string piece_ID, Color color, PieceType type)
-        : unique_serializable(id), _piece_ID(piece_ID), _color(color), _type(type)
+piece::piece(std::string piece_ID, Color color, PieceType type)
+        : _piece_ID(piece_ID), _color(color), _type(type)
 { }
+
+
+// protected constructor. only used by subclasses
+piece::piece(piece::base_class_properties props) :
+        _type(props._type),
+        _piece_ID(props._piece_ID),
+        _color(props._color),
+        _board(props._board)
+{}
 
 
 std::vector<std::vector<bool>> piece::legal_moves(unsigned row, unsigned col) {
@@ -144,6 +148,10 @@ piece* piece::from_json(const rapidjson::Value& json) {
     }
     throw LamaException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
+
+
+
+
 
 
 
