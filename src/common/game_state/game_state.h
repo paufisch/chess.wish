@@ -1,5 +1,5 @@
 //
-// Created by Manuel on 27.01.2021.
+// Created by Fabian 18.05.2023
 //
 
 #ifndef LAMA_GAME_STATE_H
@@ -21,8 +21,8 @@ private:
     static const int _min_nof_players = 2;
 
     std::vector<player*> _players;
-    board* _board = new board;
-    player* _winner;
+    board* _board;
+    player* _loser;
     serializable_value<bool>* _is_started;
     serializable_value<bool>* _is_finished;
     serializable_value<int>* _round_number;
@@ -37,7 +37,7 @@ private:
             std::string id,
             std::vector<player*>& players,
             board *board,
-            player* winner,
+            player *loser,
             serializable_value<bool>* is_started,
             serializable_value<bool>* is_finished,
             serializable_value<int>* current_player_idx,

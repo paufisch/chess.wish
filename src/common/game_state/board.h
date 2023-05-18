@@ -16,7 +16,7 @@
 
 class board : public unique_serializable {
 private:
-    std::vector<std::vector<piece*>> _board_layout;
+
 
     // from_diff constructor
     board(std::string id);
@@ -28,6 +28,7 @@ public:
 
     std::vector<piece*> board_to_vector(std::vector<std::vector<piece*>> board) const;
 
+    std::vector<std::vector<piece*>> _board_layout;
 
     board();
     ~board();

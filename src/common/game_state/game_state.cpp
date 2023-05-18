@@ -1,5 +1,5 @@
 //
-// Created by Manuel on 27.01.2021.
+// Created by Fabian 18.05.2023
 //
 
 #include "game_state.h"
@@ -10,7 +10,8 @@
 
 game_state::game_state() : unique_serializable() {
     this->_players = std::vector<player*>();
-    this->_winner = nullptr;
+    this->_board = new board;
+    this->_loser = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
@@ -21,7 +22,7 @@ game_state::game_state() : unique_serializable() {
 game_state::game_state(std::string id,
                        std::vector<player *> &players,
                        board *board,
-                       player *winner,
+                       player *loser,
                        serializable_value<bool> *is_started,
                        serializable_value<bool> *is_finished,
                        serializable_value<int> *current_player_idx,
@@ -31,7 +32,7 @@ game_state::game_state(std::string id,
 
           _players(players),
           _board(board),
-          _winner(winner),
+          _loser(loser),
           _is_started(is_started),
           _is_finished(is_finished),
           _current_player_idx(current_player_idx),
@@ -41,7 +42,8 @@ game_state::game_state(std::string id,
 
 game_state::game_state(std::string id) : unique_serializable(id) {
     this->_players = std::vector<player*>();
-    this->_winner = nullptr;
+    this->_board = new board;
+    this->_loser = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
@@ -63,7 +65,7 @@ game_state::~game_state() {
         _current_player_idx = nullptr;
         _starting_player_idx = nullptr;
         _round_number = nullptr;
-        _winner = nullptr;
+        _loser = nullptr;
     }
 }
 
@@ -104,14 +106,42 @@ bool game_state::is_player_in_game(player *player) const {
     return std::find(_players.begin(), _players.end(), player) < _players.end();
 }
 
+//Maybe further restrictions needed !resign !king_taken !round_limit
 bool game_state::is_allowed_to_play_now(player *player) const {
-    return !player->has_folded() && player == get_current_player();
+    return player == get_current_player();
 }
 
 std::vector<player*>& game_state::get_players() {
     return _players;
 }
 
+std::vector<std::vector<bool>> game_state::select_piece(int i, int j){
+    return _board->get_piece(i,j)->legal_moves(i,j);
+}
+
+bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
+    auto _legal_moves = _board->get_piece(i_from,j_from)->legal_moves(i_from,j_from);
+    if(_legal_moves[i_to][j_to]){
+        //the piece pointer at _to gets overwritten with the piece pointer at _from
+        _board->_board_layout[i_to][j_to] = _board->get_piece(i_from,j_from);
+        //the piece pointer at _from is now empty
+        _board->_board_layout[i_from][j_from] = nullptr;
+        _round_number++;
+        return true;
+    }
+    else{
+        return false;
+    };
+}
+
+player* game_state::resign(player* loser){
+    _loser = loser;
+    return loser;
+}
+
+board* game_state::get_board(){
+    return _board;
+}
 
 #ifdef LAMA_SERVER
 
@@ -338,10 +368,6 @@ void game_state::write_into_json(rapidjson::Value &json,
     _current_player_idx->write_into_json(current_player_idx_val, allocator);
     json.AddMember("current_player_idx", current_player_idx_val, allocator);
 
-    rapidjson::Value play_direction_val(rapidjson::kObjectType);
-    _play_direction->write_into_json(play_direction_val, allocator);
-    json.AddMember("play_direction", play_direction_val, allocator);
-
     rapidjson::Value starting_player_idx_val(rapidjson::kObjectType);
     _starting_player_idx->write_into_json(starting_player_idx_val, allocator);
     json.AddMember("starting_player_idx", starting_player_idx_val, allocator);
@@ -349,14 +375,6 @@ void game_state::write_into_json(rapidjson::Value &json,
     rapidjson::Value round_number_val(rapidjson::kObjectType);
     _round_number->write_into_json(round_number_val, allocator);
     json.AddMember("round_number", round_number_val, allocator);
-
-    rapidjson::Value draw_pile_val(rapidjson::kObjectType);
-    _draw_pile->write_into_json(draw_pile_val, allocator);
-    json.AddMember("draw_pile", draw_pile_val, allocator);
-
-    rapidjson::Value discard_pile_val(rapidjson::kObjectType);
-    _discard_pile->write_into_json(discard_pile_val, allocator);
-    json.AddMember("discard_pile", discard_pile_val, allocator);
 
     json.AddMember("players", vector_utils::serialize_vector(_players, allocator), allocator);
 }
@@ -367,25 +385,19 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
         && json.HasMember("is_finished")
         && json.HasMember("is_started")
         && json.HasMember("current_player_idx")
-        && json.HasMember("play_direction")
         && json.HasMember("round_number")
         && json.HasMember("starting_player_idx")
-        && json.HasMember("players")
-        && json.HasMember("draw_pile")
-        && json.HasMember("discard_pile"))
+        && json.HasMember("players"))
     {
         std::vector<player*> deserialized_players;
         for (auto &serialized_player : json["players"].GetArray()) {
             deserialized_players.push_back(player::from_json(serialized_player.GetObject()));
         }
         return new game_state(json["id"].GetString(),
-                              draw_pile::from_json(json["draw_pile"].GetObject()),
-                              discard_pile::from_json(json["discard_pile"].GetObject()),
                               deserialized_players,
                               serializable_value<bool>::from_json(json["is_started"].GetObject()),
                               serializable_value<bool>::from_json(json["is_finished"].GetObject()),
                               serializable_value<int>::from_json(json["current_player_idx"].GetObject()),
-                              serializable_value<int>::from_json(json["play_direction"].GetObject()),
                               serializable_value<int>::from_json(json["round_number"].GetObject()),
                               serializable_value<int>::from_json(json["starting_player_idx"].GetObject()));
 
