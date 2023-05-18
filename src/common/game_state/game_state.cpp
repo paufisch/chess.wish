@@ -7,8 +7,7 @@
 #include "../exceptions/LamaException.h"
 #include "../serialization/vector_utils.h"
 
-
-game_state::game_state() : unique_serializable() {
+game_state::game_state(std::string id) : unique_serializable(id) {
     this->_players = std::vector<player*>();
     this->_board = new board;
     this->_loser = nullptr;
@@ -40,7 +39,7 @@ game_state::game_state(std::string id,
           _starting_player_idx(starting_player_idx)
 { }
 
-game_state::game_state(std::string id) : unique_serializable(id) {
+game_state::game_state() : unique_serializable() {
     this->_players = std::vector<player*>();
     this->_board = new board;
     this->_loser = nullptr;
@@ -50,6 +49,7 @@ game_state::game_state(std::string id) : unique_serializable(id) {
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 }
+
 
 game_state::~game_state() {
     if (_is_started != nullptr) {
@@ -108,7 +108,7 @@ bool game_state::is_player_in_game(player *player) const {
 
 //Maybe further restrictions needed !resign !king_taken !round_limit
 bool game_state::is_allowed_to_play_now(player *player) const {
-    return player == get_current_player();
+    return (player == get_current_player());
 }
 
 std::vector<player*>& game_state::get_players() {
@@ -142,6 +142,15 @@ player* game_state::resign(player* loser){
 board* game_state::get_board(){
     return _board;
 }
+
+//the round number increase is made inside move_piece
+void game_state::next_turn() {
+    if (_current_player_idx->get_value() == 1)
+        _current_player_idx->set_value(0);
+    else if (_current_player_idx->get_value() == 0)
+        _current_player_idx->set_value(1);
+}
+
 
 #ifdef LAMA_SERVER
 
@@ -377,6 +386,15 @@ void game_state::write_into_json(rapidjson::Value &json,
     json.AddMember("round_number", round_number_val, allocator);
 
     json.AddMember("players", vector_utils::serialize_vector(_players, allocator), allocator);
+
+    rapidjson::Value board_val(rapidjson::kObjectType);
+    _board->write_into_json(board_val, allocator);
+    json.AddMember("board", board_val, allocator);
+
+    rapidjson::Value loser_val(rapidjson::kObjectType);
+    _board->write_into_json(loser_val, allocator);
+    json.AddMember("loser", board_val, allocator);
+
 }
 
 
@@ -387,14 +405,19 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
         && json.HasMember("current_player_idx")
         && json.HasMember("round_number")
         && json.HasMember("starting_player_idx")
-        && json.HasMember("players"))
+        && json.HasMember("players")
+        && json.HasMember("loser")
+        && json.HasMember("board"))
     {
         std::vector<player*> deserialized_players;
         for (auto &serialized_player : json["players"].GetArray()) {
             deserialized_players.push_back(player::from_json(serialized_player.GetObject()));
         }
+
         return new game_state(json["id"].GetString(),
                               deserialized_players,
+                              board::from_json(json["loser"].GetObject()),
+                              player::from_json(json["board"].GetObject()),
                               serializable_value<bool>::from_json(json["is_started"].GetObject()),
                               serializable_value<bool>::from_json(json["is_finished"].GetObject()),
                               serializable_value<int>::from_json(json["current_player_idx"].GetObject()),
