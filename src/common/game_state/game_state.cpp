@@ -9,41 +9,42 @@
 
 
 game_state::game_state() : unique_serializable() {
-    // this->_draw_pile = new draw_pile();
-    // this->_discard_pile = new discard_pile();
     this->_players = std::vector<player*>();
+    this->_winner = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
-    // this->_play_direction = new serializable_value<int>(1);
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 }
 
-game_state::game_state(std::string id, draw_pile *draw_pile, discard_pile *discard_pile,
-                       std::vector<player *> &players, serializable_value<bool> *is_started,
-                       serializable_value<bool> *is_finished, serializable_value<int> *current_player_idx,
-                       serializable_value<int> *play_direction, serializable_value<int>* round_number, serializable_value<int> *starting_player_idx)
+game_state::game_state(std::string id,
+                       std::vector<player *> &players,
+                       board *board,
+                       player *winner,
+                       serializable_value<bool> *is_started,
+                       serializable_value<bool> *is_finished,
+                       serializable_value<int> *current_player_idx,
+                       serializable_value<int> *round_number,
+                       serializable_value<int> *starting_player_idx)
         : unique_serializable(id),
-          _draw_pile(draw_pile),
-          _discard_pile(discard_pile),
+
           _players(players),
+          _board(board),
+          _winner(winner),
           _is_started(is_started),
           _is_finished(is_finished),
           _current_player_idx(current_player_idx),
-          _play_direction(play_direction),
           _round_number(round_number),
           _starting_player_idx(starting_player_idx)
 { }
 
 game_state::game_state(std::string id) : unique_serializable(id) {
-    this->_draw_pile = new draw_pile();
-    this->_discard_pile = new discard_pile();
     this->_players = std::vector<player*>();
+    this->_winner = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
-    this->_play_direction = new serializable_value<int>(1);
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 }
@@ -52,21 +53,17 @@ game_state::~game_state() {
     if (_is_started != nullptr) {
         delete _is_started;
         delete _is_finished;
-        delete _draw_pile;
-        delete _discard_pile;
+        delete _board;
         delete _current_player_idx;
         delete _starting_player_idx;
-        delete _play_direction;
         delete _round_number;
 
         _is_started = nullptr;
         _is_finished = nullptr;
-        _draw_pile = nullptr;
-        _discard_pile = nullptr;
         _current_player_idx = nullptr;
         _starting_player_idx = nullptr;
-        _play_direction = nullptr;
         _round_number = nullptr;
+        _winner = nullptr;
     }
 }
 
@@ -76,14 +73,6 @@ player* game_state::get_current_player() const {
         return nullptr;
     }
     return _players[_current_player_idx->get_value()];
-}
-
-discard_pile *game_state::get_discard_pile() const {
-    return _discard_pile;
-}
-
-draw_pile *game_state::get_draw_pile() const {
-    return _draw_pile;
 }
 
 bool game_state::is_full() const {

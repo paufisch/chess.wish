@@ -21,8 +21,8 @@ private:
     static const int _min_nof_players = 2;
 
     std::vector<player*> _players;
-    board _board;
-    player* winner;
+    board* _board = new board;
+    player* _winner;
     serializable_value<bool>* _is_started;
     serializable_value<bool>* _is_finished;
     serializable_value<int>* _round_number;
@@ -36,7 +36,7 @@ private:
     game_state(
             std::string id,
             std::vector<player*>& players,
-            board board,
+            board *board,
             player* winner,
             serializable_value<bool>* is_started,
             serializable_value<bool>* is_finished,
