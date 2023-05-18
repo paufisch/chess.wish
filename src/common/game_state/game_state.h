@@ -68,15 +68,14 @@ public:
 
 #ifdef LAMA_SERVER
 // server-side state update functions
-    void setup_round(std::string& err);   // server side initialization
+    void setup_board();   // server side initialization
     bool remove_player(player* player, std::string& err);
     bool add_player(player* player, std::string& err);
     bool start_game(std::string& err);
-    bool fold(player* player, std::string& err);
 
     // end of round functions
     void update_current_player(std::string& err);
-    void wrap_up_round(std::string& err);
+
 #endif
 
 // serializable interface
