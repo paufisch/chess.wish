@@ -24,6 +24,14 @@ board::~board() {
 // delete each piece pointer
 // for loop
 // fill nullptr
+    for(int row = 0; row < 8; row++){
+        for(int col = 0; col < 8; col++){
+            //piece* piece = _board_layout[row][col];
+            //delete piece;
+            delete _board_layout[row][col];
+            _board_layout[row][col] = nullptr;
+        }
+    }
 }
 
 // accessors
@@ -35,7 +43,7 @@ std::vector<std::vector<piece*>> board::vector_to_board(const std::vector<piece*
     std::vector<std::vector<piece*>> board (8, std::vector<piece*>(8, nullptr));
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
-            board[row][col]=vector[row*8 + col];
+            board[row][col] = vector[row*8 + col];
         }
     }
     return board;
@@ -45,7 +53,7 @@ std::vector<piece*> board::board_to_vector(std::vector<std::vector<piece*>> boar
     std::vector<piece*> vector (64, nullptr);
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
-            vector[row*8 + col]=board[row][col];
+            vector[row*8 + col] = board[row][col];
         }
     }
     return vector;
