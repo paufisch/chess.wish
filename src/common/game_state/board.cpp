@@ -29,7 +29,7 @@ board::~board() {
             //piece* piece = _board_layout[row][col];
             //delete piece;
             //it wants to call the specific destructor not only the base class destructor
-            //delete _board_layout[row][col];
+            delete _board_layout[row][col];
             _board_layout[row][col] = nullptr;
         }
     }
