@@ -59,7 +59,6 @@ public:
     //deserialization constructor
     piece(std::string piece_ID, Color color, PieceType type);
 
-    ~piece();
 
 
     [[nodiscard]] PieceType get_type() const { return this->_type; }

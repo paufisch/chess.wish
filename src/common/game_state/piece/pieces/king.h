@@ -10,20 +10,22 @@
 #include "../../../../../rapidjson/include/rapidjson/document.h"
 #include "../../board.h"
 
-class king : public piece{
+class King : public piece{
 private:
 
-    king(base_class_properties);
+    King(base_class_properties);
 
 
 public:
 
-    king(std::string piece_ID, Color color, PieceType type);
+    //virtual ~king();
+
+    King(std::string piece_ID, Color color, PieceType type);
 
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static king* from_json(const rapidjson::Value& json);
+    static King* from_json(const rapidjson::Value& json);
 };
 
 
