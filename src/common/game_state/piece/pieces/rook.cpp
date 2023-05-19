@@ -6,32 +6,32 @@
 #include "../../../exceptions/LamaException.h"
 
 
-rook::rook(piece::base_class_properties props)
+Rook::Rook(piece::base_class_properties props)
     : piece(props)
 { }
 
-rook::rook(std::string piece_ID, Color color, PieceType type)
+Rook::Rook(std::string piece_ID, Color color, PieceType type)
     : piece(piece_ID, color, type)
 { }
 
-void rook::write_into_json(rapidjson::Value &json,
+void Rook::write_into_json(rapidjson::Value &json,
                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     piece::write_into_json(json, allocator);
 }
 
-class rook* rook::from_json(const rapidjson::Value &json) {
+Rook* Rook::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
         json["piece_ID"].IsString() && json["color"].IsString() && json["type"].IsString()){
         std::string piece_ID = json["piece_ID"].GetString();
         std::string color = json["color"].GetString();
         std::string type = json["type"].GetString();
-        return new rook(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
+        return new Rook(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
     } else {
         throw LamaException("Rook constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 
-std::vector<std::vector<bool>> rook::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned int init_col) {
     //return value
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 

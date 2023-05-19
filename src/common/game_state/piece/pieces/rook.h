@@ -11,19 +11,19 @@
 #include "../../../../../rapidjson/include/rapidjson/document.h"
 #include "../../board.h"
 
-class rook : public piece{
+class Rook : public piece{
 private:
 
-    rook(base_class_properties);
+    Rook(base_class_properties);
 
 public:
 
-    rook(std::string piece_ID, Color color, PieceType type);
+    Rook(std::string piece_ID, Color color, PieceType type);
 
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static rook* from_json(const rapidjson::Value& json);
+    static Rook* from_json(const rapidjson::Value& json);
 };
 
 
