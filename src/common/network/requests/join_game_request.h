@@ -23,7 +23,7 @@ private:
 
 public:
 
-    [[nodiscard]] std::string get_player_name() const { return this->_player_name; }
+    [[nodiscard]] std::string get_player_name() const {return this->_player_name;}
     /*
      * Constructor to join any game
      */

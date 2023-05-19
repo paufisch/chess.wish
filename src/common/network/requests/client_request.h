@@ -21,9 +21,9 @@
 enum RequestType {
     join_game,
     start_game,
-    play_card,
-    draw_card,
-    fold,
+    select_piece,
+    move_piece,
+    resign,
 };
 
 class client_request : public serializable {
