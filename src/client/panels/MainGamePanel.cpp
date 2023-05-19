@@ -11,6 +11,7 @@
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
     selected_panel = nullptr;
+    selected = nullptr;
 
 }
 
@@ -239,53 +240,29 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                 if (gameState->get_current_player() == me) {
                     //if no panel is selected, select one!
                     //TODO: this should maybe be a function of the gamestate
-                    if (MainGamePanel::selected_panel == nullptr) {
+                    if (MainGamePanel::selected == nullptr) {
                         //TODO: select piece request (distinguish between black and white)
-                        GameController::selectPiece(i,j);
-                        //MainGamePanel::selected_panel = panels[i * 8 + j];
-
+                        MainGamePanel::selected = new int[2];
+                        MainGamePanel::selected[0] = i;
+                        MainGamePanel::selected[0] = j;
+                        if(me->get_color() == white){
+                            GameController::selectPiece(i,j);
+                        } else {
+                            GameController::selectPiece(7-i,7-j);
+                        }
                         //else move previously selected piece to new position
                     } else {
                         //TODO: display valid moves
                         //...
-                        GameController::movePiece(i,j);
-                        /*
-                        wxSizer *sizer = MainGamePanel::selected_panel->GetSizer();//sizer of source panel
-                        wxSizer *box = panels[i * 8 + j]->GetSizer();//sizer of destination panel
+                        int from_i = MainGamePanel::selected[0];
+                        int from_j = MainGamePanel::selected[1];
 
-                        //if the selected panel contains a piece move it
-                        if (sizer->GetItemCount() > 0) {
-                            int idx = sizer->GetItemCount() - 1;//piece id
-                            auto *child = dynamic_cast<wxStaticBitmap *>(sizer->GetItem(idx)->GetWindow());
-                            wxBitmap piece = child->GetBitmap();
-                            //remove piece from old position
-                            MainGamePanel::selected_panel->RemoveChild(child);
-                            sizer->Detach(child);
-                            child->Destroy();
-
-                            //check if the destination panel contains a piece
-                            if (box->GetItemCount() > 0) {
-                                int idx2 = box->GetItemCount() - 1;
-                                auto *child2 = dynamic_cast<wxStaticBitmap *>(box->GetItem(
-                                        idx2)->GetWindow());//get contained piece
-                                //remove piece from old position
-                                panels[i * 8 + j]->RemoveChild(child2);
-                                box->Detach(child2);
-                                child2->Destroy();
-                                auto *newBitmap = new wxStaticBitmap(panels[i * 8 + j], wxID_ANY, piece);
-                                box->Add(newBitmap, 1,
-                                         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                            } else {
-                                auto *newBitmap = new wxStaticBitmap(panels[i * 8 + j], wxID_ANY, piece);
-                                box->Add(newBitmap, 1,
-                                         wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                            }
+                        if(me->get_color() == white){
+                            GameController::movePiece(from_i, from_j, i, j);
                         } else {
-                            //here we should display a warning to select a different piece.
+                            GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
                         }
-                        box->Layout();
-                        MainGamePanel::selected_panel = nullptr;
-                        */
+                        MainGamePanel::selected = nullptr;
                     }
                 // if it's not our turn we display a error message
                 } else {

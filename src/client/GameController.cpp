@@ -120,10 +120,10 @@ void GameController::selectPiece(int i, int j) {
 }
 
 
-void GameController::movePiece(int i, int j) {
+void GameController::movePiece(int from_i, int from_j, int i, int j) {
     //i,j are indices of the destination panel
     //i,j are the indices of the selected piece
-    move_piece_prequest request = move_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
+    move_piece_prequest request = move_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(),from_i, from_j, i,j);
     ClientNetworkManager::sendRequest(request);
 }
 
