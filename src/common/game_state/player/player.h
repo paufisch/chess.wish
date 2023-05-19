@@ -25,13 +25,16 @@ private:
     /*
      * Deserialization constructor
      */
+
     player(std::string id, serializable_value<std::string>* name, serializable_value<Color>* color);
 
     player(std::string id, serializable_value<std::string>* name, std::string color);
 
+
 public:
 // constructors
     explicit player(std::string name, Color color);   // for client
+    player(std::string name);
     ~player();
 
 #ifdef LAMA_SERVER
