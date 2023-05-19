@@ -44,7 +44,7 @@ public:
     bool start_game(player* player, std::string& err);
     bool try_add_player(player* new_player, std::string& err);
     bool try_remove_player(player* player, std::string& err);
-    bool legal_moves(player* player, int coordinate_1, int coordinate_2, std::string& err);
+    std::vector<std::vector<bool>> legal_moves(player* player, int coordinate_1, int coordinate_2, std::string& err);
     bool move_piece(player* player, int coordinate_from_1, int coordinate_from_2, int coordinate_to_1, int coordinate_to_2, std::string& err);
     //bool play_card(player* player, const std::string& card_id, std::string& err);
     //bool draw_card(player* player, card*& drawn_card, std::string& err);

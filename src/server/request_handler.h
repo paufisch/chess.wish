@@ -8,6 +8,7 @@
 #include "../common/network/responses/server_response.h"
 #include "../common/network/requests/client_request.h"
 #include "../common/network/responses/request_response.h"
+#include "../common/network/responses/select_piece_response.h"
 
 class request_handler {
 public:

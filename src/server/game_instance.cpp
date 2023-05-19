@@ -60,14 +60,9 @@ bool game_instance::is_finished() {
     return _game_state->is_finished();
 }
 
-bool game_instance::legal_moves(player* player, int coordinate_1, int coordinate_2, std::string& err) {
+std::vector<std::vector<bool>> game_instance::legal_moves(player* player, int coordinate_1, int coordinate_2, std::string& err) {
     if (is_player_allowed_to_play(player)) {
-        modification_lock.lock();
-        std::vector<std::vector<bool>> _legal_moves = game_state->select_piece(coordinate_1, coordinate_2);
-        select_piece_response possible_moves_message = select_piece_response(this->get_id(), _legal_moves);
-        server_network_manager::broadcast_message(possible_moves_message, {player}, nullptr);
-        modification_lock.unlock();
-        return true;
+        return _game_state->select_piece(coordinate_1, coordinate_2);
     } else {
         throw LamaException("a player tried to find legal moves while it was their oponents turn");
     }
