@@ -120,13 +120,40 @@ std::vector<std::vector<bool>> game_state::select_piece(int i, int j){
 }
 
 bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
-    auto _legal_moves = _board->get_piece(i_from,j_from)->legal_moves(i_from,j_from);
+    auto _moving_piece = _board->get_piece(i_from,j_from);
+    auto _legal_moves = _moving_piece->legal_moves(i_from,j_from);
     if(_legal_moves[i_to][j_to]){
+
+        //checks if we want to overwrite a king
+        if( (_board->get_piece(i_to,j_to) != nullptr) && (king == _board->get_piece(i_to,j_to)->get_type()) ){
+
+            //the piece pointer at _to gets overwritten with the piece pointer at _from
+            _board->_board_layout[i_to][j_to] = _moving_piece;
+
+            //the piece pointer at _from is now empty
+            _board->_board_layout[i_from][j_from] = nullptr;
+
+            _is_finished->set_value(true);
+            return true;
+        }
+
+        //checks if we want to move a pawn to the base line
+        if( (i_to == 7 || i_to == 0) && (pawn == _moving_piece->get_type()) ){
+            auto Pawn_piece_ID = _moving_piece->get_piece_ID();
+            auto Pawn_color = _moving_piece->get_color();
+            _board->_board_layout[i_from][j_from] = nullptr;
+            _board->_board_layout[i_to][j_to] = new Queen(Pawn_piece_ID, Pawn_color, queen);
+            return true;
+        }
+
         //the piece pointer at _to gets overwritten with the piece pointer at _from
-        _board->_board_layout[i_to][j_to] = _board->get_piece(i_from,j_from);
+        _board->_board_layout[i_to][j_to] = _moving_piece;
+
         //the piece pointer at _from is now empty
         _board->_board_layout[i_from][j_from] = nullptr;
+
         _round_number++;
+
         return true;
     }
     else {
