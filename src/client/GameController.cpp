@@ -1,9 +1,9 @@
 #include "GameController.h"
 #include "../common/network/requests/join_game_request.h"
 #include "../common/network/requests/start_game_request.h"
-#include "../common/network/requests/draw_card_request.h"
-#include "../common/network/requests/fold_request.h"
-#include "../common/network/requests/play_card_request.h"
+//#include "../common/network/requests/fold_request.h"
+#include "../common/network/requests/select_piece_request.h"
+#include "../common/network/requests/move_piece_request.h"
 #include "network/ClientNetworkManager.h"
 
 
@@ -105,21 +105,25 @@ void GameController::startGame() {
     ClientNetworkManager::sendRequest(request);
 }
 
-
-void GameController::drawCard() {
-    draw_card_request request = draw_card_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
-    ClientNetworkManager::sendRequest(request);
-}
-
-
+/*
 void GameController::resign() {
     fold_request request = fold_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
 }
+*/
+
+void GameController::selectPiece(int i, int j) {
+    //i,j are the indices of the selected piece
+    select_piece_request request = select_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
+    ClientNetworkManager::sendRequest(request);
+
+}
 
 
-void GameController::playCard(card* cardToPlay) {
-    play_card_request request = play_card_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), cardToPlay->get_id());
+void GameController::movePiece(int from_i, int from_j, int i, int j) {
+    //i,j are indices of the destination panel
+    //i,j are the indices of the selected piece
+    move_piece_request request = move_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(),from_i, from_j, i,j);
     ClientNetworkManager::sendRequest(request);
 }
 
@@ -147,11 +151,12 @@ void GameController::showGameOverMessage() {
     // sort players by score
     std::vector<player*> players = GameController::_currentGameState->get_players();
 
+    /*
     // list all players
     for(int i = 0; i < players.size(); i++) {
 
         player* playerState = players.at(i);
-        std::string scoreText = std::to_string(playerState->get_score());
+        //std::string scoreText = std::to_string(playerState->get_score());
 
         // first entry is the winner
         std::string winnerText = "";
@@ -169,6 +174,7 @@ void GameController::showGameOverMessage() {
         }
         message += "\n" + playerName + ":     " + scoreText + winnerText;
     }
+    */
 
     wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE);
     dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel(buttonLabel));

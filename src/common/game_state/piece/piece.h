@@ -33,13 +33,13 @@ protected:
         PieceType _type;
         std::string _piece_ID;
         Color _color;
-        board* _board;
+        class board* _board;
     };
 
     PieceType _type;
     std::string _piece_ID;
     Color _color;
-    board* _board;
+    class board* _board;
 
     explicit piece(base_class_properties); // base constructor
     static base_class_properties create_base_class_properties(PieceType type, std::string piece_ID, Color color);

@@ -8,9 +8,10 @@
 #include "../common/network/responses/server_response.h"
 #include "../common/network/requests/client_request.h"
 #include "../common/network/responses/request_response.h"
+#include "../common/network/responses/select_piece_response.h"
 
 class request_handler {
 public:
-    static request_response* handle_request(const client_request* const req);
+    static server_response* handle_request(const client_request* const req);
 };
 #endif //LAMA_REQUEST_HANDLER_H

@@ -6,6 +6,16 @@
 
 #include "../../exceptions/LamaException.h"
 
+player::player(std::string name) : unique_serializable() {
+    this->_player_name = new serializable_value<std::string>(name);
+    if (name == "white"){
+        this->_color = new serializable_value<Color>(white);
+    } else {
+        this->_color = new serializable_value<Color>(black);
+    }
+
+}
+
 player::player(std::string name, Color color) : unique_serializable() {
     this->_player_name = new serializable_value<std::string>(name);
     this->_color = new serializable_value<Color>(color);
@@ -16,6 +26,8 @@ player::player(std::string id, serializable_value<std::string>* name, serializab
         _player_name(name),
         _color(color)
 { }
+
+
 
 
 player::player(std::string id, serializable_value<std::string>* name, std::string color) :
