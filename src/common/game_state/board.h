@@ -13,6 +13,13 @@
 #include "../serialization/serializable_value.h"
 #include "../serialization/unique_serializable.h"
 #include "piece/piece.h"
+#include "piece/pieces/bishop.h"
+#include "piece/pieces/king.h"
+#include "piece/pieces/knight.h"
+#include "piece/pieces/pawn.h"
+#include "piece/pieces/queen.h"
+#include "piece/pieces/rook.h"
+
 
 class board : public unique_serializable {
 private:

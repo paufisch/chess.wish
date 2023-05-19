@@ -42,10 +42,10 @@ piece* board::get_piece(int i, int j){
 
 // fill_board (0,0) = a1, (8,0) = a8
 void board::fill_white_king(){
-    _board_layout[0][4] = new piece(piece_ID,white,king);
+    _board_layout[0][4] = new king(piece_ID, white, king);
 }
 void board::fill_black_king(){
-    _board_layout[7][4] = new piece(piece_ID,black,king);
+    _board_layout[7][4] = new king(piece_ID, black, king);
 }
 
 void board::fill_white_pawns(){
@@ -70,7 +70,7 @@ void board::fill_black_pawns(){
 }
 
 void board::fill_white_rooks(){
-    _board_layout[0][0] = new piece(piece_ID, white, rook);
+    _board_layout[0][0] = new piece("1", white, rook);
     _board_layout[0][7] = new piece(piece_ID, white, rook);
 }
 void board::fill_black_rooks(){
