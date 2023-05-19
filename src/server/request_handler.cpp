@@ -12,11 +12,11 @@
 #include "game_instance.h"
 
 #include "../common/network/requests/join_game_request.h"
-#include "../common/network/requests/draw_card_request.h"
-#include "../common/network/requests/play_card_request.h"
+#include "../common/network/requests/select_piece_request.h"
+#include "../common/network/requests/move_piece_request.h"
 
 
-request_response* request_handler::handle_request(const client_request* const req) {
+server_response* request_handler::handle_request(const client_request* const req) {
 
     // Prepare variables that are used by every request type
     player* player;
