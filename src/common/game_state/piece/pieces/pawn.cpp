@@ -6,32 +6,32 @@
 #include "../../../exceptions/LamaException.h"
 
 
-pawn::pawn(piece::base_class_properties props)
+Pawn::Pawn(piece::base_class_properties props)
     : piece(props)
 { }
 
-pawn::pawn(std::string piece_ID, Color color, PieceType type)
+Pawn::Pawn(std::string piece_ID, Color color, PieceType type)
     : piece(piece_ID, color, type)
 { }
 
-void pawn::write_into_json(rapidjson::Value &json,
+void Pawn::write_into_json(rapidjson::Value &json,
                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     piece::write_into_json(json, allocator);
 }
 
-class pawn* pawn::from_json(const rapidjson::Value &json) {
+Pawn* Pawn::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
         json["piece_ID"].IsString() && json["color"].IsString() && json["type"].IsString()){
         std::string piece_ID = json["piece_ID"].GetString();
         std::string color = json["color"].GetString();
         std::string type = json["type"].GetString();
-        return new pawn(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
+        return new Pawn(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
     } else {
         throw LamaException("Pawn constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 
-std::vector<std::vector<bool>> pawn::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Pawn::legal_moves(unsigned int init_row, unsigned int init_col) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 
     //Decide if the color is white or black because of the direction the pawns can go ("up" or "down")

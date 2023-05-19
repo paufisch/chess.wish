@@ -15,7 +15,6 @@ private:
 
     King(base_class_properties);
 
-
 public:
 
     //virtual ~king();

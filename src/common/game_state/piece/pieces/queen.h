@@ -8,9 +8,9 @@
 
 #include "../piece.h"
 
-class queen : public piece{
+class Queen : public piece{
 public:
-    queen(std::string id, serializable_value<std::string>* piece_ID, serializable_value<std::string>* color);
+    Queen(std::string id, serializable_value<std::string>* piece_ID, serializable_value<std::string>* color);
 
     std::vector<std::vector<bool>> legal_moves(unsigned row, unsigned col) override;
 };

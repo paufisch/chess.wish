@@ -11,19 +11,19 @@
 #include "../../../../../rapidjson/include/rapidjson/document.h"
 #include "../../board.h"
 
-class bishop : public piece{
+class Bishop : public piece{
 private:
 
-    bishop(base_class_properties);
+    Bishop(base_class_properties);
 
 public:
 
-    bishop(std::string piece_ID, Color color, PieceType type);
+    Bishop(std::string piece_ID, Color color, PieceType type);
 
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static bishop* from_json(const rapidjson::Value& json);
+    static Bishop* from_json(const rapidjson::Value& json);
 };
 
 
