@@ -42,65 +42,65 @@ piece* board::get_piece(int i, int j){
 
 // fill_board (0,0) = a1, (8,0) = a8
 void board::fill_white_king(){
-    _board_layout[0][4] = new king(piece_ID, white, king);
+    _board_layout[0][4] = new King("1", white, king);
 }
 void board::fill_black_king(){
-    _board_layout[7][4] = new king(piece_ID, black, king);
+    _board_layout[7][4] = new King("29", black, king);
 }
 
 void board::fill_white_pawns(){
-    _board_layout[1][0] = new piece(piece_ID, white, pawn);
-    _board_layout[1][1] = new piece(piece_ID, white, pawn);
-    _board_layout[1][2] = new piece(piece_ID, white, pawn);
-    _board_layout[1][3] = new piece(piece_ID, white, pawn);
-    _board_layout[1][4] = new piece(piece_ID, white, pawn);
-    _board_layout[1][5] = new piece(piece_ID, white, pawn);
-    _board_layout[1][6] = new piece(piece_ID, white, pawn);
-    _board_layout[1][7] = new piece(piece_ID, white, pawn);
+    _board_layout[1][0] = new Pawn("9", white, pawn);
+    _board_layout[1][1] = new Pawn("10", white, pawn);
+    _board_layout[1][2] = new Pawn("11", white, pawn);
+    _board_layout[1][3] = new Pawn("12", white, pawn);
+    _board_layout[1][4] = new Pawn("13", white, pawn);
+    _board_layout[1][5] = new Pawn("14", white, pawn);
+    _board_layout[1][6] = new Pawn("15", white, pawn);
+    _board_layout[1][7] = new Pawn("16", white, pawn);
 }
 void board::fill_black_pawns(){
-    _board_layout[6][0] = new piece(piece_ID, black, pawn);
-    _board_layout[6][1] = new piece(piece_ID, black, pawn);
-    _board_layout[6][2] = new piece(piece_ID, black, pawn);
-    _board_layout[6][3] = new piece(piece_ID, black, pawn);
-    _board_layout[6][4] = new piece(piece_ID, black, pawn);
-    _board_layout[6][5] = new piece(piece_ID, black, pawn);
-    _board_layout[6][6] = new piece(piece_ID, black, pawn);
-    _board_layout[6][7] = new piece(piece_ID, black, pawn);
+    _board_layout[6][0] = new Pawn("17", black, pawn);
+    _board_layout[6][1] = new Pawn("18", black, pawn);
+    _board_layout[6][2] = new Pawn("19", black, pawn);
+    _board_layout[6][3] = new Pawn("20", black, pawn);
+    _board_layout[6][4] = new Pawn("21", black, pawn);
+    _board_layout[6][5] = new Pawn("22", black, pawn);
+    _board_layout[6][6] = new Pawn("23", black, pawn);
+    _board_layout[6][7] = new Pawn("24", black, pawn);
 }
 
 void board::fill_white_rooks(){
-    _board_layout[0][0] = new piece("1", white, rook);
-    _board_layout[0][7] = new piece(piece_ID, white, rook);
+    _board_layout[0][0] = new Rook("1", white, rook);
+    _board_layout[0][7] = new Rook("8", white, rook);
 }
 void board::fill_black_rooks(){
-    _board_layout[7][0] = new piece(piece_ID, black, rook);
-    _board_layout[7][7] = new piece(piece_ID, black, rook);
+    _board_layout[7][0] = new Rook("25", black, rook);
+    _board_layout[7][7] = new Rook("32", black, rook);
 }
 
 void board::fill_white_knights() {
-    _board_layout[0][1] = new piece(piece_ID, white, knight);
-    _board_layout[0][6] = new piece(piece_ID, white, knight);
+    _board_layout[0][1] = new Knight("2", white, knight);
+    _board_layout[0][6] = new Knight("7", white, knight);
 }
 void board::fill_black_knights() {
-    _board_layout[7][1] = new piece(piece_ID, black, knight);
-    _board_layout[7][6] = new piece(piece_ID, black, knight);
+    _board_layout[7][1] = new Knight("26", black, knight);
+    _board_layout[7][6] = new Knight("31", black, knight);
 }
 
 void board::fill_white_queen(){
-    _board_layout[0][3] = new piece(piece_ID, white, queen);
+    _board_layout[0][3] = new Queen("4", white, queen);
 }
 void board::fill_black_queen(){
-    _board_layout[7][3] = new piece(piece_ID, black, queen);
+    _board_layout[7][3] = new Queen("28", black, queen);
 }
 
 void board::fill_white_bishops(){
-    _board_layout[0][2] = new piece(piece_ID, white, bishop);
-    _board_layout[0][5] = new piece(piece_ID, white, bishop);
+    _board_layout[0][2] = new Bishop("3", white, bishop);
+    _board_layout[0][5] = new Bishop("6", white, bishop);
 }
 void board::fill_black_bishops(){
-    _board_layout[7][2] = new piece(piece_ID, black, bishop);
-    _board_layout[7][5] = new piece(piece_ID, black, bishop);
+    _board_layout[7][2] = new Bishop("27", black, bishop);
+    _board_layout[7][5] = new Bishop("30", black, bishop);
 }
 
 
