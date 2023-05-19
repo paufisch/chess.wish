@@ -12,14 +12,13 @@
 bool game_instance::is_king_dead() {
     int king_count = 0;
 
-    // TODO actually implement this when gamestate and board are done
-    //for (i = 0; i < 8; ++i) {
-    //    for (j = 0; j < 8; ++j) {
-    //        if (_game_state->board.get_piece(i, j).get_kind() == "king") {
-    //            ++king_count;
-    //        }
-    //    }
-    //}
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (_game_state->get_board()->get_piece(i, j)->get_type() == PieceType::king) {
+                ++king_count;
+            }
+        }
+    }
     if (king_count == 2) {
         return false;
     } else if (king_count == 1) {
@@ -106,7 +105,7 @@ bool game_instance::move_piece(player *player, int coordinate_from_1, int coordi
 
 bool game_instance::resign(player *player, std::string &err) {
     modification_lock.lock();
-    if (_game_state->resign(player, err)) {
+    if (_game_state->resign(player)) {
         // send state update to all other players
         full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
         server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
