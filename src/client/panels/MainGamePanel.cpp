@@ -2,9 +2,9 @@
 #include "../uiElements/ImagePanel.h"
 #include "../GameController.h"
 //not jet existing includes:
-#include "board.h"
-#include "piece/piece.h"
-#include "color.h"
+#include "../../common/game_state/board.h"
+#include "../../common/game_state/piece/piece.h"
+#include "../../common/game_state/color.h"
 
 
 
@@ -183,9 +183,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
             // Add chess figures as bitmaps to the panels
             // get the piece
             if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
-                piece piece = gameState->get_Board()->get_Piece(i, j); //TODO: gamestate needs a get_Board function
+                piece *piece = gameState->get_board()->get_piece(i, j); //TODO: gamestate needs a get_Board function
             } else {
-                piece piece = gameState->get_Board()->get_Piece(7-i,7-j);
+                piece *piece = gameState->get_board()->get_piece(7-i,7-j);
             }
 
             //add bitmap which represents the piece to the panel
