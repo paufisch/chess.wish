@@ -182,51 +182,52 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
             // Add chess figures as bitmaps to the panels
             // get the piece
+            piece *_piece = nullptr;
             if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
-                piece *piece = gameState->get_board()->get_piece(i, j); //TODO: gamestate needs a get_Board function
+                _piece = gameState->get_board()->get_piece(i, j); //TODO: gamestate needs a get_Board function
             } else {
-                piece *piece = gameState->get_board()->get_piece(7-i,7-j);
+                _piece = gameState->get_board()->get_piece(7-i,7-j);
             }
 
             //add bitmap which represents the piece to the panel
-            if(piece->get_color == white){
-                if(piece->get_type == pawn){
+            if(_piece->get_color() == white){
+                if(_piece->get_type() == pawn){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn); //maybe set ID to the ID of the piece
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == king){
+                } else if (_piece->get_type() == king){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == queen){
+                } else if (_piece->get_type() == queen){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_queen);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == rook){
+                } else if (_piece->get_type() == rook){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_rook);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == knight){
+                } else if (_piece->get_type() == knight){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_knight);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == bishop){
+                } else if (_piece->get_type() == bishop){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_bishop);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 }
 
             } else {
-                if(piece->get_type == pawn){
+                if(_piece->get_type() == pawn){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn); //maybe set ID to the ID of the piece
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == king){
+                } else if (_piece->get_type() == king){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == queen){
+                } else if (_piece->get_type() == queen){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_queen);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == rook){
+                } else if (_piece->get_type() == rook){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_rook);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == knight){
+                } else if (_piece->get_type() == knight){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_knight);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                } else if (piece->get_type == bishop){
+                } else if (_piece->get_type() == bishop){
                     auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_bishop);
                     vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                 }
