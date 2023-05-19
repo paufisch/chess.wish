@@ -8,7 +8,7 @@
 class ConnectionPanel : public wxPanel {
 
 public:
-    ConnectionPanel(wxWindow* parent);
+    explicit ConnectionPanel(wxWindow* parent);
 
     wxString getServerAddress();
     wxString getServerPort();

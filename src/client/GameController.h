@@ -15,13 +15,13 @@ public:
     static void connectToServer();
     static void updateGameState(game_state* newGameState);
     static void startGame();
-    static void drawCard();
     static void resign();
-    static void playCard(card* cardToPlay);
     static wxEvtHandler* getMainThreadEventHandler();
     static void showError(const std::string& title, const std::string& message);
     static void showStatus(const std::string& message);
     static void showGameOverMessage();
+    static void selectPiece(int i, int j);
+    static void movePiece(int from_i, int from_j, int i, int j);
 
 private:
     static GameWindow* _gameWindow;

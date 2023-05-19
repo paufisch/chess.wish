@@ -11,9 +11,9 @@ ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     wxColor red = wxColor(136,26,50);
     this->SetBackgroundColour(red);
 
-    wxBoxSizer* verticalLayout = new wxBoxSizer(wxVERTICAL);
+    auto* verticalLayout = new wxBoxSizer(wxVERTICAL);
 
-    ImagePanel* logo = new ImagePanel(this, "../assets/chess_logo.png", wxBITMAP_TYPE_ANY, wxDefaultPosition, wxSize(200, 250));
+    auto* logo = new ImagePanel(this, "../assets/chess_logo.png", wxBITMAP_TYPE_ANY, wxDefaultPosition, wxSize(200, 250));
     verticalLayout->Add(logo, 0, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 10);
 
     this->_serverAddressField = new InputField(
@@ -44,7 +44,7 @@ ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     );
     verticalLayout->Add(this->_playerNameField, 0, wxTOP | wxLEFT | wxRIGHT, 10);
 
-    wxButton* connectButton = new wxButton(this, wxID_ANY, "Connect", wxDefaultPosition, wxSize(100, 40));
+    auto* connectButton = new wxButton(this, wxID_ANY, "Connect", wxDefaultPosition, wxSize(100, 40));
     connectButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
         GameController::connectToServer();
     });
