@@ -15,9 +15,11 @@ class pawn : public piece{
 private:
 
     pawn(base_class_properties);
-    pawn(std::string piece_ID, Color color, PieceType type);
+
 
 public:
+
+    pawn(std::string piece_ID, Color color, PieceType type);
 
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
