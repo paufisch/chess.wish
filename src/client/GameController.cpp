@@ -1,7 +1,7 @@
 #include "GameController.h"
 #include "../common/network/requests/join_game_request.h"
 #include "../common/network/requests/start_game_request.h"
-#include "../common/network/requests/fold_request.h"
+//#include "../common/network/requests/fold_request.h"
 #include "../common/network/requests/select_piece_request.h"
 #include "../common/network/requests/move_piece_request.h"
 #include "network/ClientNetworkManager.h"
