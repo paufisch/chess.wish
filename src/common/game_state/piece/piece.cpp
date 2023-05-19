@@ -99,12 +99,12 @@ piece::piece(piece::base_class_properties props) :
         _board(props._board)
 {}
 
-
+/*
 std::vector<std::vector<bool>> piece::legal_moves(unsigned row, unsigned col) {
     // Default implementation, to be overridden by subclasses
-    std::vector<std::vector<bool>> legalMoves(8, std::vector<bool>(8, false));
-    return legalMoves;
+    return std::vector<std::vector<bool>> legalMoves(8, std::vector<bool>(8, false));
 }
+*/
 
 
 void piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
