@@ -108,7 +108,7 @@ bool game_state::is_player_in_game(player *player) const {
 
 //Maybe further restrictions needed !resign !king_taken !round_limit
 bool game_state::is_allowed_to_play_now(player *player) const {
-    return (player == get_current_player());
+    return (player == get_current_player()) && (0 == (_is_finished->get_value()));
 }
 
 std::vector<player*>& game_state::get_players() {
@@ -129,14 +129,15 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         _round_number++;
         return true;
     }
-    else{
+    else {
         return false;
-    };
+    }
 }
 
 player* game_state::resign(player* loser){
     _loser = loser;
-    return loser;
+    _is_finished->set_value(1);
+    return _loser;
 }
 
 board* game_state::get_board(){
@@ -155,75 +156,33 @@ void game_state::next_turn() {
 #ifdef LAMA_SERVER
 
 // state modification functions without diff
-void game_state::setup_round(std::string &err) {
+void game_state::setup_board() {
+    /*
 
-    // update round number
-    _round_number->set_value(_round_number->get_value() + 1);
+    _board->fill_white_king();
+    _board->fill_black_king();
 
-    // setup draw_pile
-    _draw_pile->setup_game(err);
+    _board->fill_white_pawns();
+    _board->fill_black_pawns();
 
-    // setup discard_pile
-    _discard_pile->setup_game(err);
+    _board->fill_white_rooks();
+    _board->fill_black_rooks();
 
-    // setup players
-    for (int i = 0; i < _players.size(); i++) {
-        _players[i]->setup_round(err);
-        // draw 6 cards
-        card* drawn_card = nullptr;
-        for (int j = 0; j < 6; j++) {
-            if (!_draw_pile->draw(_players[i], drawn_card, err)) {
-                std::cerr << err << std::endl;
-            }
-        }
-    }
+    _board->fill_white_knights();
+    _board->fill_black_knights();
 
-    // set a first card onto the discard pile
-    card* top_card = _draw_pile->remove_top(err);
-    if (top_card != nullptr) {
-        _discard_pile->try_play(top_card, err);
-    }
+    _board->fill_white_queen();
+    _board->fill_black_queen();
+
+    _board->fill_white_bishops();
+    _board->fill_black_bishops();
+
+    */
 }
 
-void game_state::wrap_up_round(std::string& err) {
-    bool is_game_over = false;
-    for(int i = 0; i < _players.size(); i++) {
-        _players[i]->wrap_up_round(err);
-        if (_players[i]->get_score() >= 40) {
-            // The game ends when the first player reaches 40 points
-            is_game_over = true;
-        }
-    }
-
-    if (is_game_over) {
-        this->_is_finished->set_value(true);
-    } else {
-        // decide which player starts in the next round
-        _starting_player_idx->set_value((_starting_player_idx->get_value() + 1) % _players.size());
-        // start next round
-        setup_round(err);
-    }
-}
-
+//for securitiy reasons here, no new funtionality
 void game_state::update_current_player(std::string& err) {
-    int nof_players = _players.size();
-    int current_player_idx = _current_player_idx->get_value();
-    ++current_player_idx %= nof_players;
-    bool round_over = true;
-    for (int i = 0; i < nof_players; i++) {
-        if (_players[current_player_idx]->has_folded() == false) {
-            _current_player_idx->set_value(current_player_idx);
-            round_over = false;
-            break;
-        } else {
-            ++current_player_idx %= nof_players;
-        }
-    }
-
-    if (round_over) {
-        // all players have folded and the round is over
-        wrap_up_round(err);
-    }
+    next_turn();
 }
 
 bool game_state::start_game(std::string &err) {
@@ -233,7 +192,7 @@ bool game_state::start_game(std::string &err) {
     }
 
     if (!_is_started->get_value()) {
-        this->setup_round(err);
+        this->setup_board();
         this->_is_started->set_value(true);
         return true;
     } else {
@@ -278,83 +237,6 @@ bool game_state::add_player(player* player_ptr, std::string& err) {
 
     _players.push_back(player_ptr);
     return true;
-}
-
-bool game_state::draw_card(player *player, std::string &err) {
-    if (!is_player_in_game(player)) {
-        err = "Server refused to perform draw_card. Player is not part of the game.";
-        return false;
-    }
-    if (!is_allowed_to_play_now(player)) {
-        err = "It's not this players turn yet.";
-        return false;
-    }
-    if (_draw_pile->is_empty()) {
-        err = "Draw pile is empty. Cannot draw a card.";
-        return false;
-    }
-    if (_is_finished->get_value()) {
-        err = "Could not draw card, because the requested game is already finished.";
-        return false;
-    }
-
-    card* drawn_card;
-    if (_draw_pile->draw(player, drawn_card, err)) {
-        update_current_player(err); // next players turn
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool game_state::play_card(player *player, const std::string& card_id, std::string &err) {
-    if (!is_player_in_game(player)) {
-        err = "Server refused to perform draw_card. Player is not part of the game.";
-        return false;
-    }
-    if (!is_allowed_to_play_now(player)) {
-        err = "It's not this players turn yet.";
-        return false;
-    }
-    if (_is_finished->get_value()) {
-        err = "Could not play card, because the requested game is already finished.";
-        return false;
-    }
-
-    if (_discard_pile->try_play(card_id, player, err)) {
-        if (player->get_nof_cards() == 0) {
-            // end of game. Calculate scores. Prepare new round
-            wrap_up_round(err);
-        } else {
-            update_current_player(err);
-        }
-        return true;
-    } else {
-        return false;
-    }
-}
-
-bool game_state::fold(player *player, std::string &err) {
-    if(!is_player_in_game(player)) {
-        err = "Server refused to perform draw_card. Player is not part of the game.";
-        return false;
-    }
-    if (!is_allowed_to_play_now(player)) {
-        err = "It's not this players turn yet.";
-        return false;
-    }
-    if (_is_finished->get_value()) {
-        err = "Could not fold, because the requested game is already finished.";
-        return false;
-    }
-
-    if (player->fold(err)) {
-        // Allow next player to play
-        update_current_player(err);
-        return true;
-    } else {
-        return false;
-    }
 }
 
 #endif
