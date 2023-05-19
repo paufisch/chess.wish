@@ -15,9 +15,10 @@ class bishop : public piece{
 private:
 
     bishop(base_class_properties);
-    bishop(std::string piece_ID, Color color, PieceType type);
 
 public:
+
+    bishop(std::string piece_ID, Color color, PieceType type);
 
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
