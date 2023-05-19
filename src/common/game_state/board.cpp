@@ -28,7 +28,8 @@ board::~board() {
         for(int col = 0; col < 8; col++){
             //piece* piece = _board_layout[row][col];
             //delete piece;
-            delete _board_layout[row][col];
+            //it wants to call the specific destructor not only the base class destructor
+            //delete _board_layout[row][col];
             _board_layout[row][col] = nullptr;
         }
     }
