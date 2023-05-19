@@ -42,7 +42,7 @@ piece* board::get_piece(int i, int j){
 
 // fill_board (0,0) = a1, (8,0) = a8
 void board::fill_white_king(){
-    _board_layout[0][4] = new King("1", white, king);
+    _board_layout[0][4] = new King("5", white, king);
 }
 void board::fill_black_king(){
     _board_layout[7][4] = new King("29", black, king);
