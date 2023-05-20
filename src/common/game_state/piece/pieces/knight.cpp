@@ -21,7 +21,7 @@ void Knight::write_into_json(rapidjson::Value &json,
     piece::write_into_json(json, allocator);
 }
 
-Knight *Knight::from_json(const rapidjson::Value &json) {
+piece * Knight::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
         json["piece_ID"].IsString() && json["color"].IsString() && json["type"].IsString()){
         std::string piece_ID = json["piece_ID"].GetString();

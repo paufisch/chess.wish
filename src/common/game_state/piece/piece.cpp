@@ -79,9 +79,11 @@ piece::base_class_properties piece::create_base_class_properties(
     return res;
 }
 
+/*
 piece::~piece() {
     _board = nullptr;
 }
+*/
 
 piece::piece(std::string id) : unique_serializable(id) { }
 
@@ -126,22 +128,22 @@ piece* piece::from_json(const rapidjson::Value& json) {
         const PieceType piece_type = piece::_string_to_piece_type.at(type);
 
         if (piece_type == PieceType::rook) {
-            return rook::from_json(json);
+            return Rook::from_json(json);
         }
         else if (piece_type == PieceType::knight) {
-            return knight::from_json(json);
+            return Knight::from_json(json);
         }
         else if (piece_type == PieceType::bishop) {
-            return bishop::from_json(json);
+            return Bishop::from_json(json);
         }
         else if (piece_type == PieceType::king) {
-            return king::from_json(json);
+            return King::from_json(json);
         }
         else if (piece_type == PieceType::queen) {
-            return queen::from_json(json);
+            return Queen::from_json(json);
         }
         else if (piece_type == PieceType::pawn) {
-            return pawn::from_json(json);
+            return Pawn::from_json(json);
         } else {
             throw LamaException("Encountered unknown Piece type " + type);
         }
