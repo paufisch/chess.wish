@@ -7,11 +7,10 @@
 
 
 #include "../piece.h"
-#include <string>
-#include "../../../../../rapidjson/include/rapidjson/document.h"
-#include "../../board.h"
 
-class Knight : public piece{
+
+
+class Knight : public piece {
 private:
 
     Knight(base_class_properties);

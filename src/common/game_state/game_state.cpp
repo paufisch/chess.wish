@@ -3,6 +3,8 @@
 //
 
 #include "game_state.h"
+#include "piece/piece.h"
+#include "board.h"
 
 #include "../exceptions/LamaException.h"
 #include "../serialization/vector_utils.h"

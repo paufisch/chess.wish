@@ -7,8 +7,9 @@
 
 
 #include "../piece.h"
+//#include "../piece.cpp"
 
-class Queen : public piece{
+class Queen : public piece {
 private:
 
     Queen(base_class_properties);

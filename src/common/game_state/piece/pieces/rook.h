@@ -7,11 +7,9 @@
 
 
 #include "../piece.h"
-#include <string>
-#include "../../../../../rapidjson/include/rapidjson/document.h"
-#include "../../board.h"
 
-class Rook : public piece{
+
+class Rook : public piece {
 private:
 
     Rook(base_class_properties);

@@ -14,6 +14,13 @@
 #include "../../serialization/json_utils.h"
 #include "../color.h"
 #include "../board.h"
+#include "pieces/queen.h"
+#include "pieces/king.h"
+#include "pieces/pawn.h"
+#include "pieces/knight.h"
+#include "pieces/bishop.h"
+#include "pieces/rook.h"
+
 
 
 

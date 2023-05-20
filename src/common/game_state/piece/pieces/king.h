@@ -6,9 +6,7 @@
 #define KING_H
 
 #include "../piece.h"
-#include <string>
-#include "../../../../../rapidjson/include/rapidjson/document.h"
-#include "../../board.h"
+
 
 class King : public piece{
 private:

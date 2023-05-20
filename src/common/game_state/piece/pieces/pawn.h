@@ -7,11 +7,9 @@
 
 
 #include "../piece.h"
-#include <string>
-#include "../../../../../rapidjson/include/rapidjson/document.h"
-#include "../../board.h"
 
-class Pawn : public piece{
+
+class Pawn : public piece {
 private:
 
     Pawn(base_class_properties);

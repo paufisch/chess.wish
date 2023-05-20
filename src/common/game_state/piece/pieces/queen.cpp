@@ -5,9 +5,11 @@
 #include "queen.h"
 #include "../../../exceptions/LamaException.h"
 
+
 Queen::Queen(piece::base_class_properties props)
     : piece(props)
 { }
+
 
 Queen::Queen(std::string piece_ID, Color color, PieceType type)
     : piece(piece_ID, color, type)

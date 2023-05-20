@@ -3,13 +3,6 @@
 //
 
 #include "piece.h"
-#include "pieces/rook.h"
-#include "pieces/queen.h"
-#include "pieces/king.h"
-#include "pieces/knight.h"
-#include "pieces/pawn.h"
-#include "pieces/bishop.h"
-#include <iostream>
 #include "../../exceptions/LamaException.h"
 
 

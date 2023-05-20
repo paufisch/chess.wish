@@ -7,11 +7,8 @@
 
 
 #include "../piece.h"
-#include <string>
-#include "../../../../../rapidjson/include/rapidjson/document.h"
-#include "../../board.h"
 
-class Bishop : public piece{
+class Bishop : public piece {
 private:
 
     Bishop(base_class_properties);
@@ -23,7 +20,7 @@ public:
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static piece * from_json(const rapidjson::Value& json);
+    static piece* from_json(const rapidjson::Value& json);
 };
 
 
