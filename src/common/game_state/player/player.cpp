@@ -9,19 +9,19 @@
 player::player(std::string name) : unique_serializable() {
     this->_player_name = new serializable_value<std::string>(name);
     if (name == "white"){
-        this->_color = new serializable_value<Color>(white);
+        this->_color = white;
     } else {
-        this->_color = new serializable_value<Color>(black);
+        this->_color = black;
     }
 
 }
 
 player::player(std::string name, Color color) : unique_serializable() {
     this->_player_name = new serializable_value<std::string>(name);
-    this->_color = new serializable_value<Color>(color);
+    this->_color = color;
 }
 
-player::player(std::string id, serializable_value<std::string>* name, serializable_value<Color>* color) :
+player::player(std::string id, serializable_value<std::string>* name, Color color) :
         unique_serializable(id),
         _player_name(name),
         _color(color)
@@ -34,16 +34,14 @@ player::player(std::string id, serializable_value<std::string>* name, std::strin
         unique_serializable(id),
         _player_name(name)
 {
-    _color = new serializable_value<Color> (color == "white" ? white : black);
+    _color = (color == "white" ? white : black);
 }
 
 player::~player() {
     if (_player_name != nullptr) {
         delete _player_name;
-        delete _color;
 
         _player_name = nullptr;
-        _color = nullptr;
     }
 }
 
@@ -69,7 +67,7 @@ std::string player::get_player_name() const noexcept {
 }
 
 bool player::get_color() const noexcept {
-    return this->_color->get_value();
+    return this->_color;
 }
 
 
@@ -104,9 +102,9 @@ void player::write_into_json(rapidjson::Value& json, rapidjson::Document::Alloca
     _player_name->write_into_json(name_val, allocator);
     json.AddMember("player_name", name_val, allocator);
 
-    rapidjson::Value color_val(rapidjson::kObjectType);
-    _color->write_into_json(color_val, allocator);
-    json.AddMember("color", color_val, allocator);
+    //rapidjson::Value color_val(rapidjson::kObjectType);
+    //_color->write_into_json(color_val, allocator);
+    json.AddMember("color", _color, allocator);
 }
 
 

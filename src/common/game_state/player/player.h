@@ -16,7 +16,7 @@
 class player : public unique_serializable {
 private:
     serializable_value<std::string>* _player_name;
-    serializable_value<Color>* _color;
+    Color _color;
 
 #ifdef LAMA_SERVER
     std::string _game_id;
@@ -26,7 +26,7 @@ private:
      * Deserialization constructor
      */
 
-    player(std::string id, serializable_value<std::string>* name, serializable_value<Color>* color);
+    player(std::string id, serializable_value<std::string>* name, Color color);
 
     player(std::string id, serializable_value<std::string>* name, std::string color);
 

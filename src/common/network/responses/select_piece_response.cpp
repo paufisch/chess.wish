@@ -60,3 +60,7 @@ select_piece_response *select_piece_response::from_json(const rapidjson::Value &
         throw LamaException("Could not parse request_response from json. success is missing.");
     }
 }
+
+void select_piece_response::Process() const {
+    //TODO
+}
