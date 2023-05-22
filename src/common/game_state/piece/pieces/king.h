@@ -8,7 +8,7 @@
 #include "../piece.h"
 
 
-class King : public piece{
+class King : public Piece{
 private:
 
     King(base_class_properties);
@@ -22,7 +22,7 @@ public:
     std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col) override;
 
     void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static piece * from_json(const rapidjson::Value& json);
+    static Piece * from_json(const rapidjson::Value& json);
 };
 
 

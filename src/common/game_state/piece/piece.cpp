@@ -4,10 +4,16 @@
 
 #include "piece.h"
 #include "../../exceptions/LamaException.h"
+#include "pieces/queen.h"
+#include "pieces/king.h"
+#include "pieces/pawn.h"
+#include "pieces/knight.h"
+#include "pieces/bishop.h"
+#include "pieces/rook.h"
 
 
 // for deserialization
-const std::unordered_map<std::string, PieceType> piece::_string_to_piece_type = {
+const std::unordered_map<std::string, PieceType> Piece::_string_to_piece_type = {
         {"rook", PieceType::rook},
         {"knight", PieceType::knight},
         {"bishop", PieceType::bishop},
@@ -17,14 +23,14 @@ const std::unordered_map<std::string, PieceType> piece::_string_to_piece_type = 
 };
 
 
-const std::unordered_map<std::string, Color> piece::_string_to_color = {
+const std::unordered_map<std::string, Color> Piece::_string_to_color = {
         {"white", Color::white},
         {"black", Color::black},
 };
 
 
 // for serialization
-const std::unordered_map<PieceType, std::string> piece::_piece_type_to_string = {
+const std::unordered_map<PieceType, std::string> Piece::_piece_type_to_string = {
         { PieceType::rook, "rook" },
         { PieceType::knight, "knight"},
         { PieceType::bishop, "bishop"},
@@ -34,7 +40,7 @@ const std::unordered_map<PieceType, std::string> piece::_piece_type_to_string = 
 };
 
 
-const std::unordered_map<Color, std::string> piece::_color_to_string = {
+const std::unordered_map<Color, std::string> Piece::_color_to_string = {
         { Color::white, "white" },
         { Color::black, "black"},
 
@@ -42,13 +48,13 @@ const std::unordered_map<Color, std::string> piece::_color_to_string = {
 
 
 // used by subclasses to retrieve information from the json stored by this superclass
-piece::base_class_properties piece::extract_base_class_properties(const rapidjson::Value& json) {
+Piece::base_class_properties Piece::extract_base_class_properties(const rapidjson::Value& json) {
     if (json.HasMember("piece_ID") && json.HasMember("color")) {
         std::string piece_ID = json["piece_ID"].GetString();
         Color color = _string_to_color.at(json["color"].GetString());
 
         return create_base_class_properties(
-                piece::_string_to_piece_type.at(json["type"].GetString()),
+                Piece::_string_to_piece_type.at(json["type"].GetString()),
                 piece_ID,
                 color
         );
@@ -60,12 +66,12 @@ piece::base_class_properties piece::extract_base_class_properties(const rapidjso
 }
 
 
-piece::base_class_properties piece::create_base_class_properties(
+Piece::base_class_properties Piece::create_base_class_properties(
         PieceType type,
         std::string piece_ID,
         Color color)
 {
-    piece::base_class_properties res;
+    Piece::base_class_properties res;
     res._piece_ID = piece_ID;
     res._color = color;
     res._type = type;
@@ -78,16 +84,16 @@ piece::~piece() {
 }
 */
 
-piece::piece(std::string id) : unique_serializable(id) { }
+Piece::Piece(std::string id) : unique_serializable(id) { }
 
 
-piece::piece(std::string piece_ID, Color color, PieceType type)
+Piece::Piece(std::string piece_ID, Color color, PieceType type)
         : _piece_ID(piece_ID), _color(color), _type(type)
 { }
 
 
 // protected constructor. only used by subclasses
-piece::piece(piece::base_class_properties props) :
+Piece::Piece(Piece::base_class_properties props) :
         _type(props._type),
         _piece_ID(props._piece_ID),
         _color(props._color),
@@ -102,7 +108,7 @@ std::vector<std::vector<bool>> piece::legal_moves(unsigned row, unsigned col) {
 */
 
 
-void piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
+void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
 
     rapidjson::Value type_val(_piece_type_to_string.at(get_type()).c_str(), allocator);
     json.AddMember("type", type_val, allocator);
@@ -115,10 +121,10 @@ void piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocat
 }
 
 
-piece* piece::from_json(const rapidjson::Value& json) {
+Piece* Piece::from_json(const rapidjson::Value& json) {
     if (json.HasMember("type") && json["type"].IsString()) {
         const std::string type = json["type"].GetString();
-        const PieceType piece_type = piece::_string_to_piece_type.at(type);
+        const PieceType piece_type = Piece::_string_to_piece_type.at(type);
 
         if (piece_type == PieceType::rook) {
             return Rook::from_json(json);

@@ -8,17 +8,17 @@
 #include "../serialization/vector_utils.h"
 
 
-board::board() : unique_serializable() {
+board::board() {
     this->_board_layout = std::vector<std::vector<piece*>> ( 8, std::vector<piece*>(8, nullptr) );
 }
 
 board::board(std::string id, std::vector<std::vector<piece *>>& board_layout )
-        : unique_serializable(id)
+        : _board_layout(board_layout)
 { }
 
-board::board(std::string id) : unique_serializable(id) {
-    this->_board_layout = std::vector<std::vector<piece*>> ( 8, std::vector<piece*>(8, nullptr) );
-}
+//board::board(std::string id) :  {
+//    this->_board_layout = std::vector<std::vector<piece*>> ( 8, std::vector<piece*>(8, nullptr) );
+//}
 
 board::~board() {
 // delete each piece pointer
@@ -38,6 +38,10 @@ board::~board() {
 // accessors
 piece* board::get_piece(int i, int j){
     return _board_layout[i][j];
+}
+
+void board::set_piece(int i, int j, piece* piece) {
+    _board_layout[i][j] = piece;
 }
 
 // fill_board (0,0) = a1, (8,0) = a8
@@ -130,7 +134,6 @@ std::vector<piece*> board::board_to_vector(std::vector<std::vector<piece*>> boar
 // Serializable interface
 void board::write_into_json(rapidjson::Value &json,
                                  rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-    unique_serializable::write_into_json(json, allocator);
     std::vector<piece*> vector = board_to_vector(_board_layout);
     json.AddMember("board_layout", vector_utils::serialize_vector(vector, allocator), allocator);
 }

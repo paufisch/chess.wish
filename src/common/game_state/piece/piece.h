@@ -14,12 +14,7 @@
 #include "../../serialization/json_utils.h"
 #include "../color.h"
 #include "../board.h"
-#include "pieces/queen.h"
-#include "pieces/king.h"
-#include "pieces/pawn.h"
-#include "pieces/knight.h"
-#include "pieces/bishop.h"
-#include "pieces/rook.h"
+
 
 
 
@@ -33,8 +28,9 @@ enum PieceType {
     pawn
 };
 
-class piece : public unique_serializable {
-protected:
+class Piece : public unique_serializable {
+//protected:
+public:
 
     struct base_class_properties {
         PieceType _type;
@@ -48,7 +44,7 @@ protected:
     Color _color;
     class board* _board;
 
-    explicit piece(base_class_properties); // base constructor
+    explicit Piece(base_class_properties); // base constructor
     static base_class_properties create_base_class_properties(PieceType type, std::string piece_ID, Color color);
     static base_class_properties extract_base_class_properties(const rapidjson::Value& json);
 
@@ -59,12 +55,12 @@ protected:
     static const std::unordered_map<PieceType, std::string> _piece_type_to_string;
     static const std::unordered_map<Color, std::string> _color_to_string;
 
-public:
+//public:
 
     //from_diff constructor
-    piece(std::string id);
+    Piece(std::string id);
     //deserialization constructor
-    piece(std::string piece_ID, Color color, PieceType type);
+    Piece(std::string piece_ID, Color color, PieceType type);
 
 
 
@@ -79,7 +75,7 @@ public:
 
     // serializable interface ??????????????????????????????????????
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-    static piece* from_json(const rapidjson::Value& json);
+    static Piece* from_json(const rapidjson::Value& json);
 };
 
 #endif //PIECE_H
