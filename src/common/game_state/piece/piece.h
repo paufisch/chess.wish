@@ -28,7 +28,7 @@ enum PieceType {
     pawn
 };
 
-class Piece {
+class Piece : public unique_serializable {
 //protected:
 public:
 
@@ -74,7 +74,7 @@ public:
     virtual std::vector<std::vector<bool>> legal_moves(unsigned row, unsigned col) = 0;
 
     // serializable interface ??????????????????????????????????????
-    virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
+    virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
     static Piece* from_json(const rapidjson::Value& json);
 };
 
