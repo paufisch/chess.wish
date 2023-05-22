@@ -23,7 +23,7 @@ private:
 
 public:
     static bool try_get_player(const std::string& player_id, player*& player_ptr);
-    static bool add_or_get_player(std::string name, const std::string& player_id, player*& player_ptr);
+    static bool add_or_get_player(std::string name, const std::string& player_id, Color color, player*& player_ptr);
     static bool remove_player(const std::string& player_id, player*& player);  // not implemented
 };
 

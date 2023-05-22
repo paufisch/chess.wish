@@ -26,7 +26,7 @@ public:
 
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
     static select_piece_response* from_json(const rapidjson::Value& json);
-    virtual void Process() const override;
+    virtual void Process() const ;
 };
 
 #endif //LAMA_SELECT_PIECE_RESPONSE_H
