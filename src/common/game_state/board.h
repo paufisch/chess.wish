@@ -13,25 +13,20 @@
 #include "../serialization/serializable_value.h"
 #include "../serialization/unique_serializable.h"
 #include "piece/piece.h"
-#include "piece/pieces/queen.h"
-#include "piece/pieces/king.h"
-#include "piece/pieces/pawn.h"
-#include "piece/pieces/knight.h"
-#include "piece/pieces/bishop.h"
-#include "piece/pieces/rook.h"
+
 
 
 
 class board {
 private:
 
-    std::vector<std::vector<Piece*>> _board_layout;
+    std::vector<std::vector<class Piece*>> _board_layout;
 
     // from_diff constructor
     //board(std::string id);
 
     // deserialization constructor
-    board(std::string id, std::vector<std::vector<Piece*>>& board_layout);
+    board(std::string id, std::vector<std::vector<class Piece*>>& board_layout);
 
 public:
     static std::vector<std::vector<Piece*>> vector_to_board(const std::vector<Piece*> vector) ;

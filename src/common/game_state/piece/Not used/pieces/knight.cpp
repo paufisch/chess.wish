@@ -3,7 +3,7 @@
 //
 
 #include "knight.h"
-#include "../../../exceptions/LamaException.h"
+#include "../../../../exceptions/LamaException.h"
 
 
 

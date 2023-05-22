@@ -3,7 +3,7 @@
 //
 
 #include "queen.h"
-#include "../../../exceptions/LamaException.h"
+#include "../../../../exceptions/LamaException.h"
 
 
 Queen::Queen(Piece::base_class_properties props)
@@ -15,10 +15,13 @@ Queen::Queen(std::string piece_ID, Color color, PieceType type)
     : Piece(piece_ID, color, type)
 { }
 
+
 void Queen::write_into_json(rapidjson::Value &json,
                             rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     Piece::write_into_json(json, allocator);
 }
+
+
 
 Piece* Queen::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
@@ -31,6 +34,7 @@ Piece* Queen::from_json(const rapidjson::Value &json) {
         throw LamaException("Queen constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
+
 
 void Queen::bishop_capabilities(std::vector<std::vector<bool>>& possible_moves, unsigned int init_row, unsigned int init_col) {
     for (unsigned int i = 1; ((init_row + i < 8) || (init_col + i < 8)); ++i) {
@@ -135,6 +139,7 @@ void Queen::rook_capabilities(std::vector<std::vector<bool>>& possible_moves, un
         }
     }
 }
+
 
 std::vector<std::vector<bool>> Queen::legal_moves(unsigned int init_row, unsigned int init_col) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));

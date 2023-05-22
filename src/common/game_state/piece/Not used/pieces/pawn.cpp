@@ -3,7 +3,7 @@
 //
 
 #include "pawn.h"
-#include "../../../exceptions/LamaException.h"
+#include "../../../../exceptions/LamaException.h"
 
 
 Pawn::Pawn(Piece::base_class_properties props)

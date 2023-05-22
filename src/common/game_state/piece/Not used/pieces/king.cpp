@@ -3,7 +3,7 @@
 //
 
 #include "king.h"
-#include "../../../exceptions/LamaException.h"
+#include "../../../../exceptions/LamaException.h"
 
 King::King(Piece::base_class_properties props)
     : Piece(props)

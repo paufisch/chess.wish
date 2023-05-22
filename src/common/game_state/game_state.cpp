@@ -5,9 +5,6 @@
 #include "game_state.h"
 #include "piece/piece.h"
 #include "board.h"
-#include "piece/pieces/queen.h"
-
-#include "piece/pieces/queen.h"
 
 #include "../exceptions/LamaException.h"
 #include "../serialization/vector_utils.h"
@@ -147,7 +144,7 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         if( (i_to == 7 || i_to == 0) && (pawn == _moving_piece->get_type()) ){
             //the piece pointer at _to gets overwritten with the piece pointer at _from
             delete _board->get_piece(i_to, j_to);
-            _board->set_piece(i_to, j_to, new Queen(_moving_piece->get_piece_ID(), _moving_piece->get_color(), queen));
+            _board->set_piece(i_to, j_to, new Piece(_moving_piece->get_piece_ID(), _moving_piece->get_color(), queen));
         }
 
         _round_number++;

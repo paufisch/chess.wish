@@ -3,7 +3,7 @@
 //
 
 #include "rook.h"
-#include "../../../exceptions/LamaException.h"
+#include "../../../../exceptions/LamaException.h"
 
 
 Rook::Rook(Piece::base_class_properties props)

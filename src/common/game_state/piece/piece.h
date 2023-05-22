@@ -28,9 +28,8 @@ enum PieceType {
     pawn
 };
 
-class Piece {
-//protected:
-public:
+class Piece : public unique_serializable{
+protected:
 
     struct base_class_properties {
         PieceType _type;
@@ -55,7 +54,7 @@ public:
     static const std::unordered_map<PieceType, std::string> _piece_type_to_string;
     static const std::unordered_map<Color, std::string> _color_to_string;
 
-//public:
+public:
 
     //from_diff constructor
     Piece(std::string id);
@@ -69,13 +68,21 @@ public:
     [[nodiscard]] Color get_color() const { return this->_color; }
 
 
-
-    // checks for legal moves
-    virtual std::vector<std::vector<bool>> legal_moves(unsigned row, unsigned col) = 0;
-
     // serializable interface ??????????????????????????????????????
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
     static Piece* from_json(const rapidjson::Value& json);
+
+    void position(std::vector<std::vector<bool>> &possible_moves, unsigned int init_row, unsigned int init_col, int row_offset, int col_offset);
+
+    // checks for legal moves
+    std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col);
+
+    std::vector<std::vector<bool>> bishop_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> knight_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> rook_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> pawn_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> king_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> queen_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
 };
 
 #endif //PIECE_H
