@@ -6,26 +6,26 @@
 #include "../../../exceptions/LamaException.h"
 
 
-Rook::Rook(piece::base_class_properties props)
-    : piece(props)
+Rook::Rook(Piece::base_class_properties props)
+    : Piece(props)
 { }
 
 Rook::Rook(std::string piece_ID, Color color, PieceType type)
-    : piece(piece_ID, color, type)
+    : Piece(piece_ID, color, type)
 { }
 
 void Rook::write_into_json(rapidjson::Value &json,
                            rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-    piece::write_into_json(json, allocator);
+    Piece::write_into_json(json, allocator);
 }
 
-piece* Rook::from_json(const rapidjson::Value &json) {
+Piece* Rook::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
         json["piece_ID"].IsString() && json["color"].IsString() && json["type"].IsString()){
         std::string piece_ID = json["piece_ID"].GetString();
         std::string color = json["color"].GetString();
         std::string type = json["type"].GetString();
-        return new Rook(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
+        return new Rook(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
         throw LamaException("Rook constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
@@ -37,7 +37,7 @@ std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned
 
     for (int row = init_row + 1; row < 8; ++row) {
         //piece which is on the current field
-        piece* piece = _board->get_piece(row, init_col);
+        Piece* piece = _board->get_piece(row, init_col);
         if (piece == nullptr) {
             possible_moves[row][init_col] = true;
         } else if (piece->get_color() == this->_color) {
@@ -50,7 +50,7 @@ std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned
 
     for (int row = init_row - 1; row > -1; --row) {
         //piece which is on the current field
-        piece* piece = _board->get_piece(row, init_col);
+        Piece* piece = _board->get_piece(row, init_col);
         if (piece == nullptr) {
             possible_moves[row][init_col] = true;
         } else if (piece->get_color() == this->_color) {
@@ -63,7 +63,7 @@ std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned
 
     for (int col = init_col + 1; col < 8; ++col) {
         //piece which is on the current field
-        piece* piece = _board->get_piece(init_row, col);
+        Piece* piece = _board->get_piece(init_row, col);
         if (piece == nullptr) {
             possible_moves[init_row][col] = true;
         } else if (piece->get_color() == this->_color) {
@@ -76,7 +76,7 @@ std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned
 
     for (int col = init_col - 1; col > -1; --col) {
         //piece which is on the current field
-        piece* piece = _board->get_piece(init_row, col);
+        Piece* piece = _board->get_piece(init_row, col);
         if (piece == nullptr) {
             possible_moves[init_row][col] = true;
         } else if (piece->get_color() == this->_color) {

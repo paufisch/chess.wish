@@ -7,26 +7,26 @@
 
 
 
-Bishop::Bishop(piece::base_class_properties props)
-    : piece(props)
+Bishop::Bishop(Piece::base_class_properties props)
+    : Piece(props)
 { }
 
 Bishop::Bishop(std::string piece_ID, Color color, PieceType type)
-    : piece(piece_ID, color, type)
+    : Piece(piece_ID, color, type)
 { }
 
 void Bishop::write_into_json(rapidjson::Value &json,
                              rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-    piece::write_into_json(json, allocator);
+    Piece::write_into_json(json, allocator);
 }
 
-piece * Bishop::from_json(const rapidjson::Value &json) {
+Piece * Bishop::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
         json["piece_ID"].IsString() && json["color"].IsString() && json["type"].IsString()){
         std::string piece_ID = json["piece_ID"].GetString();
         std::string color = json["color"].GetString();
         std::string type = json["type"].GetString();
-        return new Bishop(piece_ID, piece::_string_to_color.at(color), piece::_string_to_piece_type.at(type));
+        return new Bishop(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
         throw LamaException("Bishop constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
@@ -36,7 +36,7 @@ std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsign
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 
     for (unsigned int i = 1; ((init_row + i < 8) || (init_col + i < 8)); ++i) {
-        piece* piece = _board->get_piece(init_row + i, init_col + i);
+        Piece* piece = _board->get_piece(init_row + i, init_col + i);
         if (piece == nullptr) {
             possible_moves[init_row + i][init_col + i] = true;
         } else if (piece->get_color() == this->_color) {
@@ -48,7 +48,7 @@ std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsign
     }
 
     for (unsigned int i = 1; ((init_row + i < 8) || (init_col - i > -1)); ++i) {
-        piece* piece = _board->get_piece(init_row + i, init_col - i);
+        Piece* piece = _board->get_piece(init_row + i, init_col - i);
         if (piece == nullptr) {
             possible_moves[init_row + i][init_col - i] = true;
         } else if (piece->get_color() == this->_color) {
@@ -60,7 +60,7 @@ std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsign
     }
 
     for (unsigned int i = 1; ((init_row - i > -1) || (init_col - i > -1)); ++i) {
-        piece* piece = _board->get_piece(init_row - i, init_col - i);
+        Piece* piece = _board->get_piece(init_row - i, init_col - i);
         if (piece == nullptr) {
             possible_moves[init_row - i][init_col - i] = true;
         } else if (piece->get_color() == this->_color) {
@@ -72,7 +72,7 @@ std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsign
     }
 
     for (unsigned int i = 1; ((init_row - i > -1) || (init_col + i < 8)); ++i) {
-        piece* piece = _board->get_piece(init_row - i, init_col + i);
+        Piece* piece = _board->get_piece(init_row - i, init_col + i);
         if (piece == nullptr) {
             possible_moves[init_row - i][init_col + i] = true;
         } else if (piece->get_color() == this->_color) {
