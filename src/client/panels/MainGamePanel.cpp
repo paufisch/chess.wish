@@ -182,7 +182,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
             // Add chess figures as bitmaps to the panels
             // get the piece
-            piece *_piece = nullptr;
+            Piece *_piece = nullptr;
             if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
                 _piece = gameState->get_board()->get_piece(i, j);
             } else {
@@ -244,7 +244,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                     if (MainGamePanel::selected == nullptr) {
                         //TODO: select piece and directly check if it works (no communication needed)
                         //select the piece
-                        piece *_piece = nullptr;
+                        Piece *_piece = nullptr;
                         std::vector<std::vector<bool>> possible_moves;
                         if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
                             _piece = gameState->get_board()->get_piece(i, j);
