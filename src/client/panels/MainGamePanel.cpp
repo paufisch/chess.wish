@@ -184,7 +184,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
             // get the piece
             piece *_piece = nullptr;
             if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
-                _piece = gameState->get_board()->get_piece(i, j); //TODO: gamestate needs a get_Board function
+                _piece = gameState->get_board()->get_piece(i, j);
             } else {
                 _piece = gameState->get_board()->get_piece(7-i,7-j);
             }
@@ -242,15 +242,29 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                     //if no panel is selected, select one!
                     //TODO: this should maybe be a function of the gamestate
                     if (MainGamePanel::selected == nullptr) {
-                        //TODO: select piece request (distinguish between black and white)
-                        MainGamePanel::selected = new int[2];
-                        MainGamePanel::selected[0] = i;
-                        MainGamePanel::selected[0] = j;
-                        if(me->get_color() == white){
-                            GameController::selectPiece(i,j);
+                        //TODO: select piece and directly check if it works (no communication needed)
+                        //select the piece
+                        piece *_piece = nullptr;
+                        std::vector<std::vector<bool>> possible_moves;
+                        if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
+                            _piece = gameState->get_board()->get_piece(i, j);
+                            possible_moves = _piece->legal_moves(i,j);
                         } else {
-                            GameController::selectPiece(7-i,7-j);
+                            _piece = gameState->get_board()->get_piece(7-i,7-j);
+                            possible_moves = _piece->legal_moves(7-i,7-j);
                         }
+
+                        //TODO: check if there ar legal moves
+                        if(_piece->get_color() == me->get_color() && possible_moves != empty){
+                            MainGamePanel::selected = new int[2];
+                            MainGamePanel::selected[0] = i;
+                            MainGamePanel::selected[0] = j;
+                            //TODO: display valid moves
+                            //....
+                        } else {
+                            //TODO: displa and error message
+                        }
+
                         //else move previously selected piece to new position
                     } else {
                         //TODO: display valid moves
