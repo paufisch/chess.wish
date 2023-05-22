@@ -129,6 +129,8 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         //checks if we want to overwrite a king
         if( (_board->get_piece(i_to,j_to) != nullptr) && (king == _board->get_piece(i_to,j_to)->get_type()) ){
             _is_finished->set_value(true);
+            int _current_player_id = _current_player_idx->get_value();
+            _loser = _players[(_current_player_id +1)%2];
         }
 
         //the piece pointer at _to gets overwritten with the piece pointer at _from
