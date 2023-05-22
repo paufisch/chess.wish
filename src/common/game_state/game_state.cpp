@@ -11,7 +11,7 @@
 
 game_state::game_state(std::string id) : unique_serializable(id) {
     this->_players = std::vector<player*>();
-    this->_board = new board;
+    this->_board = new board();
     this->_loser = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
@@ -43,7 +43,7 @@ game_state::game_state(std::string id,
 
 game_state::game_state() : unique_serializable() {
     this->_players = std::vector<player*>();
-    this->_board = new board;
+    this->_board = new board();
     this->_loser = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);

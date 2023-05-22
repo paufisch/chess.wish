@@ -50,7 +50,7 @@ player::player(std::string id, std::string name, Color color) :
         unique_serializable(id)
 {
     this->_player_name = new serializable_value<std::string>(name);
-    this->_color = new serializable_value<Color>(color);
+    this->_color = color;
 }
 
 std::string player::get_game_id() {
