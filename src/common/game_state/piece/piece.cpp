@@ -95,6 +95,7 @@ Piece::Piece(Piece::base_class_properties props) :
         _board(props._board)
 {}
 
+Piece::~Piece(){}
 
 void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
 
