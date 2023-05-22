@@ -1,7 +1,7 @@
 //
 // Created by Manuel on 25.01.2021.
 //
-
+/*
 #include "discard_pile.h"
 #include "../../serialization/vector_utils.h"
 #include "../../exceptions/LamaException.h"
@@ -100,4 +100,4 @@ void discard_pile::write_into_json(rapidjson::Value &json,
 
 
 
-
+*/

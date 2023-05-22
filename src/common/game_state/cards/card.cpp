@@ -1,7 +1,7 @@
 //
 // Created by Manuel on 25.01.2021.
 //
-
+/*
 #include "card.h"
 
 #include "../../exceptions/LamaException.h"
@@ -54,3 +54,4 @@ void card::write_into_json(rapidjson::Value &json, rapidjson::Document::Allocato
 
 
 
+*/

@@ -1,7 +1,7 @@
 //
 // Created by Manuel on 25.01.2021.
 //
-
+/*
 #include "draw_pile.h"
 
 
@@ -111,3 +111,4 @@ draw_pile *draw_pile::from_json(const rapidjson::Value &json) {
         throw LamaException("Could not parse draw_pile from json. 'id' or 'cards' were missing.");
     }
 }
+*/

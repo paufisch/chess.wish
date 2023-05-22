@@ -13,7 +13,7 @@ select_piece_response::select_piece_response(server_response::base_class_propert
     _legal_moves(legal_moves)
 { }
 
-std::vector<std::vector<bool>> string_to_matrix (std::string string) {
+std::vector<std::vector<bool>> select_piece_response::string_to_matrix (const std::string& string) {
     std::vector<std::vector<bool>> matrix (8, std::vector<bool>(8, false));
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -25,7 +25,7 @@ std::vector<std::vector<bool>> string_to_matrix (std::string string) {
     return matrix;
 }
 
-std::string matrix_to_string (std::vector<std::vector<bool>> matrix) {
+std::string select_piece_response::matrix_to_string (const std::vector<std::vector<bool>>& matrix) const {
     std::string string = "0000000000000000000000000000000000000000000000000000000000000000";
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {

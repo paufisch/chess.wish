@@ -17,8 +17,8 @@ private:
 
     select_piece_response(base_class_properties props, bool success, std::vector<std::vector<bool>> legal_moves);
 
-    static std::vector<std::vector<bool>> string_to_matrix (std::string);
-    std::string matrix_to_string (std::vector<std::vector<bool>>) const;
+    static std::vector<std::vector<bool>> string_to_matrix (const std::string&);
+    std::string matrix_to_string (const std::vector<std::vector<bool>>&) const;
 
 public:
 

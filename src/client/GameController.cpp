@@ -1,7 +1,7 @@
 #include "GameController.h"
 #include "../common/network/requests/join_game_request.h"
 #include "../common/network/requests/start_game_request.h"
-//#include "../common/network/requests/fold_request.h"
+#include "../common/network/requests/resign_request.h"
 #include "../common/network/requests/select_piece_request.h"
 #include "../common/network/requests/move_piece_request.h"
 #include "network/ClientNetworkManager.h"
@@ -105,12 +105,12 @@ void GameController::startGame() {
     ClientNetworkManager::sendRequest(request);
 }
 
-/*
+
 void GameController::resign() {
-    fold_request request = fold_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
+    resign_request request = resign_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
 }
-*/
+
 
 void GameController::selectPiece(int i, int j) {
     //i,j are the indices of the selected piece
