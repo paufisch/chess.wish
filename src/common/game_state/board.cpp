@@ -9,10 +9,10 @@
 
 
 board::board() {
-    this->_board_layout = std::vector<std::vector<piece*>> ( 8, std::vector<piece*>(8, nullptr) );
+    this->_board_layout = std::vector<std::vector<Piece*>> ( 8, std::vector<Piece*>(8, nullptr) );
 }
 
-board::board(std::string id, std::vector<std::vector<piece *>>& board_layout )
+board::board(std::string id, std::vector<std::vector<Piece *>>& board_layout )
         : _board_layout(board_layout)
 { }
 
@@ -36,11 +36,11 @@ board::~board() {
 }
 
 // accessors
-piece* board::get_piece(int i, int j){
+Piece* board::get_piece(int i, int j){
     return _board_layout[i][j];
 }
 
-void board::set_piece(int i, int j, piece* piece) {
+void board::set_piece(int i, int j, Piece* piece) {
     _board_layout[i][j] = piece;
 }
 
@@ -109,8 +109,8 @@ void board::fill_black_bishops(){
 
 
 //json
-std::vector<std::vector<piece*>> board::vector_to_board(const std::vector<piece*> vector) {
-    std::vector<std::vector<piece*>> board (8, std::vector<piece*>(8, nullptr));
+std::vector<std::vector<Piece*>> board::vector_to_board(const std::vector<Piece*> vector) {
+    std::vector<std::vector<Piece*>> board (8, std::vector<Piece*>(8, nullptr));
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
             board[row][col] = vector[row*8 + col];
@@ -119,8 +119,8 @@ std::vector<std::vector<piece*>> board::vector_to_board(const std::vector<piece*
     return board;
 }
 
-std::vector<piece*> board::board_to_vector(std::vector<std::vector<piece*>> board) const {
-    std::vector<piece*> vector (64, nullptr);
+std::vector<Piece*> board::board_to_vector(std::vector<std::vector<Piece*>> board) const {
+    std::vector<Piece*> vector (64, nullptr);
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
             vector[row*8 + col] = board[row][col];
@@ -134,7 +134,7 @@ std::vector<piece*> board::board_to_vector(std::vector<std::vector<piece*>> boar
 // Serializable interface
 void board::write_into_json(rapidjson::Value &json,
                                  rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-    std::vector<piece*> vector = board_to_vector(_board_layout);
+    std::vector<Piece*> vector = board_to_vector(_board_layout);
     json.AddMember("board_layout", vector_utils::serialize_vector(vector, allocator), allocator);
 }
 
@@ -143,12 +143,12 @@ board* board::from_json(const rapidjson::Value &json) {
     if (json.HasMember("id")
         && json.HasMember("board_layout"))
     {
-        std::vector<piece*> deserialized_board_layout;
+        std::vector<Piece*> deserialized_board_layout;
         for (auto &serialized_board_layout : json["board_layout"].GetArray()) {
 
-            deserialized_board_layout.push_back(piece::from_json(serialized_board_layout.GetObject()));
+            deserialized_board_layout.push_back(Piece::from_json(serialized_board_layout.GetObject()));
         }
-        std::vector<std::vector<piece*>> _board_layout = vector_to_board(deserialized_board_layout);
+        std::vector<std::vector<Piece*>> _board_layout = vector_to_board(deserialized_board_layout);
         return new board(json["id"].GetString(), _board_layout );
 
 

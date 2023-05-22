@@ -125,7 +125,7 @@ std::vector<std::vector<bool>> game_state::select_piece(int i, int j){
 }
 
 bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
-    piece* _moving_piece = _board->get_piece(i_from,j_from);
+    Piece* _moving_piece = _board->get_piece(i_from,j_from);
     auto _legal_moves = _moving_piece->legal_moves(i_from,j_from);
     if(_legal_moves[i_to][j_to]){
 

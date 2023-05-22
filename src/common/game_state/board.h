@@ -36,16 +36,16 @@ private:
 public:
     static std::vector<std::vector<Piece*>> vector_to_board(const std::vector<Piece*> vector) ;
 
-    std::vector<piece*> board_to_vector(std::vector<std::vector<piece*>> board) const;
+    std::vector<Piece*> board_to_vector(std::vector<std::vector<Piece*>> board) const;
 
 
     board();
     ~board();
 
 // accessors
-    piece* get_piece(int i, int j);
+    Piece* get_piece(int i, int j);
 
-    void set_piece(int i, int j, piece* piece);
+    void set_piece(int i, int j, Piece* piece);
 
 // fill_board (0,0) = a1, (8,0) = a8
     void fill_white_king();
