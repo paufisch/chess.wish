@@ -79,7 +79,7 @@ Piece::base_class_properties Piece::create_base_class_properties(
 }
 
 
-Piece::Piece(std::string id) { }
+Piece::Piece(std::string id) : unique_serializable(id) { }
 
 
 Piece::Piece(std::string piece_ID, Color color, PieceType type)
