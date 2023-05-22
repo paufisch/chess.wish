@@ -9,6 +9,8 @@
 #include "server_network_manager.h"
 #include "../common/network/responses/full_state_response.h"
 
+
+/*
 bool game_instance::is_king_dead() {
     int king_count = 0;
 
@@ -29,7 +31,7 @@ bool game_instance::is_king_dead() {
         throw LamaException("how did you manage to have more than 2 kings on the board?");
     }
 }
-
+*/
 
 game_instance::game_instance() {
     _game_state = new game_state();

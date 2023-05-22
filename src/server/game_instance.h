@@ -22,7 +22,7 @@ private:
     inline static std::mutex modification_lock;
 
     //checks if there are still 2 kings on the board
-    bool is_king_dead();
+    //bool is_king_dead();
 
 public:
     game_instance();

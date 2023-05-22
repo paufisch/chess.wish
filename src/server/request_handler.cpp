@@ -38,7 +38,7 @@ server_response* request_handler::handle_request(const client_request* const req
             std::string player_name = ((join_game_request *) req)->get_player_name();
 
             // Create new player or get existing one with that name
-            player_manager::add_or_get_player(player_name, player_id, player);
+            player_manager::add_or_get_player(player_name, player_id, white, player);
 
             if (game_id.empty()) {
                 // join any game
