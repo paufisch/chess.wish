@@ -5,6 +5,7 @@
 #include "game_state.h"
 #include "piece/piece.h"
 #include "board.h"
+#include "piece/pieces/queen.h"
 
 #include "piece/pieces/queen.h"
 
