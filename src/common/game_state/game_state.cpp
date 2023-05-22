@@ -130,9 +130,11 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         if( (_board->get_piece(i_to,j_to) != nullptr) && (king == _board->get_piece(i_to,j_to)->get_type()) ){
 
             //the piece pointer at _to gets overwritten with the piece pointer at _from
+            delete _board->_board_layout[i_to][j_to];
             _board->_board_layout[i_to][j_to] = _moving_piece;
 
             //the piece pointer at _from is now empty
+            delete _board->_board_layout[i_from][j_from];
             _board->_board_layout[i_from][j_from] = nullptr;
 
             _is_finished->set_value(true);
@@ -143,15 +145,23 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         if( (i_to == 7 || i_to == 0) && (pawn == _moving_piece->get_type()) ){
             auto Pawn_piece_ID = _moving_piece->get_piece_ID();
             auto Pawn_color = _moving_piece->get_color();
+
+            //the piece pointer at _from is now empty
+            delete _board->_board_layout[i_from][j_from];
             _board->_board_layout[i_from][j_from] = nullptr;
+
+            //the piece pointer at _to gets overwritten with the piece pointer at _from
+            delete _board->_board_layout[i_to][j_to];
             _board->_board_layout[i_to][j_to] = new Queen(Pawn_piece_ID, Pawn_color, queen);
             return true;
         }
 
         //the piece pointer at _to gets overwritten with the piece pointer at _from
+        delete _board->_board_layout[i_to][j_to];
         _board->_board_layout[i_to][j_to] = _moving_piece;
 
         //the piece pointer at _from is now empty
+        delete _board->_board_layout[i_from][j_from];
         _board->_board_layout[i_from][j_from] = nullptr;
 
         _round_number++;
@@ -165,7 +175,7 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
 
 player* game_state::resign(player* loser){
     _loser = loser;
-    _is_finished->set_value(1);
+    _is_finished->set_value(true);
     return _loser;
 }
 
