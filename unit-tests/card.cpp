@@ -1,7 +1,7 @@
 //
 // Created by Manuel Nowack on 10.04.21.
 //
-
+/*
 #include "gtest/gtest.h"
 #include "../src/common/exceptions/LamaException.h"
 #include "../src/common/game_state/cards/card.h"

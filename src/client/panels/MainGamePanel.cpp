@@ -248,22 +248,22 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         std::vector<std::vector<bool>> possible_moves;
                         if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
                             _piece = gameState->get_board()->get_piece(i, j);
-                            possible_moves = _piece->legal_moves(i,j);
+                            possible_moves = _piece->legal_moves(i,j,gameState->get_board());
                         } else {
                             _piece = gameState->get_board()->get_piece(7-i,7-j);
-                            possible_moves = _piece->legal_moves(7-i,7-j);
+                            possible_moves = _piece->legal_moves(7-i,7-j,gameState->get_board());
                         }
 
                         //TODO: check if there ar legal moves
-                        if(_piece->get_color() == me->get_color() && possible_moves != empty){
+                        //if(_piece->get_color() == me->get_color() && possible_moves != empty){
                             MainGamePanel::selected = new int[2];
                             MainGamePanel::selected[0] = i;
                             MainGamePanel::selected[0] = j;
                             //TODO: display valid moves
                             //....
-                        } else {
+                        //} else {
                             //TODO: displa and error message
-                        }
+                        //}
 
                         //else move previously selected piece to new position
                     } else {

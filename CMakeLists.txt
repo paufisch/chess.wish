@@ -47,7 +47,16 @@ set(CLIENT_SOURCE_FILES
         src/common/serialization/serializable_value.h
         src/common/serialization/json_utils.h
         src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h "src/common/game_state/piece/Not used/pieces/knight.cpp" "src/common/game_state/piece/Not used/pieces/knight.h" "src/common/game_state/piece/Not used/pieces/rook.cpp" "src/common/game_state/piece/Not used/pieces/rook.h" "src/common/game_state/piece/Not used/pieces/pawn.cpp" "src/common/game_state/piece/Not used/pieces/pawn.h" "src/common/game_state/piece/Not used/pieces/bishop.cpp" "src/common/game_state/piece/Not used/pieces/bishop.h" "src/common/game_state/piece/Not used/pieces/king.cpp" "src/common/game_state/piece/Not used/pieces/king.h" "src/common/game_state/piece/Not used/pieces/queen.cpp" "src/common/game_state/piece/Not used/pieces/queen.h" src/common/game_state/board.cpp src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h)
+        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h
+        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        #"src/common/game_state/piece/Not used/pieces/knight.cpp" "src/common/game_state/piece/Not used/pieces/knight.h"
+        #"src/common/game_state/piece/Not used/pieces/rook.cpp" "src/common/game_state/piece/Not used/pieces/rook.h"
+        #"src/common/game_state/piece/Not used/pieces/pawn.cpp" "src/common/game_state/piece/Not used/pieces/pawn.h"
+        #"src/common/game_state/piece/Not used/pieces/bishop.cpp" "src/common/game_state/piece/Not used/pieces/bishop.h"
+        #"src/common/game_state/piece/Not used/pieces/king.cpp" "src/common/game_state/piece/Not used/pieces/king.h"
+        #"src/common/game_state/piece/Not used/pieces/queen.cpp" "src/common/game_state/piece/Not used/pieces/queen.h"
+        src/common/game_state/board.cpp src/common/game_state/board.h
+        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h)
 
 # define a variable SERVER_SOURCE_FILES that contains the paths to all source files required to compile the server executable
 set(SERVER_SOURCE_FILES
@@ -80,7 +89,18 @@ set(SERVER_SOURCE_FILES
         src/common/serialization/serializable_value.h
         src/common/serialization/json_utils.h
         src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h src/server/request_handler.h src/server/request_handler.cpp)
+        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h
+        src/server/request_handler.h src/server/request_handler.cpp
+        src/common/game_state/board.cpp src/common/game_state/board.h
+        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        #"src/common/game_state/piece/Not used/pieces/knight.cpp" "src/common/game_state/piece/Not used/pieces/knight.h"
+        #"src/common/game_state/piece/Not used/pieces/rook.cpp" "src/common/game_state/piece/Not used/pieces/rook.h"
+        #"src/common/game_state/piece/Not used/pieces/pawn.cpp" "src/common/game_state/piece/Not used/pieces/pawn.h"
+        #"src/common/game_state/piece/Not used/pieces/bishop.cpp" "src/common/game_state/piece/Not used/pieces/bishop.h"
+        #"src/common/game_state/piece/Not used/pieces/king.cpp" "src/common/game_state/piece/Not used/pieces/king.h"
+        #"src/common/game_state/piece/Not used/pieces/queen.cpp" "src/common/game_state/piece/Not used/pieces/queen.h"
+        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h)
+
 
 
 # set source files for client-executable
@@ -120,6 +140,9 @@ else()
 endif()
 
 # copy assets (images) to binary directory
+file(GLOB_RECURSE SOURCES RELATIVE ${CMAKE_SOURCE_DIR} "*.cpp")
+file(GLOB_RECURSE HEADERS RELATIVE ${CMAKE_SOURCE_DIR} "*.hpp")
+
 file(INSTALL assets DESTINATION ${CMAKE_BINARY_DIR})
 
 
