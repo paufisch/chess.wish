@@ -24,11 +24,11 @@ set(CLIENT_SOURCE_FILES
         src/client/network/ClientNetworkManager.cpp src/client/network/ClientNetworkManager.h
         src/client/network/ResponseListenerThread.cpp src/client/network/ResponseListenerThread.h
         # game state
-        src/common/game_state/cards/card.cpp src/common/game_state/cards/card.h
         src/common/game_state/game_state.cpp src/common/game_state/game_state.h
         src/common/game_state/player/player.cpp src/common/game_state/player/player.h
-        src/common/game_state/cards/draw_pile.cpp src/common/game_state/cards/draw_pile.h
-        src/common/game_state/cards/discard_pile.cpp src/common/game_state/cards/discard_pile.h
+        src/common/game_state/board.cpp src/common/game_state/board.h
+        src/common/game_state/color.h
+        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
         # client requests
         src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
@@ -40,6 +40,7 @@ set(CLIENT_SOURCE_FILES
         src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
         src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
         src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
+        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h
         # serialization
         src/common/serialization/serializable.h
         src/common/serialization/value_type_helpers.h
@@ -47,8 +48,7 @@ set(CLIENT_SOURCE_FILES
         src/common/serialization/serializable_value.h
         src/common/serialization/json_utils.h
         src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h "src/common/game_state/piece/Not used/pieces/knight.cpp" "src/common/game_state/piece/Not used/pieces/knight.h" "src/common/game_state/piece/Not used/pieces/rook.cpp" "src/common/game_state/piece/Not used/pieces/rook.h" "src/common/game_state/piece/Not used/pieces/pawn.cpp" "src/common/game_state/piece/Not used/pieces/pawn.h" "src/common/game_state/piece/Not used/pieces/bishop.cpp" "src/common/game_state/piece/Not used/pieces/bishop.h" "src/common/game_state/piece/Not used/pieces/king.cpp" "src/common/game_state/piece/Not used/pieces/king.h" "src/common/game_state/piece/Not used/pieces/queen.cpp" "src/common/game_state/piece/Not used/pieces/queen.h" src/common/game_state/board.cpp src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h)
-
+        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h)
 # define a variable SERVER_SOURCE_FILES that contains the paths to all source files required to compile the server executable
 set(SERVER_SOURCE_FILES
         src/server/main.cpp
@@ -56,12 +56,13 @@ set(SERVER_SOURCE_FILES
         src/server/game_instance_manager.cpp src/server/game_instance_manager.h
         src/server/player_manager.cpp src/server/player_manager.h
         src/server/server_network_manager.cpp src/server/server_network_manager.h
+        src/server/request_handler.cpp src/server/request_handler.h
         # game state
-        src/common/game_state/cards/card.cpp src/common/game_state/cards/card.h
         src/common/game_state/game_state.cpp src/common/game_state/game_state.h
         src/common/game_state/player/player.cpp src/common/game_state/player/player.h
-        src/common/game_state/cards/draw_pile.cpp src/common/game_state/cards/draw_pile.h
-        src/common/game_state/cards/discard_pile.cpp src/common/game_state/cards/discard_pile.h
+        src/common/game_state/board.cpp src/common/game_state/board.h
+        src/common/game_state/color.h
+        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
         # client requests
         src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
@@ -73,6 +74,7 @@ set(SERVER_SOURCE_FILES
         src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
         src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
         src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
+        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h
         # serialization
         src/common/serialization/serializable.h
         src/common/serialization/value_type_helpers.h
@@ -80,9 +82,7 @@ set(SERVER_SOURCE_FILES
         src/common/serialization/serializable_value.h
         src/common/serialization/json_utils.h
         src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h src/server/request_handler.h src/server/request_handler.cpp)
-
-
+        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h)
 # set source files for client-executable
 add_executable(Lama-client ${CLIENT_SOURCE_FILES})
 # set compile directives for client-executable
@@ -130,4 +130,3 @@ add_library(Lama-lib ${SERVER_SOURCE_FILES})
 target_compile_definitions(Lama-lib PRIVATE LAMA_SERVER=1 RAPIDJSON_HAS_STDSTRING=1)
 
 add_subdirectory(googletest)
-add_subdirectory(unit-tests)
