@@ -5,13 +5,14 @@
 #ifndef LAMA_GAME_STATE_H
 #define LAMA_GAME_STATE_H
 
-
+#include <vector>
+#include <string>
+#include "../../rapidjson/include/rapidjson/document.h"
 #include "player/player.h"
+#include "../serialization/serializable.h"
+#include "../serialization/serializable_value.h"
+#include "../serialization/unique_serializable.h"
 #include "board.h"
-
-
-
-
 
 class game_state : public unique_serializable {
 private:

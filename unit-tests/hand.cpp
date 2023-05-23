@@ -2,8 +2,8 @@
 // Created by Manuel Nowack on 11.04.21.
 //
 
-//#include "gtest/gtest.h"
-//#include "../src/common/game_state/player/hand.h"
+#include "gtest/gtest.h"
+#include "../src/common/game_state/player/hand.h"
 
 
 /* A test fixture allows to reuse the same configuration of objects for all
@@ -17,7 +17,6 @@
  * next one. googletest does not reuse the same test fixture for multiple
  * tests. Any changes one test makes to the fixture do not affect other tests.
  */
-/*
 class HandTest : public ::testing::Test {
 
 protected:
@@ -33,7 +32,6 @@ protected:
     /* Any object and subroutine declared here can be accessed in the tests */
 
     // cards[i][j] holds a pointer to the j-th copy of a card of value i
-    /*
     std::vector<std::vector<card*>> cards;
     hand player_hand;
     std::string err;
@@ -263,4 +261,3 @@ TEST_F(HandTest, CountManyCardsWithDuplicates) {
     player_hand.add_card(cards[7][0], err);
     EXPECT_EQ(6, player_hand.get_nof_cards());
 }
-*/

@@ -3,10 +3,11 @@
 //
 
 #include "game_state.h"
+#include "piece/piece.h"
+#include "board.h"
+
 #include "../exceptions/LamaException.h"
 #include "../serialization/vector_utils.h"
-
-
 
 game_state::game_state(std::string id) : unique_serializable(id) {
     this->_players = std::vector<player*>();
@@ -18,7 +19,6 @@ game_state::game_state(std::string id) : unique_serializable(id) {
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 }
-
 
 game_state::game_state(std::string id,
                        std::vector<player *> &players,
@@ -118,12 +118,12 @@ std::vector<player*>& game_state::get_players() {
 }
 
 std::vector<std::vector<bool>> game_state::select_piece(int i, int j){
-    return this->_board->get_piece(i,j)->legal_moves(i, j, _board);
+    return _board->get_piece(i,j)->legal_moves(i,j);
 }
 
 bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
-    Piece* _moving_piece = this->_board->get_piece(i_from,j_from);
-    auto _legal_moves = _moving_piece->legal_moves(i_from, j_from, _board);
+    Piece* _moving_piece = _board->get_piece(i_from,j_from);
+    auto _legal_moves = _moving_piece->legal_moves(i_from,j_from);
     if(_legal_moves[i_to][j_to]){
 
         //checks if we want to overwrite a king
