@@ -19,7 +19,8 @@ const std::unordered_map<std::string, PieceType> Piece::_string_to_piece_type = 
         {"bishop", PieceType::bishop},
         {"king", PieceType::king},
         {"queen", PieceType::queen},
-        {"pawn", PieceType::pawn}
+        {"pawn", PieceType::pawn},
+        {"empty", PieceType::empty}
 };
 
 
@@ -36,7 +37,8 @@ const std::unordered_map<PieceType, std::string> Piece::_piece_type_to_string = 
         { PieceType::bishop, "bishop"},
         { PieceType::king, "king"},
         { PieceType::queen, "queen"},
-        { PieceType::pawn, "pawn"}
+        { PieceType::pawn, "pawn"},
+        { PieceType::empty, "empty"}
 };
 
 
@@ -98,7 +100,6 @@ Piece::Piece(Piece::base_class_properties props) :
 Piece::~Piece(){}
 
 void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
-
     rapidjson::Value type_val(_piece_type_to_string.at(get_type()).c_str(), allocator);
     json.AddMember("type", type_val, allocator);
 

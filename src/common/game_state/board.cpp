@@ -109,11 +109,17 @@ void board::fill_black_bishops(){
 
 
 //json
-std::vector<std::vector<Piece*>> board::vector_to_board(const std::vector<Piece*> vector) {
+std::vector<std::vector<Piece*>> board::vector_to_board(std::vector<Piece*> vector) {
     std::vector<std::vector<Piece*>> board (8, std::vector<Piece*>(8, nullptr));
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
-            board[row][col] = vector[row*8 + col];
+            if (vector[row*8 + col]->get_type() == empty) {
+                delete vector[row*8 + col];
+                vector[row*8 + col] = nullptr;
+                board[row][col] = nullptr;
+            } else {
+                board[row][col] = vector[row*8 + col];
+            }
         }
     }
     return board;
@@ -123,7 +129,11 @@ std::vector<Piece*> board::board_to_vector(std::vector<std::vector<Piece*>> boar
     std::vector<Piece*> vector (64, nullptr);
     for(int row = 0; row < 8; row++){
         for(int col = 0; col < 8; col++){
-            vector[row*8 + col] = board[row][col];
+            if (board[row][col] == nullptr) {
+                vector[row*8 + col] = new Piece("empty", white, empty);
+            } else {
+                vector[row*8 + col] = board[row][col];
+            }
         }
     }
     return vector;

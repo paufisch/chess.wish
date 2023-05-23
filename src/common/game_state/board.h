@@ -29,7 +29,7 @@ private:
     board(std::string id, std::vector<std::vector<class Piece*>>& board_layout);
 
 public:
-    static std::vector<std::vector<Piece*>> vector_to_board(const std::vector<Piece*> vector) ;
+    static std::vector<std::vector<Piece*>> vector_to_board(std::vector<Piece*> vector) ;
 
     std::vector<Piece*> board_to_vector(std::vector<std::vector<Piece*>> board) const;
 

@@ -25,7 +25,8 @@ enum PieceType {
     bishop,
     king,
     queen,
-    pawn
+    pawn,
+    empty
 };
 
 class Piece : public unique_serializable{
