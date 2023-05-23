@@ -255,23 +255,22 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         }
 
                         //TODO: check if there ar legal moves
-                        if(_piece->get_color() == me->get_color() && possible_moves != empty){
+                        if(_piece->get_color() == me->get_color()){// && possible_moves != empty
                             MainGamePanel::selected = new int[2];
                             MainGamePanel::selected[0] = i;
                             MainGamePanel::selected[0] = j;
                             //TODO: display valid moves
                             //....
                         } else {
-                            //TODO: displa and error message
+                            //TODO: display and error message
                         }
 
                         //else move previously selected piece to new position
                     } else {
-                        //TODO: display valid moves
-                        //...
                         int from_i = MainGamePanel::selected[0];
                         int from_j = MainGamePanel::selected[1];
 
+                        //TODO: only send request if selected piece is on of the valid moves
                         if(me->get_color() == white){
                             GameController::movePiece(from_i, from_j, i, j);
                         } else {
