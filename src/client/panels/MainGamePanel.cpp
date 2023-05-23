@@ -237,48 +237,75 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
             //add functionality to the button
             panels[i*8+j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
-                //if its our turn we can move pieces
+                //if it's our turn we can move pieces
                 if (gameState->get_current_player() == me) {
                     //if no panel is selected, select one!
-                    //TODO: this should maybe be a function of the gamestate
                     if (MainGamePanel::selected == nullptr) {
-                        //TODO: select piece and directly check if it works (no communication needed)
-                        //select the piece
+
+                        //get the selected piece
                         Piece *_piece = nullptr;
                         std::vector<std::vector<bool>> possible_moves;
-                        if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
-                            _piece = gameState->get_board()->get_piece(i, j);
+                        if(me->get_color() == white) {
+                            _piece = gameState->get_board()->get_piece(i, j);//TODO: what happens if there is no piece on i,j
                             possible_moves = _piece->legal_moves(i,j);
                         } else {
                             _piece = gameState->get_board()->get_piece(7-i,7-j);
                             possible_moves = _piece->legal_moves(7-i,7-j);
                         }
 
-                        //TODO: check if there ar legal moves
-                        if(_piece->get_color() == me->get_color()){// && possible_moves != empty
-                            MainGamePanel::selected = new int[2];
+                        //sum the total number of possible moves
+                        int sum = 0;
+                        for (const auto& row : possible_moves) {
+                            for (bool value : row) {
+                                sum += value;
+                            }
+                        }
+
+                        //if the selected piece is our piece and has possible moves we select it
+                        if(_piece->get_color() == me->get_color() && sum > 0){
+                            MainGamePanel::selected = new unsigned int[2];
                             MainGamePanel::selected[0] = i;
                             MainGamePanel::selected[0] = j;
                             //TODO: display valid moves
                             //....
                         } else {
-                            //TODO: display and error message
+                            GameController::showError("Error", "Select a different piece!");
+
                         }
 
-                        //else move previously selected piece to new position
-                    } else {
-                        int from_i = MainGamePanel::selected[0];
-                        int from_j = MainGamePanel::selected[1];
+                    //if we click the selected piece again we deselect it
+                    } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]){
+                        delete[] MainGamePanel::selected;
+                        MainGamePanel::selected = nullptr;
+                        //else if move previously selected piece to new position
+                    }else {
+                        unsigned int from_i = MainGamePanel::selected[0];
+                        unsigned int from_j = MainGamePanel::selected[1];
 
-                        //TODO: only send request if selected piece is on of the valid moves
+                        std::vector<std::vector<bool>> possible_moves;
                         if(me->get_color() == white){
-                            GameController::movePiece(from_i, from_j, i, j);
+                            //check if selected destination is a possible move
+                            possible_moves = gameState->select_piece(from_i, from_j);
+                            if (possible_moves[i][j] == true){
+                                GameController::movePiece(from_i, from_j, i, j);
+                            } else {
+                                GameController::showError("Error", "Not a valid move!");
+                            }
                         } else {
+                            //check if selected destination is a possible move
+                            possible_moves = gameState->select_piece(7-from_i, 7-from_j);
+                            if (possible_moves[i][j] == true){
+                                GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
+                            } else {
+                                GameController::showError("Error", "Not a valid move!");
+                            }
                             GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
                         }
+                        //deselect piece
+                        delete[] MainGamePanel::selected;
                         MainGamePanel::selected = nullptr;
                     }
-                // if it's not our turn we display a error message
+                // if it's not our turn we display an error message
                 } else {
                     GameController::showError("Error", "It's not your turn!");
                 }
