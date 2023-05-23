@@ -12,8 +12,7 @@ board::board() {
     this->_board_layout = std::vector<std::vector<Piece*>> ( 8, std::vector<Piece*>(8, nullptr) );
 }
 
-
-board::board(std::vector<std::vector<Piece *>>& board_layout )
+board::board(std::string id, std::vector<std::vector<Piece *>>& board_layout )
         : _board_layout(board_layout)
 { }
 
@@ -150,7 +149,7 @@ board* board::from_json(const rapidjson::Value &json) {
             deserialized_board_layout.push_back(Piece::from_json(serialized_board_layout.GetObject()));
         }
         std::vector<std::vector<Piece*>> _board_layout = vector_to_board(deserialized_board_layout);
-        return new board(_board_layout );
+        return new board(json["id"].GetString(), _board_layout );
 
 
     } else {
