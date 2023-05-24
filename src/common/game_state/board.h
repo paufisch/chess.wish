@@ -41,6 +41,7 @@ public:
     Piece* get_piece(int i, int j);
 
     void set_piece(int i, int j, Piece* piece);
+    void set_board_layout(std::vector<std::vector<Piece*>> board);
 
 // fill_board (0,0) = a1, (8,0) = a8
     void fill_white_king();

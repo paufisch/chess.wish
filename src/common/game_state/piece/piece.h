@@ -60,18 +60,19 @@ public:
     //from_diff constructor
     Piece(std::string id);
     //deserialization constructor
-    Piece(std::string piece_ID, Color color, PieceType type);
+    Piece(std::string piece_ID, Color color, PieceType type, board* board);
 
     virtual ~Piece();
 
     [[nodiscard]] PieceType get_type() const { return this->_type; }
     [[nodiscard]] std::string get_piece_ID() const { return this->_piece_ID; }
     [[nodiscard]] Color get_color() const { return this->_color; }
+    [[nodiscard]] board* get_board() const { return this->_board; }
 
 
     // serializable interface ??????????????????????????????????????
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
-    static Piece* from_json(const rapidjson::Value& json);
+    static Piece* from_json(const rapidjson::Value& json, board* board);
 
     void position(std::vector<std::vector<bool>> &possible_moves, unsigned int init_row, unsigned int init_col, int row_offset, int col_offset);
 

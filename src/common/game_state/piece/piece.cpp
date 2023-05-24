@@ -84,8 +84,8 @@ Piece::base_class_properties Piece::create_base_class_properties(
 Piece::Piece(std::string id) : unique_serializable(id) { }
 
 
-Piece::Piece(std::string piece_ID, Color color, PieceType type)
-        : _piece_ID(piece_ID), _color(color), _type(type)
+Piece::Piece(std::string piece_ID, Color color, PieceType type, board* board)
+        : _piece_ID(piece_ID), _color(color), _type(type), _board(board)
 { }
 
 
@@ -111,7 +111,7 @@ void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocat
 }
 
 
-Piece* Piece::from_json(const rapidjson::Value& json) {
+Piece* Piece::from_json(const rapidjson::Value& json, board* board) {
     if (json.HasMember("type") && json["type"].IsString()) {
         const std::string type = json["type"].GetString();
         const PieceType piece_type = Piece::_string_to_piece_type.at(type);
@@ -121,8 +121,9 @@ Piece* Piece::from_json(const rapidjson::Value& json) {
 
         std::string piece_ID = json["piece_ID"].GetString();
 
+        return new Piece(piece_ID, color, piece_type, board);
 
-
+        /*
         if (piece_type == PieceType::rook) {
             return new Piece(piece_ID, color, piece_type);
         }
@@ -147,6 +148,7 @@ Piece* Piece::from_json(const rapidjson::Value& json) {
         } else {
             throw LamaException("Encountered unknown Piece type " + type);
         }
+         */
     }
     throw LamaException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
