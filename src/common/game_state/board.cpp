@@ -107,6 +107,26 @@ void board::fill_black_bishops(){
     _board_layout[7][5] = new Piece("30", black, bishop);
 }
 
+void board::fill_all() {
+    fill_white_king();
+    fill_black_king();
+
+    fill_white_pawns();
+    fill_black_pawns();
+
+    fill_white_rooks();
+    fill_black_rooks();
+
+    fill_white_knights();
+    fill_black_knights();
+
+    fill_white_queen();
+    fill_black_queen();
+
+    fill_white_bishops();
+    fill_black_bishops();
+}
+
 
 //json
 std::vector<std::vector<Piece*>> board::vector_to_board(std::vector<Piece*> vector) {

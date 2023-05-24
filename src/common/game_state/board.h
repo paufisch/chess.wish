@@ -61,6 +61,8 @@ public:
     void fill_white_bishops();
     void fill_black_bishops();
 
+    void fill_all();
+
 // serializable interface
     static board* from_json(const rapidjson::Value& json);
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;

@@ -50,6 +50,8 @@ game_state::game_state() : unique_serializable() {
     this->_current_player_idx = new serializable_value<int>(0);
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
+
+    _board->fill_all();
 }
 
 
