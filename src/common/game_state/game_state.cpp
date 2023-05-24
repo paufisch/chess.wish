@@ -320,8 +320,6 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
         for (auto &serialized_player : json["players"].GetArray()) {
             deserialized_players.push_back(player::from_json(serialized_player.GetObject()));
         }
-        std::cout << "AAAAAAAAAAA " <<json["id"].GetString() << " B  " << std::endl;
-        std::cout << " c "<< std::endl;
 
         player* loser;
         if (serializable_value<bool>::from_json(json["is_finished"].GetObject()) && json.HasMember("loser")){

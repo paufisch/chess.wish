@@ -26,7 +26,7 @@ private:
     //board(std::string id);
 
     // deserialization constructor
-    board(std::string id, std::vector<std::vector<class Piece*>>& board_layout);
+    board(std::vector<std::vector<class Piece*>>& board_layout);
 
 public:
     static std::vector<std::vector<Piece*>> vector_to_board(std::vector<Piece*> vector) ;
