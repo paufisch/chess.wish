@@ -3,13 +3,8 @@
 //
 
 #include "bishop.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../exceptions/LamaException.h"
 
-
-
-Bishop::Bishop(Piece::base_class_properties props)
-    : Piece(props)
-{ }
 
 Bishop::Bishop(std::string piece_ID, Color color, PieceType type)
     : Piece(piece_ID, color, type)
@@ -32,7 +27,7 @@ Piece * Bishop::from_json(const rapidjson::Value &json) {
     }
 }
 
-std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Bishop::legal_moves(unsigned int init_row, unsigned int init_col, board* _board) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 
     for (unsigned int i = 1; ((init_row + i < 8) || (init_col + i < 8)); ++i) {

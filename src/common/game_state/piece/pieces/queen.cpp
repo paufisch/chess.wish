@@ -3,25 +3,17 @@
 //
 
 #include "queen.h"
-#include "../../../../exceptions/LamaException.h"
-
-
-Queen::Queen(Piece::base_class_properties props)
-    : Piece(props)
-{ }
+#include "../../../exceptions/LamaException.h"
 
 
 Queen::Queen(std::string piece_ID, Color color, PieceType type)
     : Piece(piece_ID, color, type)
 { }
 
-
 void Queen::write_into_json(rapidjson::Value &json,
                             rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     Piece::write_into_json(json, allocator);
 }
-
-
 
 Piece* Queen::from_json(const rapidjson::Value &json) {
     if (json.HasMember("piece_ID") && json.HasMember("color") && json.HasMember("type") &&
@@ -35,8 +27,7 @@ Piece* Queen::from_json(const rapidjson::Value &json) {
     }
 }
 
-
-void Queen::bishop_capabilities(std::vector<std::vector<bool>>& possible_moves, unsigned int init_row, unsigned int init_col) {
+void Queen::bishop_capabilities(std::vector<std::vector<bool>>& possible_moves, board* _board, unsigned int init_row, unsigned int init_col) {
     for (unsigned int i = 1; ((init_row + i < 8) || (init_col + i < 8)); ++i) {
         Piece* piece = _board->get_piece(init_row + i, init_col + i);
         if (piece == nullptr) {
@@ -86,7 +77,7 @@ void Queen::bishop_capabilities(std::vector<std::vector<bool>>& possible_moves, 
     }
 }
 
-void Queen::rook_capabilities(std::vector<std::vector<bool>>& possible_moves, unsigned int init_row, unsigned int init_col) {
+void Queen::rook_capabilities(std::vector<std::vector<bool>>& possible_moves, board* _board, unsigned int init_row, unsigned int init_col) {
     for (int row = init_row + 1; row < 8; ++row) {
         //piece which is on the current field
         Piece* piece = _board->get_piece(row, init_col);
@@ -140,10 +131,9 @@ void Queen::rook_capabilities(std::vector<std::vector<bool>>& possible_moves, un
     }
 }
 
-
-std::vector<std::vector<bool>> Queen::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Queen::legal_moves(unsigned int init_row, unsigned int init_col, board* _board) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
-    bishop_capabilities(possible_moves, init_row, init_col);
-    rook_capabilities(possible_moves, init_row, init_col);
+    bishop_capabilities(possible_moves, _board, init_row, init_col);
+    rook_capabilities(possible_moves, _board, init_row, init_col);
     return possible_moves;
 }

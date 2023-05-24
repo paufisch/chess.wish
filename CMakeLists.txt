@@ -29,6 +29,13 @@ set(CLIENT_SOURCE_FILES
         src/common/game_state/board.cpp src/common/game_state/board.h
         src/common/game_state/color.h
         src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        src/common/game_state/piece/pieces/bishop.h src/common/game_state/piece/pieces/bishop.cpp
+        src/common/game_state/piece/pieces/king.h src/common/game_state/piece/pieces/king.cpp
+        src/common/game_state/piece/pieces/knight.h src/common/game_state/piece/pieces/knight.cpp
+        src/common/game_state/piece/pieces/pawn.h src/common/game_state/piece/pieces/pawn.cpp
+        src/common/game_state/piece/pieces/queen.h src/common/game_state/piece/pieces/queen.cpp
+        src/common/game_state/piece/pieces/rook.h src/common/game_state/piece/pieces/rook.cpp
+        src/common/game_state/piece/pieces/empty.h src/common/game_state/piece/pieces/empty.cpp
         # client requests
         src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
@@ -63,6 +70,13 @@ set(SERVER_SOURCE_FILES
         src/common/game_state/board.cpp src/common/game_state/board.h
         src/common/game_state/color.h
         src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        src/common/game_state/piece/pieces/bishop.h src/common/game_state/piece/pieces/bishop.cpp
+        src/common/game_state/piece/pieces/king.h src/common/game_state/piece/pieces/king.cpp
+        src/common/game_state/piece/pieces/knight.h src/common/game_state/piece/pieces/knight.cpp
+        src/common/game_state/piece/pieces/pawn.h src/common/game_state/piece/pieces/pawn.cpp
+        src/common/game_state/piece/pieces/queen.h src/common/game_state/piece/pieces/queen.cpp
+        src/common/game_state/piece/pieces/rook.h src/common/game_state/piece/pieces/rook.cpp
+        src/common/game_state/piece/pieces/empty.h src/common/game_state/piece/pieces/empty.cpp
         # client requests
         src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
@@ -93,7 +107,7 @@ target_link_libraries(Lama-client ${wxWidgets_LIBRARIES})
 target_compile_definitions(Lama-client PRIVATE PRINT_NETWORK_MESSAGES=1)
 
 # set source files for server-executable
-add_executable(Lama-server ${SERVER_SOURCE_FILES})
+add_executable(Lama-server ${SERVER_SOURCE_FILES} "src/common/game_state/piece/pieces/bishop.h" "src/common/game_state/piece/pieces/bishop.cpp" "src/common/game_state/piece/pieces/king.h" "src/common/game_state/piece/pieces/king.cpp" "src/common/game_state/piece/pieces/knight.h" "src/common/game_state/piece/pieces/knight.cpp" "src/common/game_state/piece/pieces/pawn.h" "src/common/game_state/piece/pieces/pawn.cpp" "src/common/game_state/piece/pieces/queen.h" "src/common/game_state/piece/pieces/queen.cpp" "src/common/game_state/piece/pieces/rook.h" "src/common/game_state/piece/pieces/rook.cpp" src/common/game_state/piece/pieces/empty.h src/common/game_state/piece/pieces/empty.cpp)
 # set compile directives for server-executable
 target_compile_definitions(Lama-server PRIVATE LAMA_SERVER=1 RAPIDJSON_HAS_STDSTRING=1)
 # Comment out if you don't want to print network-related messages into the console

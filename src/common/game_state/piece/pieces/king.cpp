@@ -3,11 +3,7 @@
 //
 
 #include "king.h"
-#include "../../../../exceptions/LamaException.h"
-
-King::King(Piece::base_class_properties props)
-    : Piece(props)
-{ }
+#include "../../../exceptions/LamaException.h"
 
 King::King(std::string piece_ID, Color color, PieceType type)
         : Piece(piece_ID, color, type)
@@ -30,7 +26,7 @@ Piece * King::from_json(const rapidjson::Value &json) {
     }
 }
 
-std::vector<std::vector<bool>> King::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> King::legal_moves(unsigned int init_row, unsigned int init_col, board* _board) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
     for (int row = init_row - 1; row < init_row + 2; ++row) {
         for (int col = init_col - 1; col < init_col + 2; ++col) {

@@ -3,12 +3,7 @@
 //
 
 #include "rook.h"
-#include "../../../../exceptions/LamaException.h"
-
-
-Rook::Rook(Piece::base_class_properties props)
-    : Piece(props)
-{ }
+#include "../../../exceptions/LamaException.h"
 
 Rook::Rook(std::string piece_ID, Color color, PieceType type)
     : Piece(piece_ID, color, type)
@@ -31,7 +26,7 @@ Piece* Rook::from_json(const rapidjson::Value &json) {
     }
 }
 
-std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Rook::legal_moves(unsigned int init_row, unsigned int init_col, board* _board) {
     //return value
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 

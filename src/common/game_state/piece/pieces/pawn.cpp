@@ -3,12 +3,8 @@
 //
 
 #include "pawn.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../exceptions/LamaException.h"
 
-
-Pawn::Pawn(Piece::base_class_properties props)
-    : Piece(props)
-{ }
 
 Pawn::Pawn(std::string piece_ID, Color color, PieceType type)
     : Piece(piece_ID, color, type)
@@ -31,7 +27,7 @@ Piece * Pawn::from_json(const rapidjson::Value &json) {
     }
 }
 
-std::vector<std::vector<bool>> Pawn::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Pawn::legal_moves(unsigned int init_row, unsigned int init_col, board* _board) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
 
     //Decide if the color is white or black because of the direction the pawns can go ("up" or "down")
