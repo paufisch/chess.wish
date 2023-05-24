@@ -120,6 +120,14 @@ bool game_instance_manager::try_add_player(player *player, game_instance *&game_
     }
 
     if (game_instance_ptr->try_add_player(player, err)) {
+        if (game_instance_ptr->get_game_state()->get_players().size() == 2 &&
+            game_instance_ptr->get_game_state()->get_players().at(0)->get_color() == player->get_color()) {
+            if (player->get_color() == white) {
+                player->set_color(black);
+            } else {
+                player->set_color(white);
+            }
+        }
         player->set_game_id(game_instance_ptr->get_id());   // mark that this player is playing in a src
         return true;
     } else {

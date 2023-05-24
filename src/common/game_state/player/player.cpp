@@ -80,6 +80,10 @@ bool player::get_color() const noexcept {
     return this->_color;
 }
 
+void player::set_color(Color color) {
+    _color = color;
+}
+
 
 #ifdef LAMA_SERVER
 void player::setup_round(std::string& err) {

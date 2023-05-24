@@ -50,6 +50,7 @@ public:
     // accessors
     std::string get_player_name() const noexcept;
     bool get_color() const noexcept;
+    void set_color(Color color);
 
 #ifdef LAMA_SERVER
     // state update functions
