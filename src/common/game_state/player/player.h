@@ -30,6 +30,9 @@ private:
 
     player(std::string id, serializable_value<std::string>* name, std::string color);
 
+    static const std::unordered_map<std::string, Color> _string_to_color;
+    static const std::unordered_map<Color, std::string> _color_to_string;
+
 
 public:
 // constructors

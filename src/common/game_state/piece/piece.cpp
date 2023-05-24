@@ -107,7 +107,7 @@ void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocat
     json.AddMember("piece_ID", piece_ID_val, allocator);
 
     rapidjson::Value color_val(_color_to_string.at(get_color()).c_str(), allocator);
-    json.AddMember("color", piece_ID_val, allocator);
+    json.AddMember("color", color_val, allocator);
 }
 
 
