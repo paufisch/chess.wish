@@ -297,9 +297,11 @@ void game_state::write_into_json(rapidjson::Value &json,
     _board->write_into_json(board_val, allocator);
     json.AddMember("board", board_val, allocator);
 
-    rapidjson::Value loser_val(rapidjson::kObjectType);
-    _board->write_into_json(loser_val, allocator);
-    json.AddMember("loser", board_val, allocator);
+    if (_is_finished->get_value()) {
+        rapidjson::Value loser_val(rapidjson::kObjectType);
+        _loser->write_into_json(loser_val, allocator);
+        json.AddMember("loser", loser_val, allocator);
+    }
 
 }
 
@@ -312,18 +314,26 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
         && json.HasMember("round_number")
         && json.HasMember("starting_player_idx")
         && json.HasMember("players")
-        && json.HasMember("loser")
         && json.HasMember("board"))
     {
         std::vector<player*> deserialized_players;
         for (auto &serialized_player : json["players"].GetArray()) {
             deserialized_players.push_back(player::from_json(serialized_player.GetObject()));
         }
+        std::cout << "AAAAAAAAAAA " <<json["id"].GetString() << " B  " << std::endl;
+        std::cout << " c "<< std::endl;
+
+        player* loser;
+        if (serializable_value<bool>::from_json(json["is_finished"].GetObject()) && json.HasMember("loser")){
+            loser = player::from_json(json["loser"].GetObject());
+        } else {
+            loser = nullptr;
+        }
 
         return new game_state(json["id"].GetString(),
                               deserialized_players,
-                              board::from_json(json["loser"].GetObject()),
-                              player::from_json(json["board"].GetObject()),
+                              board::from_json(json["board"].GetObject()),
+                              loser,
                               serializable_value<bool>::from_json(json["is_started"].GetObject()),
                               serializable_value<bool>::from_json(json["is_finished"].GetObject()),
                               serializable_value<int>::from_json(json["current_player_idx"].GetObject()),
