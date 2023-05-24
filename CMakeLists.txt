@@ -130,3 +130,5 @@ add_library(Lama-lib ${SERVER_SOURCE_FILES})
 target_compile_definitions(Lama-lib PRIVATE LAMA_SERVER=1 RAPIDJSON_HAS_STDSTRING=1)
 
 add_subdirectory(googletest)
+#add_subdirectory(unit-tests)
+

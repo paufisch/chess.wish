@@ -1,10 +1,12 @@
 //
-// Created by Manuel Nowack on 10.04.21.
+// Created by Fabian on 24.05.2023
 //
+
+//Currently commented out in the main CMakeList.txt inside src
 
 #include "gtest/gtest.h"
 #include "../src/common/exceptions/LamaException.h"
-#include "../src/common/game_state/cards/card.h"
+#include "../src/common/game_state/piece/piece.h"
 #include "../src/common/serialization/json_utils.h"
 
 

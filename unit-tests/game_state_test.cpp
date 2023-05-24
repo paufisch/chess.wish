@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../src/common/game_state/player/hand.h"
+#include "../src/common/game_state/game_state.h"
 
 
 /* A test fixture allows to reuse the same configuration of objects for all
