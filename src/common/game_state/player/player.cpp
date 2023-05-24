@@ -6,6 +6,16 @@
 
 #include "../../exceptions/LamaException.h"
 
+const std::unordered_map<std::string, Color> player::_string_to_color = {
+        {"white", Color::white},
+        {"black", Color::black},
+};
+
+const std::unordered_map<Color, std::string> player::_color_to_string = {
+        { Color::white, "white" },
+        { Color::black, "black"},
+};
+
 player::player(std::string name) : unique_serializable() {
     this->_player_name = new serializable_value<std::string>(name);
     if (name == "white"){
@@ -103,8 +113,7 @@ void player::write_into_json(rapidjson::Value& json, rapidjson::Document::Alloca
     json.AddMember("player_name", name_val, allocator);
 
     //rapidjson::Value color_val(rapidjson::kObjectType);
-    //_color->write_into_json(color_val, allocator);
-    json.AddMember("color", _color, allocator);
+    json.AddMember("color", rapidjson::Value(_color_to_string.at(_color), allocator), allocator);
 }
 
 
@@ -116,7 +125,7 @@ player *player::from_json(const rapidjson::Value &json) {
         return new player(
                 json["id"].GetString(),
                 serializable_value<std::string>::from_json(json["player_name"].GetObject()),
-                json["color"].GetString());
+                _string_to_color.at(json["color"].GetString()));
     } else {
         throw LamaException("Failed to deserialize player from json. Required json entries were missing.");
     }
