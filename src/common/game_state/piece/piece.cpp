@@ -140,6 +140,10 @@ Piece* Piece::from_json(const rapidjson::Value& json) {
         }
         else if (piece_type == PieceType::pawn) {
             return new Piece(piece_ID, color, piece_type);
+        }
+        else if (piece_type == PieceType::empty) {
+            return new Piece(piece_ID, color, piece_type);
+
         } else {
             throw LamaException("Encountered unknown Piece type " + type);
         }
