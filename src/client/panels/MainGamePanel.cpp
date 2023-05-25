@@ -151,7 +151,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     wxBitmap b_king("../assets/black-king.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_queen("../assets/black-queen.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_rook("../assets/black-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_knight("../assets/black-knight.png", wxBITMAP_TYPE_PNG);
+    wxBitmap b_knight("../assets/b-knight.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_bishop("../assets/black-bishop.png", wxBITMAP_TYPE_PNG);
 
     //white pieces
@@ -159,7 +159,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_queen("../assets/white-queen.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_rook("../assets/white-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_knight("../assets/white-knight.png", wxBITMAP_TYPE_PNG);
+    wxBitmap w_knight("../assets/w-knight.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_bishop("../assets/white-bishop.png", wxBITMAP_TYPE_PNG);
 
     //the board is a grid sizer containing panels
@@ -175,9 +175,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
             //color panels
             if ((i + j) % 2 == 0){
-                panels[i*8+j]->SetBackgroundColour(yellow);
-            } else {
                 panels[i*8+j]->SetBackgroundColour(pink);
+            } else {
+                panels[i*8+j]->SetBackgroundColour(yellow);
             }
 
             // Add chess figures as bitmaps to the panels
@@ -306,12 +306,12 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         } else {
                             //check if selected destination is a possible move
                             possible_moves = gameState->select_piece(7-from_i, 7-from_j);
-                            if (possible_moves[i][j] == true){
+                            if (possible_moves[7-i][7-j] == true){
                                 GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
                             } else {
                                 GameController::showError("Error", "Not a valid move!");
                             }
-                            GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
+                            //GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
                         }
                         //deselect piece
                         delete[] MainGamePanel::selected;
