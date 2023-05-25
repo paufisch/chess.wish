@@ -10,7 +10,6 @@
 
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
-    selected_panel = nullptr;
     selected = nullptr;
 
 }
@@ -165,21 +164,28 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     //the board is a grid sizer containing panels
     auto *grid = new wxGridSizer(8, 8, 0, 0);
     auto *panels = new wxPanel *[8*8];
+    //wxPanel *panels[64];
+    //std::array<wxPanel, 64> panels;
+
 
     // fill the panels with the pieces contained in board
     for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j){
+        for (int j = 0; j < 8; ++j) {
 
-            panels[i*8+j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-            auto *vbox = new wxBoxSizer(wxVERTICAL);
+            panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
 
             //color panels
-            if ((i + j) % 2 == 0){
-                panels[i*8+j]->SetBackgroundColour(pink);
+            if ((i + j) % 2 == 0) {
+                panels[i * 8 + j]->SetBackgroundColour(pink);
             } else {
-                panels[i*8+j]->SetBackgroundColour(yellow);
+                panels[i * 8 + j]->SetBackgroundColour(yellow);
             }
+        }
+    }
+    for (int i = 7; i >= 0; --i){
+        for (int j = 0; j < 8; ++j){
 
+            auto *vbox = new wxBoxSizer(wxVERTICAL);
             // Add chess figures as bitmaps to the panels
             // get the piece
             Piece *_piece = nullptr;
@@ -250,7 +256,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         std::vector<std::vector<bool>> possible_moves;
 
                         if(me->get_color() == white && gameState->get_board()->get_piece(i, j) != nullptr) {
-                            _piece = gameState->get_board()->get_piece(i, j);//TODO: what happens if there is no piece on i,j
+                            _piece = gameState->get_board()->get_piece(i, j);
                             possible_moves = _piece->legal_moves(i,j);
                             /*
                             std::cout << "selected piece in position " << i << " " << j << std::endl;
@@ -282,6 +288,25 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                                 MainGamePanel::selected[0] = i;
                                 MainGamePanel::selected[1] = j;
                                 //TODO: display valid moves
+                                //display_moves(panels, possible_moves, me);
+                                if(me->get_color() == white){
+                                    for (int k = possible_moves.size() - 1; k >= 0; --k) {
+                                        for (int l = 0; l < possible_moves.at(k).size(); ++l) {
+                                            if(possible_moves.at(k).at(l) == true){
+                                                panels[k*8+l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                                            }
+                                        }
+                                    }
+                                } else if(me->get_color() == black){
+                                    for (int k = possible_moves.size() - 1; k >= 0; --k) {
+                                        for (int l = 0; l < possible_moves.at(k).size(); ++l) {
+                                            if(possible_moves.at(k).at(l) == true){
+                                                panels[(7-k)*8+7-l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                                            }
+                                        }
+                                    }
+                                }
+                                this->Refresh();
                                 //....
                             } else {
                                 GameController::showError("Error", "Select a different piece!");
@@ -298,8 +323,21 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         std::cout << "deselected piece in position " << i << " " << j << std::endl;
                         delete[] MainGamePanel::selected;
                         MainGamePanel::selected = nullptr;
+                        //TODO: remove the highlighted valid moves
+                        for (int i = 7; i >= 0; --i){
+                            for (int j = 0; j < 8; ++j) {
+                                //color panels
+                                if ((i + j) % 2 == 0) {
+                                    panels[i * 8 + j]->SetBackgroundColour(pink);
+                                } else {
+                                    panels[i * 8 + j]->SetBackgroundColour(yellow);
+                                }
+                            }
+                        }
+                        this->Refresh();
+
                         //else if move previously selected piece to new position
-                    }else {
+                    } else {
                         unsigned int from_i = MainGamePanel::selected[0];
                         unsigned int from_j = MainGamePanel::selected[1];
 
@@ -309,6 +347,9 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                             possible_moves = gameState->select_piece(from_i, from_j);
                             if (possible_moves[i][j] == true){
                                 GameController::movePiece(from_i, from_j, i, j);
+                                //deselect piece
+                                delete[] MainGamePanel::selected;
+                                MainGamePanel::selected = nullptr;
                             } else {
                                 GameController::showError("Error", "Not a valid move!");
                             }
@@ -317,14 +358,13 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                             possible_moves = gameState->select_piece(7-from_i, 7-from_j);
                             if (possible_moves[7-i][7-j] == true){
                                 GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
+                                //deselect piece
+                                delete[] MainGamePanel::selected;
+                                MainGamePanel::selected = nullptr;
                             } else {
                                 GameController::showError("Error", "Not a valid move!");
                             }
-                            //GameController::movePiece(7-from_i, 7-from_j, 7-i, 7-j);
                         }
-                        //deselect piece
-                        delete[] MainGamePanel::selected;
-                        MainGamePanel::selected = nullptr;
                     }
                 // if it's not our turn we display an error message
                 } else {
@@ -338,6 +378,11 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
     grid->SetMinSize(wxSize(800, 800));
     return grid;
+}
+
+
+void MainGamePanel::display_moves(wxPanel (&panel)[64], std::vector<std::vector<bool>> possible_moves, player* me) {
+
 }
 
 

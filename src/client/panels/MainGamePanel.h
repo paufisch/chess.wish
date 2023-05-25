@@ -18,8 +18,8 @@ private:
     void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
     wxGridSizer* buildBoard(game_state* gameState, player* me);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
-    wxPanel* selected_panel;
     unsigned int* selected;
+    void display_moves(wxPanel (&panel)[64], std::vector<std::vector<bool>>, player*);
 };
 
 
