@@ -9,6 +9,7 @@
 #include "../src/common/game_state/piece/piece.h"
 #include "../src/common/game_state/board.h"
 #include "../src/common/serialization/json_utils.h"
+#include <vector>
 
 /* A test fixture allows to reuse the same configuration of objects for all
  * tests in a test suite. The name of the fixture must match the test suite.
@@ -24,24 +25,118 @@
 class Piece_Test : public ::testing::Test {
 
 protected:
+
+    board* _board;
+
+    std::vector<std::vector<bool>> _legal_moves_output;
+    std::vector<std::vector<bool>> _legal_moves_expected;
+
     virtual void SetUp() {
-        cards.resize(8);
-        for (int i = 1; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                cards[i].push_back(new card(i));
+
+        _board = new board;
+
+        _legal_moves_output   = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
+        _legal_moves_expected = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
+
+        _board->set_piece(0, 4, new Piece( "5", white, king, _board));
+        _board->set_piece(7, 4, new Piece("29", black, king, _board));
+
+        _board->set_piece(1, 0, new Piece( "9", white, pawn, _board));
+        _board->set_piece(1, 1, new Piece("10", white, pawn, _board));
+        _board->set_piece(1, 2, new Piece("11", white, pawn, _board));
+        _board->set_piece(1, 3, new Piece("12", white, pawn, _board));
+        _board->set_piece(1, 4, new Piece("13", white, pawn, _board));
+        _board->set_piece(1, 5, new Piece("14", white, pawn, _board));
+        _board->set_piece(1, 6, new Piece("15", white, pawn, _board));
+        _board->set_piece(1, 7, new Piece("16", white, pawn, _board));
+
+        _board->set_piece(6, 0, new Piece("17", black, pawn, _board));
+        _board->set_piece(6, 1, new Piece("18", black, pawn, _board));
+        _board->set_piece(6, 2, new Piece("19", black, pawn, _board));
+        _board->set_piece(6, 3, new Piece("20", black, pawn, _board));
+        _board->set_piece(6, 4, new Piece("21", black, pawn, _board));
+        _board->set_piece(6, 5, new Piece("22", black, pawn, _board));
+        _board->set_piece(6, 6, new Piece("23", black, pawn, _board));
+        _board->set_piece(6, 7, new Piece("24", black, pawn, _board));
+
+        _board->set_piece(0, 0, new Piece( "1", white, rook, _board));
+        _board->set_piece(0, 7, new Piece( "8", white, rook, _board));
+
+        _board->set_piece(7, 0, new Piece("25", black, rook, _board));
+        _board->set_piece(7, 7, new Piece("32", black, rook, _board));
+
+        _board->set_piece(0, 1, new Piece( "2", white, knight, _board));
+        _board->set_piece(0, 6, new Piece( "7", white, knight, _board));
+
+        _board->set_piece(7, 1, new Piece("26", black, knight, _board));
+        _board->set_piece(7, 6, new Piece("31", black, knight, _board));
+
+        _board->set_piece(0, 3, new Piece( "4", white, queen, _board));
+        _board->set_piece(7, 3, new Piece("28", black, queen, _board));
+
+        _board->set_piece(0, 2, new Piece( "3", white, bishop, _board));
+        _board->set_piece(0, 5, new Piece( "6", white, bishop, _board));
+
+        _board->set_piece(7, 2, new Piece("27", black, bishop, _board));
+        _board->set_piece(7, 5, new Piece("30", black, bishop, _board));
+    }
+
+    virtual void TearDown() {
+        delete _board;
+    }
+
+};
+
+bool compare(std::vector<std::vector<bool>>& _legal_moves_output,
+             std::vector<std::vector<bool>>& _legal_moves_expected){
+
+    for(int i = 0; i < 8; i++ ){
+        for(int j = 0; j < 8; j++ ){
+            if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
+                return false;
             }
         }
     }
 
-    /* Any object and subroutine declared here can be accessed in the tests */
-
-    // cards[i][j] holds a pointer to the j-th copy of a card of value i
-    std::vector<std::vector<card*>> cards;
-    hand player_hand;
-    std::string err;
-};
-
-TEST_F(Piece_Test, Pawn) {
-
+    return true;
 }
 
+TEST_F(Piece_Test, Pawn) {
+    _legal_moves_expected[2][4] = true;
+    _legal_moves_expected[3][4] = true;
+    _legal_moves_output = _board->get_piece(1,4)->legal_moves(1,4);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
+
+TEST_F(Piece_Test, Rook) {
+    _legal_moves_output = _board->get_piece(0,0)->legal_moves(0,0);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
+
+TEST_F(Piece_Test, King) {
+    _legal_moves_output = _board->get_piece(7,4)->legal_moves(7,4);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
+
+TEST_F(Piece_Test, Queen) {
+    _legal_moves_output = _board->get_piece(0,3)->legal_moves(0,3);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
+
+TEST_F(Piece_Test, Bishop) {
+    _legal_moves_output = _board->get_piece(7,5)->legal_moves(7,5);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
+
+TEST_F(Piece_Test, Knight) {
+    _legal_moves_expected[5][7] = true;
+    _legal_moves_expected[5][5] = true;
+    _legal_moves_output = _board->get_piece(7,6)->legal_moves(7,6);
+
+    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+}
