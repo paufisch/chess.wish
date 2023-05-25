@@ -70,21 +70,21 @@ public:
     [[nodiscard]] board* get_board() const { return this->_board; }
 
 
-    // serializable interface ??????????????????????????????????????
+    // serializable interface
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
     static Piece* from_json(const rapidjson::Value& json, board* board);
 
-    void position(std::vector<std::vector<bool>> &possible_moves, unsigned int init_row, unsigned int init_col, int row_offset, int col_offset);
+    void position(std::vector<std::vector<bool>> &possible_moves, int init_row, int init_col, int row_offset, int col_offset);
 
     // checks for legal moves
-    std::vector<std::vector<bool>> legal_moves(unsigned init_row, unsigned init_col);
+    std::vector<std::vector<bool>> legal_moves(int init_row, int init_col);
 
-    std::vector<std::vector<bool>> bishop_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
-    std::vector<std::vector<bool>> knight_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
-    std::vector<std::vector<bool>> rook_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
-    std::vector<std::vector<bool>> pawn_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
-    std::vector<std::vector<bool>> king_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
-    std::vector<std::vector<bool>> queen_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> bishop_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> knight_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> rook_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> pawn_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> king_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
+    std::vector<std::vector<bool>> queen_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves);
 };
 
 #endif //PIECE_H
