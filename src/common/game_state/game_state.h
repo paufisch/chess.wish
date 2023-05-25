@@ -66,6 +66,8 @@ public:
     player* resign(player* loser);
     board* get_board();
     void next_turn();
+    player* get_loser();
+    int get_max_number_rounds();
 
 #ifdef LAMA_SERVER
 // server-side state update functions

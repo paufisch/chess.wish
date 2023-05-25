@@ -160,11 +160,7 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
             _loser = get_players().at(rand()%2);
         }
 
-        if (_current_player_idx->get_value() == 0) {
-            _current_player_idx->set_value(1);
-        } else {
-            _current_player_idx->set_value(0);
-        }
+        next_turn();
 
         return true;
     }
@@ -189,6 +185,14 @@ void game_state::next_turn() {
         _current_player_idx->set_value(0);
     else if (_current_player_idx->get_value() == 0)
         _current_player_idx->set_value(1);
+}
+
+player* game_state::get_loser() {
+    return _loser;
+}
+
+int game_state::get_max_number_rounds() {
+    return _max_number_rounds;
 }
 
 
