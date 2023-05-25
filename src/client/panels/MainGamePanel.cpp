@@ -163,7 +163,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
     //the board is a grid sizer containing panels
     auto *grid = new wxGridSizer(8, 8, 0, 0);
-    auto *panels = new wxPanel *[8*8];
+    //auto *panels = new wxPanel *[8*8];
     //wxPanel *panels[64];
     //std::array<wxPanel, 64> panels;
 
@@ -171,9 +171,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     // fill the panels with the pieces contained in board
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j) {
-
             panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-
             //color panels
             if ((i + j) % 2 == 0) {
                 panels[i * 8 + j]->SetBackgroundColour(pink);
@@ -288,25 +286,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                                 MainGamePanel::selected[0] = i;
                                 MainGamePanel::selected[1] = j;
                                 //TODO: display valid moves
-                                //display_moves(panels, possible_moves, me);
-                                if(me->get_color() == white){
-                                    for (int k = possible_moves.size() - 1; k >= 0; --k) {
-                                        for (int l = 0; l < possible_moves.at(k).size(); ++l) {
-                                            if(possible_moves.at(k).at(l) == true){
-                                                panels[k*8+l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
-                                            }
-                                        }
-                                    }
-                                } else if(me->get_color() == black){
-                                    for (int k = possible_moves.size() - 1; k >= 0; --k) {
-                                        for (int l = 0; l < possible_moves.at(k).size(); ++l) {
-                                            if(possible_moves.at(k).at(l) == true){
-                                                panels[(7-k)*8+7-l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
-                                            }
-                                        }
-                                    }
-                                }
-                                this->Refresh();
+                                display_moves(possible_moves, me);
                                 //....
                             } else {
                                 GameController::showError("Error", "Select a different piece!");
@@ -381,8 +361,25 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 }
 
 
-void MainGamePanel::display_moves(wxPanel (&panel)[64], std::vector<std::vector<bool>> possible_moves, player* me) {
-
+void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves, player* me) {
+    if(me->get_color() == white){
+        for (int k = possible_moves.size() - 1; k >= 0; --k) {
+            for (int l = 0; l < possible_moves.at(k).size(); ++l) {
+                if(possible_moves.at(k).at(l) == true){
+                    panels[k*8+l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                }
+            }
+        }
+    } else if(me->get_color() == black){
+        for (int k = possible_moves.size() - 1; k >= 0; --k) {
+            for (int l = 0; l < possible_moves.at(k).size(); ++l) {
+                if(possible_moves.at(k).at(l) == true){
+                    panels[(7-k)*8+7-l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                }
+            }
+        }
+    }
+    this->Refresh();
 }
 
 
