@@ -147,12 +147,27 @@ void GameController::showStatus(const std::string& message) {
 
 
 void GameController::showGameOverMessage() {
-    std::string title = "Game Over!";
-    std::string message = "Final score:\n";
+    std::string title;
+    std::string message;
+    if (_currentGameState->get_loser()->get_id() == _me->get_id()) {
+        title = "You lost!";
+        if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
+            message = "your king died of old age";
+        } else {
+            message = "your opponent murdered your king";
+        }
+    } else {
+        title = "You won!";
+        if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
+            message = "your opponents king died of old age";
+        } else {
+            message = "you murdered your opponents king";
+        }
+    }
     std::string buttonLabel = "Close Game";
 
     // sort players by score
-    std::vector<player*> players = GameController::_currentGameState->get_players();
+    //std::vector<player*> players = GameController::_currentGameState->get_players();
 
     /*
     // list all players
