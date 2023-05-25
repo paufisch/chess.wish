@@ -151,7 +151,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     wxBitmap b_king("../assets/black-king.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_queen("../assets/black-queen.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_rook("../assets/black-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_knight("../assets/b-knight.png", wxBITMAP_TYPE_PNG);
+    wxBitmap b_knight("../assets/black-knight.png", wxBITMAP_TYPE_PNG);
     wxBitmap b_bishop("../assets/black-bishop.png", wxBITMAP_TYPE_PNG);
 
     //white pieces
@@ -159,7 +159,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_queen("../assets/white-queen.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_rook("../assets/white-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_knight("../assets/w-knight.png", wxBITMAP_TYPE_PNG);
+    wxBitmap w_knight("../assets/white-knight.png", wxBITMAP_TYPE_PNG);
     wxBitmap w_bishop("../assets/white-bishop.png", wxBITMAP_TYPE_PNG);
 
     //the board is a grid sizer containing panels
