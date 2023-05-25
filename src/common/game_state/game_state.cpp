@@ -51,7 +51,10 @@ game_state::game_state() : unique_serializable() {
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 
-    _board->fill_all();
+    #ifdef LAMA_SERVER
+        setup_board();
+    #endif
+
 }
 
 
@@ -188,7 +191,7 @@ void game_state::next_turn() {
 
 // state modification functions without diff
 void game_state::setup_board() {
-    /*
+
 
     _board->fill_white_king();
     _board->fill_black_king();
@@ -208,7 +211,7 @@ void game_state::setup_board() {
     _board->fill_white_bishops();
     _board->fill_black_bishops();
 
-    */
+
 }
 
 //for securitiy reasons here, no new funtionality
