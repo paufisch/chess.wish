@@ -11,6 +11,27 @@
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
     selected = nullptr;
+    yellow = wxColor(175, 245, 190);
+    pink = wxColor(245, 175, 230);
+    high_yellow = wxColor(77, 245, 113);
+    high_pink = wxColor(245, 52, 204);
+
+
+    //black pieces
+    b_pawn = wxBitmap("../assets/black-pawn.png", wxBITMAP_TYPE_PNG);
+    b_king = wxBitmap("../assets/black-king.png", wxBITMAP_TYPE_PNG);
+    b_queen = wxBitmap("../assets/black-queen.png", wxBITMAP_TYPE_PNG);
+    b_rook = wxBitmap("../assets/black-rook.png", wxBITMAP_TYPE_PNG);
+    b_knight = wxBitmap("../assets/black-knight.png", wxBITMAP_TYPE_PNG);
+    b_bishop = wxBitmap("../assets/black-bishop.png", wxBITMAP_TYPE_PNG);
+
+    //white pieces
+    w_pawn = wxBitmap("../assets/white-pawn.png", wxBITMAP_TYPE_PNG);
+    w_king = wxBitmap("../assets/white-king.png", wxBITMAP_TYPE_PNG);
+    w_queen = wxBitmap("../assets/white-queen.png", wxBITMAP_TYPE_PNG);
+    w_rook = wxBitmap("../assets/white-rook.png", wxBITMAP_TYPE_PNG);
+    w_knight= wxBitmap("../assets/white-knight.png", wxBITMAP_TYPE_PNG);
+    w_bishop = wxBitmap("../assets/white-bishop.png", wxBITMAP_TYPE_PNG);
 
 }
 
@@ -140,46 +161,12 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 //this function builds the chess board
 wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
-    //color declarations
-    wxColor yellow = wxColor(225, 245, 150);
-    wxColor pink = wxColor(245, 175, 230);
-    //wxColor white = wxColor(255, 255, 255);
-
-    //black pieces
-    wxBitmap b_pawn("../assets/black-pawn.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_king("../assets/black-king.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_queen("../assets/black-queen.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_rook("../assets/black-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_knight("../assets/black-knight.png", wxBITMAP_TYPE_PNG);
-    wxBitmap b_bishop("../assets/black-bishop.png", wxBITMAP_TYPE_PNG);
-
-    //white pieces
-    wxBitmap w_pawn("../assets/white-pawn.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_king("../assets/white-king.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_queen("../assets/white-queen.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_rook("../assets/white-rook.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_knight("../assets/white-knight.png", wxBITMAP_TYPE_PNG);
-    wxBitmap w_bishop("../assets/white-bishop.png", wxBITMAP_TYPE_PNG);
-
     //the board is a grid sizer containing panels
     auto *grid = new wxGridSizer(8, 8, 0, 0);
-    //auto *panels = new wxPanel *[8*8];
-    //wxPanel *panels[64];
-    //std::array<wxPanel, 64> panels;
-
 
     // fill the panels with the pieces contained in board
-    for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j) {
-            panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
-            //color panels
-            if ((i + j) % 2 == 0) {
-                panels[i * 8 + j]->SetBackgroundColour(pink);
-            } else {
-                panels[i * 8 + j]->SetBackgroundColour(yellow);
-            }
-        }
-    }
+    color_board();
+
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j){
 
@@ -192,7 +179,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
             } else {
                 _piece = gameState->get_board()->get_piece(7-i,7-j);
             }
-            
+
             if (_piece != nullptr) {
 
                 //add bitmap which represents the piece to the panel
@@ -285,36 +272,22 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                                 MainGamePanel::selected = new unsigned int[2];
                                 MainGamePanel::selected[0] = i;
                                 MainGamePanel::selected[1] = j;
-                                //TODO: display valid moves
+                                //display valid moves
                                 display_moves(possible_moves, me);
-                                //....
                             } else {
                                 GameController::showError("Error", "Select a different piece!");
-
                             }
                         } else {
                             GameController::showError("Error", "No piece here!");
                         }
-
-
 
                     //if we click the selected piece again we deselect it
                     } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]){
                         std::cout << "deselected piece in position " << i << " " << j << std::endl;
                         delete[] MainGamePanel::selected;
                         MainGamePanel::selected = nullptr;
-                        //TODO: remove the highlighted valid moves
-                        for (int i = 7; i >= 0; --i){
-                            for (int j = 0; j < 8; ++j) {
-                                //color panels
-                                if ((i + j) % 2 == 0) {
-                                    panels[i * 8 + j]->SetBackgroundColour(pink);
-                                } else {
-                                    panels[i * 8 + j]->SetBackgroundColour(yellow);
-                                }
-                            }
-                        }
-                        this->Refresh();
+                        //remove the highlighted valid moves
+                        deselect_moves();
 
                         //else if move previously selected piece to new position
                     } else {
@@ -361,12 +334,48 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 }
 
 
+void MainGamePanel::color_board(){
+
+    for (int i = 7; i >= 0; --i){
+        for (int j = 0; j < 8; ++j) {
+            panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+            //color panels
+            if ((i + j) % 2 == 0) {
+                panels[i * 8 + j]->SetBackgroundColour(pink);
+            } else {
+                panels[i * 8 + j]->SetBackgroundColour(yellow);
+            }
+        }
+    }
+    this->Refresh();
+}
+
+void MainGamePanel::deselect_moves(){
+    for (int i = 7; i >= 0; --i){
+        for (int j = 0; j < 8; ++j) {
+            //color panels
+            if ((i + j) % 2 == 0) {
+                panels[i * 8 + j]->SetBackgroundColour(pink);
+            } else {
+                panels[i * 8 + j]->SetBackgroundColour(yellow);
+            }
+        }
+    }
+    this->Refresh();
+}
+
+
 void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves, player* me) {
+
     if(me->get_color() == white){
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    panels[k*8+l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                    if ((k + l) % 2 == 0) {
+                        panels[k*8+l]->SetOwnBackgroundColour(high_pink);
+                    } else {
+                        panels[k*8+l]->SetOwnBackgroundColour(high_yellow);
+                    }
                 }
             }
         }
@@ -374,7 +383,11 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    panels[(7-k)*8+7-l]->SetOwnBackgroundColour(wxColor(100,255, 0, 0.5));
+                    if ((k + l) % 2 == 0) {
+                        panels[(7-k)*8+7-l]->SetOwnBackgroundColour(high_pink);
+                    } else {
+                        panels[(7-k)*8+7-l]->SetOwnBackgroundColour(high_yellow);
+                    }
                 }
             }
         }
