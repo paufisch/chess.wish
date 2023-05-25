@@ -159,24 +159,7 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
     if (this->_color == white) {
         //Checking if a piece is in front of the pawn
         //We can go left or right but just when a piece from the other color is there
-        if (init_row < 7 && _board->get_piece(init_row + 1, init_col) != nullptr) {
-            //If a piece is on the left
-            if (_board->get_piece(init_row + 1, init_col - 1) != nullptr && init_col > 0) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row + 1, init_col - 1);
-                if (piece->get_color() != white) {
-                    possible_moves[init_row + 1][init_col - 1] = true;
-                }
-            }
-            //If a piece is on the right
-            if (_board->get_piece(init_row + 1, init_col + 1) != nullptr && init_col < 7) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row + 1, init_col + 1);
-                if (piece->get_color() != white) {
-                    possible_moves[init_row + 1][init_col + 1] = true;
-                }
-            }
-        } else if (init_row < 7){
+        if (init_row < 7 && _board->get_piece(init_row + 1, init_col) == nullptr) {
             possible_moves[init_row + 1][init_col] = true;
             if (init_row == 1) {
                 if (_board->get_piece(init_row + 2, init_col) == nullptr) {
@@ -184,32 +167,47 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
                 }
             }
         }
+        //If a piece is on the left
+        if (init_col > 0 && _board->get_piece(init_row + 1, init_col - 1) != nullptr) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row + 1, init_col - 1);
+            if (piece->get_color() != this->_color) {
+                possible_moves[init_row + 1][init_col - 1] = true;
+            }
+        }
+        //If a piece is on the right
+        if (_board->get_piece(init_row + 1, init_col + 1) != nullptr && init_col < 7) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row + 1, init_col + 1);
+            if (piece->get_color() != white) {
+                possible_moves[init_row + 1][init_col + 1] = true;
+            }
+        }
     } else if (this->_color == black) {
         //Checking if a piece is in front of the pawn
         //We can go left or right but just when a piece from the other color is there
-        if (init_row > 0 && _board->get_piece(init_row - 1, init_col) != nullptr) {
-            //If a piece is on the left
-            if (_board->get_piece(init_row - 1, init_col - 1) != nullptr && init_col > 0) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row - 1, init_col - 1);
-                if (piece->get_color() != black) {
-                    possible_moves[init_row - 1][init_col - 1] = true;
-                }
-            }
-            //If a piece is on the right
-            if (_board->get_piece(init_row - 1, init_col + 1) != nullptr && init_col < 7) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row - 1, init_col + 1);
-                if (piece->get_color() != black) {
-                    possible_moves[init_row - 1][init_col + 1] = true;
-                }
-            }
-        } else if (init_row > 0){
+        if (init_row > 0 && _board->get_piece(init_row - 1, init_col) == nullptr) {
             possible_moves[init_row - 1][init_col] = true;
             if (init_row == 6) {
                 if (_board->get_piece(init_row - 2, init_col) == nullptr) {
                     possible_moves[init_row - 2][init_col] = true;
                 }
+            }
+        }
+        //If a piece is on the left
+        if (_board->get_piece(init_row - 1, init_col - 1) != nullptr && init_col > 0) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row - 1, init_col - 1);
+            if (piece->get_color() != black) {
+                possible_moves[init_row - 1][init_col - 1] = true;
+            }
+        }
+        //If a piece is on the right
+        if (_board->get_piece(init_row - 1, init_col + 1) != nullptr && init_col < 7) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row - 1, init_col + 1);
+            if (piece->get_color() != black) {
+                possible_moves[init_row - 1][init_col + 1] = true;
             }
         }
     }
