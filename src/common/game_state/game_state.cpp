@@ -51,7 +51,10 @@ game_state::game_state() : unique_serializable() {
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 
-    _board->fill_all();
+    #ifdef LAMA_SERVER
+        setup_board();
+    #endif
+
 }
 
 
@@ -152,6 +155,11 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         }
 
         _round_number->set_value(_round_number->get_value() + 1);
+        if (_round_number->get_value() == _max_number_rounds) {
+            _is_finished->set_value(true);
+            _loser = get_players().at(rand()%2);
+        }
+
         if (_current_player_idx->get_value() == 0) {
             _current_player_idx->set_value(1);
         } else {
@@ -188,7 +196,7 @@ void game_state::next_turn() {
 
 // state modification functions without diff
 void game_state::setup_board() {
-    /*
+
 
     _board->fill_white_king();
     _board->fill_black_king();
@@ -208,7 +216,7 @@ void game_state::setup_board() {
     _board->fill_white_bishops();
     _board->fill_black_bishops();
 
-    */
+
 }
 
 //for securitiy reasons here, no new funtionality

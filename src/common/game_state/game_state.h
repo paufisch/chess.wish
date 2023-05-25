@@ -28,6 +28,7 @@ private:
     serializable_value<int>* _round_number;
     serializable_value<int>* _current_player_idx;
     serializable_value<int>* _starting_player_idx;
+    int _max_number_rounds = 1000;
 
     // from_diff constructor
     game_state(std::string id);

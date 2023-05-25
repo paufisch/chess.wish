@@ -153,40 +153,13 @@ Piece* Piece::from_json(const rapidjson::Value& json, board* board) {
     throw LamaException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
 
-void Piece::position(std::vector<std::vector<bool>>& possible_moves, unsigned int init_row, unsigned int init_col, int row_offset, int col_offset) {
-    if (_board->get_piece(init_row + row_offset, init_col + col_offset) != nullptr) {
-        Piece* piece = _board->get_piece(init_row + row_offset, init_col + col_offset);
-        if (piece->get_color() != this->_color) {
-            possible_moves[init_row + row_offset][init_col + col_offset];
-        }
-    } else {
-        possible_moves[init_row + row_offset][init_col + col_offset];
-    }
-}
 
-std::vector<std::vector<bool>> Piece::pawn_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
+std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     //Decide if the color is white or black because of the direction the pawns can go ("up" or "down")
     if (this->_color == white) {
         //Checking if a piece is in front of the pawn
         //We can go left or right but just when a piece from the other color is there
-        if (_board->get_piece(init_row + 1, init_col) != nullptr && init_row < 7) {
-            //If a piece is on the left
-            if (_board->get_piece(init_row + 1, init_col - 1) != nullptr && init_col > 0) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row + 1, init_col - 1);
-                if (piece->get_color() != white) {
-                    possible_moves[init_row + 1][init_col - 1] = true;
-                }
-            }
-            //If a piece is on the right
-            if (_board->get_piece(init_row + 1, init_col + 1) != nullptr && init_col < 7) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row + 1, init_col + 1);
-                if (piece->get_color() != white) {
-                    possible_moves[init_row + 1][init_col + 1] = true;
-                }
-            }
-        } else if (init_row < 7){
+        if (init_row < 7 && _board->get_piece(init_row + 1, init_col) == nullptr) {
             possible_moves[init_row + 1][init_col] = true;
             if (init_row == 1) {
                 if (_board->get_piece(init_row + 2, init_col) == nullptr) {
@@ -194,27 +167,26 @@ std::vector<std::vector<bool>> Piece::pawn_moves(unsigned int init_row, unsigned
                 }
             }
         }
+        //If a piece is on the left
+        if (init_col > 0 && _board->get_piece(init_row + 1, init_col - 1) != nullptr) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row + 1, init_col - 1);
+            if (piece->get_color() != this->_color) {
+                possible_moves[init_row + 1][init_col - 1] = true;
+            }
+        }
+        //If a piece is on the right
+        if (_board->get_piece(init_row + 1, init_col + 1) != nullptr && init_col < 7) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row + 1, init_col + 1);
+            if (piece->get_color() != white) {
+                possible_moves[init_row + 1][init_col + 1] = true;
+            }
+        }
     } else if (this->_color == black) {
         //Checking if a piece is in front of the pawn
         //We can go left or right but just when a piece from the other color is there
-        if (_board->get_piece(init_row - 1, init_col) != nullptr && init_row > 0) {
-            //If a piece is on the left
-            if (_board->get_piece(init_row - 1, init_col - 1) != nullptr && init_col > 0) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row - 1, init_col - 1);
-                if (piece->get_color() != black) {
-                    possible_moves[init_row - 1][init_col - 1] = true;
-                }
-            }
-            //If a piece is on the right
-            if (_board->get_piece(init_row - 1, init_col + 1) != nullptr && init_col < 7) {
-                //Need the piece to find out its color
-                Piece* piece = _board->get_piece(init_row - 1, init_col + 1);
-                if (piece->get_color() != black) {
-                    possible_moves[init_row - 1][init_col + 1] = true;
-                }
-            }
-        } else if (init_row > 0){
+        if (init_row > 0 && _board->get_piece(init_row - 1, init_col) == nullptr) {
             possible_moves[init_row - 1][init_col] = true;
             if (init_row == 6) {
                 if (_board->get_piece(init_row - 2, init_col) == nullptr) {
@@ -222,10 +194,26 @@ std::vector<std::vector<bool>> Piece::pawn_moves(unsigned int init_row, unsigned
                 }
             }
         }
+        //If a piece is on the left
+        if (_board->get_piece(init_row - 1, init_col - 1) != nullptr && init_col > 0) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row - 1, init_col - 1);
+            if (piece->get_color() != black) {
+                possible_moves[init_row - 1][init_col - 1] = true;
+            }
+        }
+        //If a piece is on the right
+        if (_board->get_piece(init_row - 1, init_col + 1) != nullptr && init_col < 7) {
+            //Need the piece to find out its color
+            Piece* piece = _board->get_piece(init_row - 1, init_col + 1);
+            if (piece->get_color() != black) {
+                possible_moves[init_row - 1][init_col + 1] = true;
+            }
+        }
     }
     return possible_moves;
 }
-std::vector<std::vector<bool>> Piece::rook_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
+std::vector<std::vector<bool>> Piece::rook_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     for (int row = init_row + 1; row < 8; ++row) {
         //piece which is on the current field
         Piece* piece = _board->get_piece(row, init_col);
@@ -279,42 +267,54 @@ std::vector<std::vector<bool>> Piece::rook_moves(unsigned int init_row, unsigned
     }
     return possible_moves;
 }
-std::vector<std::vector<bool>> Piece::knight_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
-    if (init_row < 5 && init_col < 7) {
-        position(possible_moves, init_row, init_col, 3, 1);
+
+void Piece::position(std::vector<std::vector<bool>>& possible_moves, int init_row, int init_col, int row_offset, int col_offset) {
+    if (_board->get_piece(init_row + row_offset, init_col + col_offset) != nullptr) {
+        Piece* piece = _board->get_piece(init_row + row_offset, init_col + col_offset);
+        if (piece->get_color() != this->_color) {
+            possible_moves[init_row + row_offset][init_col + col_offset] = true;
+        }
+    } else {
+        possible_moves[init_row + row_offset][init_col + col_offset] = true;
+    }
+}
+
+std::vector<std::vector<bool>> Piece::knight_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
+    if (init_row < 6 && init_col < 7) {
+        position(possible_moves, init_row, init_col, 2, 1);
     }
 
-    if (init_row < 5 && init_col > 0) {
-        position(possible_moves, init_row, init_col, 3, -1);
+    if (init_row < 6 && init_col > 0) {
+        position(possible_moves, init_row, init_col, 2, -1);
     }
 
-    if (init_row > 2 && init_col < 7) {
-        position(possible_moves, init_row, init_col, -3, 1);
+    if (init_row > 1 && init_col < 7) {
+        position(possible_moves, init_row, init_col, -2, 1);
     }
 
-    if (init_row > 2 && init_col > 0) {
-        position(possible_moves, init_row, init_col, -3, -1);
+    if (init_row > 1 && init_col > 0) {
+        position(possible_moves, init_row, init_col, -2, -1);
     }
 
-    if (init_row < 7 && init_col < 5) {
-        position(possible_moves, init_row, init_col, 1, 3);
+    if (init_row < 7 && init_col < 6) {
+        position(possible_moves, init_row, init_col, 1, 2);
     }
 
-    if (init_row > 0 && init_col < 5) {
-        position(possible_moves, init_row, init_col, -1, 3);
+    if (init_row > 0 && init_col < 6) {
+        position(possible_moves, init_row, init_col, -1, 2);
     }
 
-    if (init_row < 7 && init_col > 2) {
-        position(possible_moves, init_row, init_col, 1, -3);
+    if (init_row < 7 && init_col > 1) {
+        position(possible_moves, init_row, init_col, 1, -2);
     }
 
-    if (init_row > 0 && init_col > 2) {
-        position(possible_moves, init_row, init_col, -1, -3);
+    if (init_row > 0 && init_col > 1) {
+        position(possible_moves, init_row, init_col, -1, -2);
     }
     return possible_moves;
 }
-std::vector<std::vector<bool>> Piece::bishop_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
-    for (unsigned int i = 1; ((init_row + i < 8) || (init_col + i < 8)); ++i) {
+std::vector<std::vector<bool>> Piece::bishop_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
+    for (int i = 1; ((init_row + i < 8) && (init_col + i < 8)); ++i) {
         Piece* piece = _board->get_piece(init_row + i, init_col + i);
         if (piece == nullptr) {
             possible_moves[init_row + i][init_col + i] = true;
@@ -326,7 +326,7 @@ std::vector<std::vector<bool>> Piece::bishop_moves(unsigned int init_row, unsign
         }
     }
 
-    for (unsigned int i = 1; ((init_row + i < 8) || (init_col - i > -1)); ++i) {
+    for (int i = 1; ((init_row + i < 8) && (init_col - i > -1)); ++i) {
         Piece* piece = _board->get_piece(init_row + i, init_col - i);
         if (piece == nullptr) {
             possible_moves[init_row + i][init_col - i] = true;
@@ -338,7 +338,7 @@ std::vector<std::vector<bool>> Piece::bishop_moves(unsigned int init_row, unsign
         }
     }
 
-    for (unsigned int i = 1; ((init_row - i > -1) || (init_col - i > -1)); ++i) {
+    for (int i = 1; ((init_row - i > -1) && (init_col - i > -1)); ++i) {
         Piece* piece = _board->get_piece(init_row - i, init_col - i);
         if (piece == nullptr) {
             possible_moves[init_row - i][init_col - i] = true;
@@ -350,7 +350,7 @@ std::vector<std::vector<bool>> Piece::bishop_moves(unsigned int init_row, unsign
         }
     }
 
-    for (unsigned int i = 1; ((init_row - i > -1) || (init_col + i < 8)); ++i) {
+    for (int i = 1; ((init_row - i > -1) && (init_col + i < 8)); ++i) {
         Piece* piece = _board->get_piece(init_row - i, init_col + i);
         if (piece == nullptr) {
             possible_moves[init_row - i][init_col + i] = true;
@@ -363,7 +363,7 @@ std::vector<std::vector<bool>> Piece::bishop_moves(unsigned int init_row, unsign
     }
     return possible_moves;
 }
-std::vector<std::vector<bool>> Piece::king_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
+std::vector<std::vector<bool>> Piece::king_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     for (int row = init_row - 1; row < init_row + 2; ++row) {
         for (int col = init_col - 1; col < init_col + 2; ++col) {
             if (!(row == init_row && col == init_col)) {
@@ -378,12 +378,13 @@ std::vector<std::vector<bool>> Piece::king_moves(unsigned int init_row, unsigned
     }
     return possible_moves;
 }
-std::vector<std::vector<bool>> Piece::queen_moves(unsigned int init_row, unsigned int init_col, std::vector<std::vector<bool>>& possible_moves) {
+
+std::vector<std::vector<bool>> Piece::queen_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     possible_moves = rook_moves(init_row, init_col, possible_moves);
     return bishop_moves(init_row, init_col, possible_moves);
 }
 
-std::vector<std::vector<bool>> Piece::legal_moves(unsigned int init_row, unsigned int init_col) {
+std::vector<std::vector<bool>> Piece::legal_moves(int init_row, int init_col) {
     std::vector<std::vector<bool>> possible_moves(8, std::vector<bool>(8, false));
     switch (_type) {
         case PieceType::rook:
@@ -404,7 +405,10 @@ std::vector<std::vector<bool>> Piece::legal_moves(unsigned int init_row, unsigne
         case PieceType::pawn:
             return pawn_moves(init_row, init_col, possible_moves);
             break;
+        case empty:
+            break;
     }
+    return possible_moves;
 }
 
 
