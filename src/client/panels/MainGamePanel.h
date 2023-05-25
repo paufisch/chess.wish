@@ -10,6 +10,7 @@ class MainGamePanel : public wxPanel {
 public:
     explicit MainGamePanel(wxWindow* parent);
     void buildGameState(game_state* gameState, player* me);
+    void display_moves(std::vector<std::vector<bool>>, player*);
 
 
 
@@ -19,7 +20,7 @@ private:
     wxGridSizer* buildBoard(game_state* gameState, player* me);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
     unsigned int* selected;
-    void display_moves(wxPanel (&panel)[64], std::vector<std::vector<bool>>, player*);
+    wxPanel *panels[64];
 };
 
 
