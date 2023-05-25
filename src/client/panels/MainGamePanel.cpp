@@ -248,10 +248,12 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         //get the selected piece
                         Piece *_piece = nullptr;
                         std::vector<std::vector<bool>> possible_moves;
-                        if(me->get_color() == white) {
+
+                        if(me->get_color() == white && gameState->get_board()->get_piece(i, j) != nullptr) {
                             _piece = gameState->get_board()->get_piece(i, j);//TODO: what happens if there is no piece on i,j
-                            std::cout << "selected piece in position " << i << " " << j << std::endl;
                             possible_moves = _piece->legal_moves(i,j);
+                            /*
+                            std::cout << "selected piece in position " << i << " " << j << std::endl;
                             std::cout << "displaying legal moves: "<< std::endl;
                             for (int k = possible_moves.size() - 1; k >= 0; --k) {
                                 for (int l = 0; l < possible_moves.at(k).size(); ++l) {
@@ -259,30 +261,37 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                                 }
                                 std::cout << std::endl;
                             }
-                        } else {
-                            _piece = gameState->get_board()->get_piece(7-i,7-j);
+                            */
+                        } else if(me->get_color() == black && gameState->get_board()->get_piece(7-i, 7-j) != nullptr) {
+                            _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
                             possible_moves = _piece->legal_moves(7-i,7-j);
                         }
 
-                        //sum the total number of possible moves
-                        int sum = 0;
-                        for (const auto& row : possible_moves) {
-                            for (bool value : row) {
-                                sum += value;
+                        if(_piece != nullptr){
+                            //sum the total number of possible moves
+                            int sum = 0;
+                            for (const auto& row : possible_moves) {
+                                for (bool value : row) {
+                                    sum += value;
+                                }
                             }
-                        }
 
-                        //if the selected piece is our piece and has possible moves we select it
-                        if(_piece->get_color() == me->get_color() && sum > 0){
-                            MainGamePanel::selected = new unsigned int[2];
-                            MainGamePanel::selected[0] = i;
-                            MainGamePanel::selected[1] = j;
-                            //TODO: display valid moves
-                            //....
+                            //if the selected piece is our piece and has possible moves we select it
+                            if(_piece->get_color() == me->get_color() && sum > 0){
+                                MainGamePanel::selected = new unsigned int[2];
+                                MainGamePanel::selected[0] = i;
+                                MainGamePanel::selected[1] = j;
+                                //TODO: display valid moves
+                                //....
+                            } else {
+                                GameController::showError("Error", "Select a different piece!");
+
+                            }
                         } else {
-                            GameController::showError("Error", "Select a different piece!");
-
+                            GameController::showError("Error", "No piece here!");
                         }
+
+
 
                     //if we click the selected piece again we deselect it
                     } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]){
