@@ -250,7 +250,15 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         std::vector<std::vector<bool>> possible_moves;
                         if(me->get_color() == white) {
                             _piece = gameState->get_board()->get_piece(i, j);//TODO: what happens if there is no piece on i,j
+                            std::cout << "selected piece in position " << i << " " << j << std::endl;
                             possible_moves = _piece->legal_moves(i,j);
+                            std::cout << "displaying legal moves: "<< std::endl;
+                            for (int k = possible_moves.size() - 1; k >= 0; --k) {
+                                for (int l = 0; l < possible_moves.at(k).size(); ++l) {
+                                    std::cout << possible_moves.at(k).at(l) << " ";
+                                }
+                                std::cout << std::endl;
+                            }
                         } else {
                             _piece = gameState->get_board()->get_piece(7-i,7-j);
                             possible_moves = _piece->legal_moves(7-i,7-j);
@@ -268,7 +276,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         if(_piece->get_color() == me->get_color() && sum > 0){
                             MainGamePanel::selected = new unsigned int[2];
                             MainGamePanel::selected[0] = i;
-                            MainGamePanel::selected[0] = j;
+                            MainGamePanel::selected[1] = j;
                             //TODO: display valid moves
                             //....
                         } else {
@@ -278,6 +286,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 
                     //if we click the selected piece again we deselect it
                     } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]){
+                        std::cout << "deselected piece in position " << i << " " << j << std::endl;
                         delete[] MainGamePanel::selected;
                         MainGamePanel::selected = nullptr;
                         //else if move previously selected piece to new position
