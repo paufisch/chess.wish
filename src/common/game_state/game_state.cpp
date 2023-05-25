@@ -151,7 +151,12 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
             _board->set_piece(i_to, j_to, new Piece(_moving_piece->get_piece_ID(), _moving_piece->get_color(), queen, _board));
         }
 
-        _round_number++;
+        _round_number->set_value(_round_number->get_value() + 1);
+        if (_current_player_idx->get_value() == 0) {
+            _current_player_idx->set_value(1);
+        } else {
+            _current_player_idx->set_value(0);
+        }
 
         return true;
     }

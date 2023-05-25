@@ -104,7 +104,7 @@ server_response* request_handler::handle_request(const client_request* const req
                     return new request_response(game_instance_ptr->get_id(), req_id, true, game_instance_ptr->get_game_state()->to_json(), err);
                 }
             }
-            return new request_response("", req_id, false, nullptr, err);
+            return new request_response(game_instance_ptr->get_id(), req_id, false, nullptr, err);
         }
 
 

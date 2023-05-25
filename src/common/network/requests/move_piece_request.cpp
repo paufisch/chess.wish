@@ -29,15 +29,8 @@ void move_piece_request::write_into_json(rapidjson::Value &json,
                                         rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     client_request::write_into_json(json, allocator);
 
-    rapidjson::Value coordinate_from_1_val(std::to_string(_coordinate_from_1), allocator);  //std::to_string might cause problems
-    json.AddMember("coordinate_from_1", coordinate_from_1_val, allocator);
-
-    rapidjson::Value coordinate_from_2_val(std::to_string(_coordinate_from_2), allocator);
-    json.AddMember("coordinate_from_2", coordinate_from_2_val, allocator);
-
-    rapidjson::Value coordinate_to_1_val(std::to_string(_coordinate_to_1), allocator);
-    json.AddMember("coordinate_to_1", coordinate_to_1_val, allocator);
-
-    rapidjson::Value coordinate_to_2_val(std::to_string(_coordinate_to_2), allocator);
-    json.AddMember("coordinate_to_2", coordinate_to_2_val, allocator);
+    json.AddMember("coordinate_from_1", _coordinate_from_1, allocator);
+    json.AddMember("coordinate_from_2", _coordinate_from_2, allocator);
+    json.AddMember("coordinate_to_1", _coordinate_to_1, allocator);
+    json.AddMember("coordinate_to_2", _coordinate_to_2, allocator);
 }
