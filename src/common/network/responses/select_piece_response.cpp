@@ -4,7 +4,7 @@
 
 #include "select_piece_response.h"
 #include "../../serialization/vector_utils.h"
-#include "../../exceptions/LamaException.h"
+#include "../../exceptions/ChessException.h"
 
 
 select_piece_response::select_piece_response(server_response::base_class_properties props, bool success, std::vector<std::vector<bool>> legal_moves) :
@@ -57,7 +57,7 @@ select_piece_response *select_piece_response::from_json(const rapidjson::Value &
                 json["success"].GetBool(),
                 string_to_matrix(json["legal_moves"].GetString()));
     } else {
-        throw LamaException("Could not parse request_response from json. success is missing.");
+        throw ChessException("Could not parse request_response from json. success is missing.");
     }
 }
 

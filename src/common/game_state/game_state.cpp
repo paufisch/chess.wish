@@ -6,7 +6,7 @@
 #include "piece/piece.h"
 #include "board.h"
 
-#include "../exceptions/LamaException.h"
+#include "../exceptions/ChessException.h"
 #include "../serialization/vector_utils.h"
 
 game_state::game_state(std::string id) : unique_serializable(id) {
@@ -54,7 +54,7 @@ game_state::game_state() : unique_serializable() {
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 
-    #ifdef LAMA_SERVER
+    #ifdef CHESS_SERVER
         setup_board();
     #endif
 
@@ -205,7 +205,7 @@ int game_state::get_max_number_rounds() {
 }
 
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
 
 // state modification functions without diff
 void game_state::setup_board() {
@@ -374,7 +374,7 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
 
 
     } else {
-        throw LamaException("Failed to deserialize game_state. Required entries were missing.");
+        throw ChessException("Failed to deserialize game_state. Required entries were missing.");
     }
 }
 

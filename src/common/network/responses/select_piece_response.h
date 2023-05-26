@@ -2,8 +2,8 @@
 // Created by jann on 5/18/23.
 //
 
-#ifndef LAMA_SELECT_PIECE_RESPONSE_H
-#define LAMA_SELECT_PIECE_RESPONSE_H
+#ifndef CHESS_SELECT_PIECE_RESPONSE_H
+#define CHESS_SELECT_PIECE_RESPONSE_H
 
 #include <string>
 #include <vector>
@@ -29,4 +29,4 @@ public:
     virtual void Process() const ;
 };
 
-#endif //LAMA_SELECT_PIECE_RESPONSE_H
+#endif //CHESS_SELECT_PIECE_RESPONSE_H

@@ -4,7 +4,7 @@
 
 #include "board.h"
 
-#include "../exceptions/LamaException.h"
+#include "../exceptions/ChessException.h"
 #include "../serialization/vector_utils.h"
 
 
@@ -191,7 +191,7 @@ board* board::from_json(const rapidjson::Value &json) {
 
 
     } else {
-        throw LamaException("Failed to deserialize board. Required entries were missing.");
+        throw ChessException("Failed to deserialize board. Required entries were missing.");
     }
 }
 

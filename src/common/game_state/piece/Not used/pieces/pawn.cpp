@@ -3,7 +3,7 @@
 //
 
 #include "pawn.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../../exceptions/ChessException.h"
 
 
 Pawn::Pawn(Piece::base_class_properties props)
@@ -27,7 +27,7 @@ Piece * Pawn::from_json(const rapidjson::Value &json) {
         std::string type = json["type"].GetString();
         return new Pawn(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
-        throw LamaException("Pawn constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
+        throw ChessException("Pawn constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 

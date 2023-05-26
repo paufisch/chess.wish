@@ -52,7 +52,7 @@ client_request::base_class_properties client_request::extract_base_class_propert
     }
     else
     {
-        throw LamaException("Client Request did not contain player_id or game_id");
+        throw ChessException("Client Request did not contain player_id or game_id");
     }
 }
 
@@ -96,7 +96,7 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
             return move_piece_request::from_json(json);
         }
         else if (request_type == RequestType::select_piece) {
-            return select_piece_request::from_json(json);
+//            return select_piece_request::from_json(json);
         }
         else if (request_type == RequestType::resign) {
             return resign_request::from_json(json);
@@ -107,10 +107,10 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
         else if (request_type == RequestType::start_game) {
             return start_game_request::from_json(json);
         } else {
-            throw LamaException("Encountered unknown ClientRequest type " + type);
+            throw ChessException("Encountered unknown ClientRequest type " + type);
         }
     }
-    throw LamaException("Could not determine type of ClientRequest. JSON was:\n" + json_utils::to_string(&json));
+    throw ChessException("Could not determine type of ClientRequest. JSON was:\n" + json_utils::to_string(&json));
 }
 
 

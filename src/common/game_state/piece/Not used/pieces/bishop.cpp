@@ -3,7 +3,7 @@
 //
 
 #include "bishop.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../../exceptions/ChessException.h"
 
 
 
@@ -28,7 +28,7 @@ Piece * Bishop::from_json(const rapidjson::Value &json) {
         std::string type = json["type"].GetString();
         return new Bishop(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
-        throw LamaException("Bishop constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
+        throw ChessException("Bishop constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 

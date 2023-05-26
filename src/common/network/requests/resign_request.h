@@ -2,8 +2,8 @@
 // Created by jann on 5/3/23.
 //
 
-#ifndef LAMA_RESIGN_REQUEST_H
-#define LAMA_RESIGN_REQUEST_H
+#ifndef CHESS_RESIGN_REQUEST_H
+#define CHESS_RESIGN_REQUEST_H
 
 #include <string>
 #include "client_request.h"
@@ -24,4 +24,4 @@ public:
     static resign_request* from_json(const rapidjson::Value& json);
 };
 
-#endif //LAMA_RESIGN_REQUEST_H
+#endif //CHESS_RESIGN_REQUEST_H

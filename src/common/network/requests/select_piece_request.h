@@ -2,8 +2,8 @@
 // Created by jann on 5/3/23.
 //
 
-#ifndef LAMA_SELECT_PIECE_REQUEST_H
-#define LAMA_SELECT_PIECE_REQUEST_H
+#ifndef CHESS_SELECT_PIECE_REQUEST_H
+#define CHESS_SELECT_PIECE_REQUEST_H
 
 #include "client_request.h"
 #include <string>
@@ -28,4 +28,4 @@ public:
     static select_piece_request* from_json(const rapidjson::Value& json);
 };
 
-#endif //LAMA_SELECT_PIECE_REQUEST_H
+#endif //CHESS_SELECT_PIECE_REQUEST_H

@@ -1,5 +1,5 @@
-#ifndef LAMA_CLIENT_MAINGAMEPANEL_H
-#define LAMA_CLIENT_MAINGAMEPANEL_H
+#ifndef CHESS_CLIENT_MAINGAMEPANEL_H
+#define CHESS_CLIENT_MAINGAMEPANEL_H
 
 #include <wx/wx.h>
 #include "../../common/game_state/game_state.h"
@@ -47,4 +47,4 @@ private:
 };
 
 
-#endif //LAMA_CLIENT_MAINGAMEPANEL_H
+#endif //CHESS_CLIENT_MAINGAMEPANEL_H

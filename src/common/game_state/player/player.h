@@ -2,8 +2,8 @@
 // Created by Manuel on 25.01.2021.
 //
 
-#ifndef LAMA_PLAYER_H
-#define LAMA_PLAYER_H
+#ifndef CHESS_PLAYER_H
+#define CHESS_PLAYER_H
 
 
 #include <string>
@@ -18,7 +18,7 @@ private:
     serializable_value<std::string>* _player_name;
     Color _color;
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
     std::string _game_id;
 #endif
 
@@ -40,7 +40,7 @@ public:
     player(std::string name);
     ~player();
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
     player(std::string id, std::string name, Color color);  // for server
 
     std::string get_game_id();
@@ -52,7 +52,7 @@ public:
     bool get_color() const noexcept;
     void set_color(Color color);
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
     // state update functions
     //bool fold(std::string& err);
 
@@ -68,4 +68,4 @@ public:
 };
 
 
-#endif //LAMA_PLAYER_H
+#endif //CHESS_PLAYER_H

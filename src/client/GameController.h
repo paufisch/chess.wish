@@ -1,5 +1,5 @@
-#ifndef LAMAUI_GAMECONTROLLER_H
-#define LAMAUI_GAMECONTROLLER_H
+#ifndef CHESSUI_GAMECONTROLLER_H
+#define CHESSUI_GAMECONTROLLER_H
 
 #include "windows/GameWindow.h"
 #include "panels/ConnectionPanel.h"
@@ -33,4 +33,4 @@ private:
 };
 
 
-#endif //LAMAUI_GAMECONTROLLER_H
+#endif //CHESSUI_GAMECONTROLLER_H

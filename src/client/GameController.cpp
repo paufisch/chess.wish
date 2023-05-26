@@ -117,8 +117,8 @@ void GameController::resign() {
 
 void GameController::selectPiece(int i, int j) {
     //i,j are the indices of the selected piece
-    select_piece_request request = select_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
-    ClientNetworkManager::sendRequest(request);
+//    select_piece_request request = select_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
+//    ClientNetworkManager::sendRequest(request);
 
 }
 

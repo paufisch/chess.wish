@@ -3,7 +3,7 @@
 //
 
 #include "queen.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../../exceptions/ChessException.h"
 
 
 Queen::Queen(Piece::base_class_properties props)
@@ -31,7 +31,7 @@ Piece* Queen::from_json(const rapidjson::Value &json) {
         std::string type = json["type"].GetString();
         return new Queen(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
-        throw LamaException("Queen constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
+        throw ChessException("Queen constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 

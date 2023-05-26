@@ -1,5 +1,5 @@
-#ifndef LAMAUI_LAMA_H
-#define LAMAUI_LAMA_H
+#ifndef CHESSUI_CHESS_H
+#define CHESSUI_CHESS_H
 
 #include <wx/wx.h>
 #include "../windows/GameWindow.h"
@@ -14,4 +14,4 @@ public:
 };
 
 
-#endif //LAMAUI_LAMA_H
+#endif //CHESSUI_CHESS_H

@@ -2,8 +2,8 @@
 // Created by Fabian 18.05.2023
 //
 
-#ifndef LAMA_GAME_STATE_H
-#define LAMA_GAME_STATE_H
+#ifndef CHESS_GAME_STATE_H
+#define CHESS_GAME_STATE_H
 
 #include <vector>
 #include <string>
@@ -72,7 +72,7 @@ public:
     player* get_loser();
     int get_max_number_rounds();
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
 // server-side state update functions
     void setup_board();   // server side initialization
     bool remove_player(player* player, std::string& err);
@@ -91,5 +91,5 @@ public:
 };
 
 
-#endif //LAMA_GAME_STATE_H
+#endif //CHESS_GAME_STATE_H
 

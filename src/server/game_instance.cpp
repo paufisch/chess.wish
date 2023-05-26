@@ -26,9 +26,9 @@ bool game_instance::is_king_dead() {
     } else if (king_count == 1) {
         return true;
     } else if (king_count == 0) {
-        throw LamaException("how did you manage to kill both kings?");
+        throw ChessException("how did you manage to kill both kings?");
     } else {
-        throw LamaException("how did you manage to have more than 2 kings on the board?");
+        throw ChessException("how did you manage to have more than 2 kings on the board?");
     }
 }
 */
@@ -65,7 +65,7 @@ std::vector<std::vector<bool>> game_instance::legal_moves(player* player, int co
     if (is_player_allowed_to_play(player)) {
         return _game_state->select_piece(coordinate_1, coordinate_2);
     } else {
-        throw LamaException("a player tried to find legal moves while it was their oponents turn");
+        throw ChessException("a player tried to find legal moves while it was their oponents turn");
     }
 }
 
