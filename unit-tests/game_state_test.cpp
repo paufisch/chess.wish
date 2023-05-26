@@ -37,6 +37,9 @@ protected:
     std::string err;
 };
 
+ASSERT_STREQ(expected_str, actual_str)
+
+
 // Adding one card to an empty hand must succeed
 TEST_F(HandTest, AddOneCard) {
     EXPECT_TRUE(player_hand.add_card(cards[1][0], err));

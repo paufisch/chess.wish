@@ -1,7 +1,10 @@
 project(Lama-unit-tests)
 
 set(TEST_SOURCE_FILES
-        piece_test.cpp
+        piece_test_1.cpp
+        piece_test_2.cpp
+        piece_test_3.cpp
+        piece_test_4.cpp
         )
 
 add_executable(Lama-tests ${TEST_SOURCE_FILES})

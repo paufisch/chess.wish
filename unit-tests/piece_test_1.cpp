@@ -2,8 +2,6 @@
 // Created by Fabian on 24.05.2023
 //
 
-//Currently commented out in the main CMakeList.txt inside src
-
 #include "gtest/gtest.h"
 #include "../src/common/exceptions/LamaException.h"
 #include "../src/common/game_state/piece/piece.h"
@@ -22,7 +20,7 @@
  * next one. googletest does not reuse the same test fixture for multiple
  * tests. Any changes one test makes to the fixture do not affect other tests.
  */
-class Piece_Test : public ::testing::Test {
+class Piece_Test_1 : public ::testing::Test {
 
 protected:
 
@@ -85,55 +83,58 @@ protected:
         delete _board;
     }
 
-};
+    bool compare(std::vector<std::vector<bool>>& legal_moves_output,
+                 std::vector<std::vector<bool>>& legal_moves_expected){
 
-bool compare(std::vector<std::vector<bool>>& _legal_moves_output,
-             std::vector<std::vector<bool>>& _legal_moves_expected){
-
-    for(int i = 0; i < 8; i++ ){
-        for(int j = 0; j < 8; j++ ){
-            if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
-                return false;
+        for(int i = 0; i < 8; i++ ){
+            for(int j = 0; j < 8; j++ ){
+                if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
+                    return false;
+                }
             }
         }
+
+        return true;
     }
 
-    return true;
-}
 
-TEST_F(Piece_Test, Pawn) {
+};
+
+
+TEST_F(Piece_Test_1, Pawn) {
     _legal_moves_expected[2][4] = true;
     _legal_moves_expected[3][4] = true;
     _legal_moves_output = _board->get_piece(1,4)->legal_moves(1,4);
 
     ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
+
 }
 
-TEST_F(Piece_Test, Rook) {
+TEST_F(Piece_Test_1, Rook) {
     _legal_moves_output = _board->get_piece(0,0)->legal_moves(0,0);
 
     ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
 }
 
-TEST_F(Piece_Test, King) {
+TEST_F(Piece_Test_1, King) {
     _legal_moves_output = _board->get_piece(7,4)->legal_moves(7,4);
 
     ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
 }
 
-TEST_F(Piece_Test, Queen) {
+TEST_F(Piece_Test_1, Queen) {
     _legal_moves_output = _board->get_piece(0,3)->legal_moves(0,3);
 
     ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
 }
 
-TEST_F(Piece_Test, Bishop) {
+TEST_F(Piece_Test_1, Bishop) {
     _legal_moves_output = _board->get_piece(7,5)->legal_moves(7,5);
 
     ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
 }
 
-TEST_F(Piece_Test, Knight) {
+TEST_F(Piece_Test_1, Knight) {
     _legal_moves_expected[5][7] = true;
     _legal_moves_expected[5][5] = true;
     _legal_moves_output = _board->get_piece(7,6)->legal_moves(7,6);
