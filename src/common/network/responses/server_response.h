@@ -17,9 +17,7 @@
 // during deserialization on the client side.
 enum ResponseType {
     req_response,
-    //state_diff_msg,
     full_state_msg,
-    select_piece_msg
 };
 
 class server_response : public serializable {

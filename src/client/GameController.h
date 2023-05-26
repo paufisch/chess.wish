@@ -20,7 +20,6 @@ public:
     static void showError(const std::string& title, const std::string& message);
     static void showStatus(const std::string& message);
     static void showGameOverMessage();
-    static void selectPiece(int i, int j);
     static void movePiece(int from_i, int from_j, int i, int j);
 
 private:

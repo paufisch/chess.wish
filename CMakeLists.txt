@@ -34,13 +34,11 @@ set(CLIENT_SOURCE_FILES
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
         src/common/network/requests/start_game_request.cpp src/common/network/requests/start_game_request.h
         src/common/network/requests/move_piece_request.cpp src/common/network/requests/move_piece_request.h
-        src/common/network/requests/select_piece_request.h
         src/common/network/requests/resign_request.cpp src/common/network/requests/resign_request.h
         # server responses
         src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
         src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
         src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
-        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h
         # serialization
         src/common/serialization/serializable.h
         src/common/serialization/value_type_helpers.h
@@ -68,13 +66,11 @@ set(SERVER_SOURCE_FILES
         src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
         src/common/network/requests/start_game_request.cpp src/common/network/requests/start_game_request.h
         src/common/network/requests/move_piece_request.cpp src/common/network/requests/move_piece_request.h
-        src/common/network/requests/select_piece_request.h
         src/common/network/requests/resign_request.cpp src/common/network/requests/resign_request.h
         # server responses
         src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
         src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
         src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
-        src/common/network/responses/select_piece_response.cpp src/common/network/responses/select_piece_response.h
         # serialization
         src/common/serialization/serializable.h
         src/common/serialization/value_type_helpers.h

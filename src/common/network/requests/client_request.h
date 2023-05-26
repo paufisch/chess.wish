@@ -21,7 +21,6 @@
 enum RequestType {
     join_game,
     start_game,
-    select_piece,
     move_piece,
     resign,
 };
