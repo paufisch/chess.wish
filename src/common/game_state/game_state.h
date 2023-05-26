@@ -25,6 +25,7 @@ private:
     player* _loser;
     serializable_value<bool>* _is_started;
     serializable_value<bool>* _is_finished;
+    serializable_value<bool>* _is_resigned;
     serializable_value<int>* _round_number;
     serializable_value<int>* _current_player_idx;
     serializable_value<int>* _starting_player_idx;
@@ -41,6 +42,7 @@ private:
             player *loser,
             serializable_value<bool>* is_started,
             serializable_value<bool>* is_finished,
+            serializable_value<bool>* is_resigned,
             serializable_value<int>* current_player_idx,
             serializable_value<int>* round_number,
             serializable_value<int>* starting_player_idx);
@@ -55,6 +57,7 @@ public:
     bool is_full() const;
     bool is_started() const;
     bool is_finished() const;
+    bool is_resigned() const;
     bool is_player_in_game(player* player) const;
     bool is_allowed_to_play_now(player* player) const;
     std::vector<player*>& get_players();
