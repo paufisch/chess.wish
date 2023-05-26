@@ -2,8 +2,8 @@
 // Created by Manuel on 29.01.2021.
 //
 
-#ifndef LAMA_START_GAME_REQUEST_H
-#define LAMA_START_GAME_REQUEST_H
+#ifndef CHESS_START_GAME_REQUEST_H
+#define CHESS_START_GAME_REQUEST_H
 
 
 #include <string>

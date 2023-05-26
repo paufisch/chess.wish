@@ -1,4 +1,4 @@
-#include "Lama.h"
+#include "Chess.h"
 
 
 // Application entry point
@@ -10,7 +10,7 @@ bool Chess::OnInit()
 
     // Open main game window
     GameWindow* gameWindow = new GameWindow(
-            "SUICIDE CHESS", // title of window,
+            "CHESS", // title of window,
             wxDefaultPosition, // position of the window
             wxDefaultSize // size of the window
     );

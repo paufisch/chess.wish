@@ -3,8 +3,8 @@
 //
 // abstract class for a serializable object.
 
-#ifndef LAMA_SERIALIZABLE_H
-#define LAMA_SERIALIZABLE_H
+#ifndef CHESS_SERIALIZABLE_H
+#define CHESS_SERIALIZABLE_H
 
 #include "../../rapidjson/include/rapidjson/document.h"
 

@@ -4,7 +4,7 @@
 
 #include "board.h"
 
-#include "../exceptions/LamaException.h"
+#include "../exceptions/ChessException.h"
 #include "../serialization/vector_utils.h"
 
 
@@ -46,6 +46,17 @@ void board::set_piece(int i, int j, Piece* piece) {
 
 void board::set_board_layout(std::vector<std::vector<Piece*>> board) {
     _board_layout = board;
+}
+
+void board::clear_board() {
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (_board_layout[i][j] != nullptr) {
+                delete _board_layout[i][j];
+                _board_layout[i][j] = nullptr;
+            }
+        }
+    }
 }
 
 // fill_board (0,0) = a1, (8,0) = a8
@@ -111,26 +122,6 @@ void board::fill_black_bishops(){
     _board_layout[7][5] = new Piece("30", black, bishop, this);
 }
 
-void board::fill_all() {
-    fill_white_king();
-    fill_black_king();
-
-    fill_white_pawns();
-    fill_black_pawns();
-
-    fill_white_rooks();
-    fill_black_rooks();
-
-    fill_white_knights();
-    fill_black_knights();
-
-    fill_white_queen();
-    fill_black_queen();
-
-    fill_white_bishops();
-    fill_black_bishops();
-}
-
 
 //json
 std::vector<std::vector<Piece*>> board::vector_to_board(std::vector<Piece*> vector) {
@@ -191,7 +182,7 @@ board* board::from_json(const rapidjson::Value &json) {
 
 
     } else {
-        throw LamaException("Failed to deserialize board. Required entries were missing.");
+        throw ChessException("Failed to deserialize board. Required entries were missing.");
     }
 }
 

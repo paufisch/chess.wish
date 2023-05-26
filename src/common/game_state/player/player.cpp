@@ -4,7 +4,7 @@
 
 #include "player.h"
 
-#include "../../exceptions/LamaException.h"
+#include "../../exceptions/ChessException.h"
 
 const std::unordered_map<std::string, Color> player::_string_to_color = {
         {"white", Color::white},
@@ -55,7 +55,7 @@ player::~player() {
     }
 }
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
 player::player(std::string id, std::string name, Color color) :
         unique_serializable(id)
 {
@@ -85,7 +85,7 @@ void player::set_color(Color color) {
 }
 
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
 void player::setup_round(std::string& err) {
     //_color = ?
 }
@@ -131,6 +131,6 @@ player *player::from_json(const rapidjson::Value &json) {
                 serializable_value<std::string>::from_json(json["player_name"].GetObject()),
                 _string_to_color.at(json["color"].GetString()));
     } else {
-        throw LamaException("Failed to deserialize player from json. Required json entries were missing.");
+        throw ChessException("Failed to deserialize player from json. Required json entries were missing.");
     }
 }

@@ -1,5 +1,5 @@
-#ifndef LAMA_CLIENT_NETWORK_THREAD_H
-#define LAMA_CLIENT_NETWORK_THREAD_H
+#ifndef CHESS_CLIENT_NETWORK_THREAD_H
+#define CHESS_CLIENT_NETWORK_THREAD_H
 
 #include <functional>
 #include <wx/wx.h>
@@ -22,4 +22,4 @@ private:
 
 };
 
-#endif //LAMA_CLIENT_NETWORK_THREAD_H
+#endif //CHESS_CLIENT_NETWORK_THREAD_H

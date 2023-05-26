@@ -6,7 +6,7 @@
 #include "piece/piece.h"
 #include "board.h"
 
-#include "../exceptions/LamaException.h"
+#include "../exceptions/ChessException.h"
 #include "../serialization/vector_utils.h"
 
 game_state::game_state(std::string id) : unique_serializable(id) {
@@ -26,6 +26,7 @@ game_state::game_state(std::string id,
                        player *loser,
                        serializable_value<bool> *is_started,
                        serializable_value<bool> *is_finished,
+                       serializable_value<bool> *is_resigned,
                        serializable_value<int> *current_player_idx,
                        serializable_value<int> *round_number,
                        serializable_value<int> *starting_player_idx)
@@ -36,6 +37,7 @@ game_state::game_state(std::string id,
           _loser(loser),
           _is_started(is_started),
           _is_finished(is_finished),
+          _is_resigned(is_resigned),
           _current_player_idx(current_player_idx),
           _round_number(round_number),
           _starting_player_idx(starting_player_idx)
@@ -47,11 +49,12 @@ game_state::game_state() : unique_serializable() {
     this->_loser = nullptr;
     this->_is_started = new serializable_value<bool>(false);
     this->_is_finished = new serializable_value<bool>(false);
+    this->_is_resigned = new serializable_value<bool>(false);
     this->_current_player_idx = new serializable_value<int>(0);
     this->_round_number = new serializable_value<int>(0);
     this->_starting_player_idx = new serializable_value<int>(0);
 
-    #ifdef LAMA_SERVER
+    #ifdef CHESS_SERVER
         setup_board();
     #endif
 
@@ -62,6 +65,7 @@ game_state::~game_state() {
     if (_is_started != nullptr) {
         delete _is_started;
         delete _is_finished;
+        delete _is_resigned;
         delete _board;
         delete _current_player_idx;
         delete _starting_player_idx;
@@ -94,6 +98,10 @@ bool game_state::is_started() const {
 
 bool game_state::is_finished() const {
     return _is_finished->get_value();
+}
+
+bool game_state::is_resigned() const {
+    return _is_resigned->get_value();
 }
 
 int game_state::get_round_number() const {
@@ -172,6 +180,7 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
 player* game_state::resign(player* loser){
     _loser = loser;
     _is_finished->set_value(true);
+    _is_resigned->set_value(true);
     return _loser;
 }
 
@@ -196,7 +205,7 @@ int game_state::get_max_number_rounds() {
 }
 
 
-#ifdef LAMA_SERVER
+#ifdef CHESS_SERVER
 
 // state modification functions without diff
 void game_state::setup_board() {
@@ -230,13 +239,32 @@ void game_state::update_current_player(std::string& err) {
 
 bool game_state::start_game(std::string &err) {
     if (_players.size() < _min_nof_players) {
-        err = "You need at least " + std::to_string(_min_nof_players) + " players to start the game.";
+        err = "You need " + std::to_string(_min_nof_players) + " players to start the game.";
         return false;
     }
 
     if (!_is_started->get_value()) {
-        this->setup_board();
-        this->_is_started->set_value(true);
+        setup_board();
+        _is_started->set_value(true);
+        return true;
+    } else if (_is_finished->get_value()) {
+        _board->clear_board();
+        setup_board();
+        _loser = nullptr;
+        _is_finished->set_value(false);
+        _is_resigned->set_value(false);
+        _round_number->set_value(0);
+        if (_players[0]->get_color() == white) {
+            _current_player_idx->set_value(1);
+            _starting_player_idx->set_value(1);
+            _players[0]->set_color(black);
+            _players[1]->set_color(white);
+        } else {
+            _current_player_idx->set_value(0);
+            _starting_player_idx->set_value(0);
+            _players[0]->set_color(white);
+            _players[1]->set_color(black);
+        }
         return true;
     } else {
         err = "Could not start game, as the game was already started";
@@ -290,6 +318,10 @@ void game_state::write_into_json(rapidjson::Value &json,
                                  rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     unique_serializable::write_into_json(json, allocator);
 
+    rapidjson::Value is_resigned_val(rapidjson::kObjectType);
+    _is_resigned->write_into_json(is_resigned_val, allocator);
+    json.AddMember("is_resigned", is_resigned_val, allocator);
+
     rapidjson::Value is_finished_val(rapidjson::kObjectType);
     _is_finished->write_into_json(is_finished_val, allocator);
     json.AddMember("is_finished", is_finished_val, allocator);
@@ -328,6 +360,7 @@ void game_state::write_into_json(rapidjson::Value &json,
 game_state* game_state::from_json(const rapidjson::Value &json) {
     if (json.HasMember("id")
         && json.HasMember("is_finished")
+        && json.HasMember("is_resigned")
         && json.HasMember("is_started")
         && json.HasMember("current_player_idx")
         && json.HasMember("round_number")
@@ -353,13 +386,14 @@ game_state* game_state::from_json(const rapidjson::Value &json) {
                               loser,
                               serializable_value<bool>::from_json(json["is_started"].GetObject()),
                               serializable_value<bool>::from_json(json["is_finished"].GetObject()),
+                              serializable_value<bool>::from_json(json["is_resigned"].GetObject()),
                               serializable_value<int>::from_json(json["current_player_idx"].GetObject()),
                               serializable_value<int>::from_json(json["round_number"].GetObject()),
                               serializable_value<int>::from_json(json["starting_player_idx"].GetObject()));
 
 
     } else {
-        throw LamaException("Failed to deserialize game_state. Required entries were missing.");
+        throw ChessException("Failed to deserialize game_state. Required entries were missing.");
     }
 }
 

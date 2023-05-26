@@ -4,8 +4,8 @@
 // The game_instance class is a wrapper around the game_state of an active instance of the game.
 // This class contains functions to modify the contained game_state.
 
-#ifndef LAMA_GAME_H
-#define LAMA_GAME_H
+#ifndef CHESS_GAME_H
+#define CHESS_GAME_H
 
 #include <vector>
 #include <string>
@@ -53,5 +53,5 @@ public:
 };
 
 
-#endif //LAMA_GAME_H
+#endif //CHESS_GAME_H
 

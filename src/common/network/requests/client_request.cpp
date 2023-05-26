@@ -3,7 +3,6 @@
 //
 
 #include "client_request.h"
-#include "select_piece_request.h"
 #include "move_piece_request.h"
 #include "join_game_request.h"
 #include "start_game_request.h"
@@ -15,7 +14,6 @@
 const std::unordered_map<std::string, RequestType> client_request::_string_to_request_type = {
         {"join_game", RequestType::join_game },
         {"start_game", RequestType::start_game},
-        {"select_piece", RequestType::select_piece},
         {"move_piece", RequestType::move_piece},
         {"resign", RequestType::resign}
 };
@@ -23,7 +21,6 @@ const std::unordered_map<std::string, RequestType> client_request::_string_to_re
 const std::unordered_map<RequestType, std::string> client_request::_request_type_to_string = {
         { RequestType::join_game, "join_game" },
         { RequestType::start_game, "start_game"},
-        { RequestType::select_piece, "select_piece"},
         { RequestType::move_piece, "move_piece"},
         {RequestType::resign, "resign"}
 };
@@ -52,7 +49,7 @@ client_request::base_class_properties client_request::extract_base_class_propert
     }
     else
     {
-        throw LamaException("Client Request did not contain player_id or game_id");
+        throw ChessException("Client Request did not contain player_id or game_id");
     }
 }
 
@@ -95,9 +92,6 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
         if (request_type == RequestType::move_piece) {
             return move_piece_request::from_json(json);
         }
-        else if (request_type == RequestType::select_piece) {
-            return select_piece_request::from_json(json);
-        }
         else if (request_type == RequestType::resign) {
             return resign_request::from_json(json);
         }
@@ -107,10 +101,10 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
         else if (request_type == RequestType::start_game) {
             return start_game_request::from_json(json);
         } else {
-            throw LamaException("Encountered unknown ClientRequest type " + type);
+            throw ChessException("Encountered unknown ClientRequest type " + type);
         }
     }
-    throw LamaException("Could not determine type of ClientRequest. JSON was:\n" + json_utils::to_string(&json));
+    throw ChessException("Could not determine type of ClientRequest. JSON was:\n" + json_utils::to_string(&json));
 }
 
 

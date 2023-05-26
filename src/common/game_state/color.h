@@ -2,8 +2,8 @@
 // Created by jann on 5/11/23.
 //
 
-#ifndef LAMA_COLOR_H
-#define LAMA_COLOR_H
+#ifndef CHESS_COLOR_H
+#define CHESS_COLOR_H
 
 enum Color {
     white,
@@ -11,4 +11,4 @@ enum Color {
 };
 
 
-#endif //LAMA_COLOR_H
+#endif //CHESS_COLOR_H

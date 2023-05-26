@@ -3,7 +3,7 @@
 //
 
 #include "piece.h"
-#include "../../exceptions/LamaException.h"
+#include "../../exceptions/ChessException.h"
 //#include "pieces/queen.h"
 //#include "pieces/king.h"
 //#include "pieces/pawn.h"
@@ -63,7 +63,7 @@ Piece::base_class_properties Piece::extract_base_class_properties(const rapidjso
     }
     else
     {
-        throw LamaException("Client Request did not contain piece_ID or color");
+        throw ChessException("Client Request did not contain piece_ID or color");
     }
 }
 
@@ -146,11 +146,11 @@ Piece* Piece::from_json(const rapidjson::Value& json, board* board) {
             return new Piece(piece_ID, color, piece_type);
 
         } else {
-            throw LamaException("Encountered unknown Piece type " + type);
+            throw ChessException("Encountered unknown Piece type " + type);
         }
          */
     }
-    throw LamaException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
+    throw ChessException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
 
 

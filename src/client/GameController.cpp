@@ -2,7 +2,6 @@
 #include "../common/network/requests/join_game_request.h"
 #include "../common/network/requests/start_game_request.h"
 #include "../common/network/requests/resign_request.h"
-#include "../common/network/requests/select_piece_request.h"
 #include "../common/network/requests/move_piece_request.h"
 #include "network/ClientNetworkManager.h"
 
@@ -88,9 +87,6 @@ void GameController::updateGameState(game_state* newGameState) {
     // save the new game state as our current game state
     GameController::_currentGameState = newGameState;
 
-    if(GameController::_currentGameState->is_finished()) {
-        GameController::showGameOverMessage();
-    }
 
     // make sure we are showing the main game panel in the window (if we are already showing it, nothing will happen)
     GameController::_gameWindow->showPanel(GameController::_mainGamePanel);
@@ -99,6 +95,11 @@ void GameController::updateGameState(game_state* newGameState) {
     if (GameController::_currentGameState->get_players().size() == 2) {
         // command the main game panel to rebuild itself, based on the new game state
         GameController::_mainGamePanel->buildGameState(GameController::_currentGameState, GameController::_me);
+    }
+
+    
+    if(GameController::_currentGameState->is_finished()) {
+        GameController::showGameOverMessage();
     }
 }
 
@@ -112,14 +113,6 @@ void GameController::startGame() {
 void GameController::resign() {
     resign_request request = resign_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
-}
-
-
-void GameController::selectPiece(int i, int j) {
-    //i,j are the indices of the selected piece
-    select_piece_request request = select_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(), i,j);
-    ClientNetworkManager::sendRequest(request);
-
 }
 
 
@@ -151,53 +144,40 @@ void GameController::showGameOverMessage() {
     std::string message;
     if (_currentGameState->get_loser()->get_id() == _me->get_id()) {
         title = "You lost!";
-        if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
+        if (_currentGameState->is_resigned()) {
+            message = "you resigned";
+        } else if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
             message = "your king died of old age";
         } else {
             message = "your opponent murdered your king";
         }
     } else {
         title = "You won!";
-        if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
+        if (_currentGameState->is_resigned()) {
+            message = "your opponent resigned";
+        } else if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
             message = "your opponents king died of old age";
         } else {
             message = "you murdered your opponents king";
         }
     }
-    std::string buttonLabel = "Close Game";
-
-    // sort players by score
-    //std::vector<player*> players = GameController::_currentGameState->get_players();
-
-    /*
-    // list all players
-    for(int i = 0; i < players.size(); i++) {
-
-        player* playerState = players.at(i);
-        //std::string scoreText = std::to_string(playerState->get_score());
-
-        // first entry is the winner
-        std::string winnerText = "";
-        if(i == 0) {
-            winnerText = "     Winner!";
-        }
-
-        std::string playerName = playerState->get_player_name();
-        if(playerState->get_id() == GameController::_me->get_id()) {
-            playerName = "You";
-
-            if(i == 0) {
-                winnerText = "     You won!!!";
-            }
-        }
-        message += "\n" + playerName + ":     " + scoreText + winnerText;
-    }
-    */
-
+/*
     wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE);
-    dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel(buttonLabel));
+    dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel("Close Game"));
     int buttonClicked = dialogBox.ShowModal();
     if(buttonClicked == wxID_OK) {
         GameController::_gameWindow->Close();
     }
+    */
+
+
+    wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE|wxYES_NO);
+    dialogBox.SetYesNoLabels(wxMessageDialog::ButtonLabel("Start new Game"), wxMessageDialog::ButtonLabel("Close Game"));
+    int buttonClicked = dialogBox.ShowModal();
+    if(buttonClicked == wxID_NO) {
+        GameController::_gameWindow->Close();
+    } else if (buttonClicked == wxID_YES) {
+        GameController::startGame();
+    }
+
 }

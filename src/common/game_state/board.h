@@ -43,6 +43,8 @@ public:
     void set_piece(int i, int j, Piece* piece);
     void set_board_layout(std::vector<std::vector<Piece*>> board);
 
+    void clear_board();
+
 // fill_board (0,0) = a1, (8,0) = a8
     void fill_white_king();
     void fill_black_king();
@@ -61,8 +63,6 @@ public:
 
     void fill_white_bishops();
     void fill_black_bishops();
-
-    void fill_all();
 
 // serializable interface
     static board* from_json(const rapidjson::Value& json);

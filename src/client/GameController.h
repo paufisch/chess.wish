@@ -1,5 +1,5 @@
-#ifndef LAMAUI_GAMECONTROLLER_H
-#define LAMAUI_GAMECONTROLLER_H
+#ifndef CHESSUI_GAMECONTROLLER_H
+#define CHESSUI_GAMECONTROLLER_H
 
 #include "windows/GameWindow.h"
 #include "panels/ConnectionPanel.h"
@@ -20,7 +20,6 @@ public:
     static void showError(const std::string& title, const std::string& message);
     static void showStatus(const std::string& message);
     static void showGameOverMessage();
-    static void selectPiece(int i, int j);
     static void movePiece(int from_i, int from_j, int i, int j);
 
 private:
@@ -33,4 +32,4 @@ private:
 };
 
 
-#endif //LAMAUI_GAMECONTROLLER_H
+#endif //CHESSUI_GAMECONTROLLER_H

@@ -3,7 +3,7 @@
 //
 
 #include "knight.h"
-#include "../../../../exceptions/LamaException.h"
+#include "../../../../exceptions/ChessException.h"
 
 
 
@@ -29,7 +29,7 @@ Piece * Knight::from_json(const rapidjson::Value &json) {
         std::string type = json["type"].GetString();
         return new Knight(piece_ID, Piece::_string_to_color.at(color), Piece::_string_to_piece_type.at(type));
     } else {
-        throw LamaException("Knight constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
+        throw ChessException("Knight constructor did not get all variables. JSON was:\n" + json_utils::to_string(&json));
     }
 }
 
