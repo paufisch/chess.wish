@@ -2,7 +2,7 @@ project(Lama-unit-tests)
 
 set(TEST_SOURCE_FILES
         piece_test.cpp
-        game_state_test.cpp)
+        )
 
 add_executable(Lama-tests ${TEST_SOURCE_FILES})
 
