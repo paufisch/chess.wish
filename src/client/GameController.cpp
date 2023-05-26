@@ -161,40 +161,23 @@ void GameController::showGameOverMessage() {
             message = "you murdered your opponents king";
         }
     }
-    std::string buttonLabel = "Close Game";
-
-    // sort players by score
-    //std::vector<player*> players = GameController::_currentGameState->get_players();
-
-    /*
-    // list all players
-    for(int i = 0; i < players.size(); i++) {
-
-        player* playerState = players.at(i);
-        //std::string scoreText = std::to_string(playerState->get_score());
-
-        // first entry is the winner
-        std::string winnerText = "";
-        if(i == 0) {
-            winnerText = "     Winner!";
-        }
-
-        std::string playerName = playerState->get_player_name();
-        if(playerState->get_id() == GameController::_me->get_id()) {
-            playerName = "You";
-
-            if(i == 0) {
-                winnerText = "     You won!!!";
-            }
-        }
-        message += "\n" + playerName + ":     " + scoreText + winnerText;
-    }
-    */
-
+/*
     wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE);
-    dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel(buttonLabel));
+    dialogBox.SetOKLabel(wxMessageDialog::ButtonLabel("Close Game"));
     int buttonClicked = dialogBox.ShowModal();
     if(buttonClicked == wxID_OK) {
         GameController::_gameWindow->Close();
     }
+    */
+
+
+    wxMessageDialog dialogBox = wxMessageDialog(nullptr, message, title, wxICON_NONE|wxYES_NO);
+    dialogBox.SetYesNoLabels(wxMessageDialog::ButtonLabel("Start new Game"), wxMessageDialog::ButtonLabel("Close Game"));
+    int buttonClicked = dialogBox.ShowModal();
+    if(buttonClicked == wxID_NO) {
+        GameController::_gameWindow->Close();
+    } else if (buttonClicked == wxID_YES) {
+        GameController::startGame();
+    }
+
 }

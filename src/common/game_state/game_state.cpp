@@ -239,13 +239,32 @@ void game_state::update_current_player(std::string& err) {
 
 bool game_state::start_game(std::string &err) {
     if (_players.size() < _min_nof_players) {
-        err = "You need at least " + std::to_string(_min_nof_players) + " players to start the game.";
+        err = "You need " + std::to_string(_min_nof_players) + " players to start the game.";
         return false;
     }
 
     if (!_is_started->get_value()) {
-        this->setup_board();
-        this->_is_started->set_value(true);
+        setup_board();
+        _is_started->set_value(true);
+        return true;
+    } else if (_is_finished->get_value()) {
+        _board->clear_board();
+        setup_board();
+        _loser = nullptr;
+        _is_finished->set_value(false);
+        _is_resigned->set_value(false);
+        _round_number->set_value(0);
+        if (_players[0]->get_color() == white) {
+            _current_player_idx->set_value(1);
+            _starting_player_idx->set_value(1);
+            _players[0]->set_color(black);
+            _players[1]->set_color(white);
+        } else {
+            _current_player_idx->set_value(0);
+            _starting_player_idx->set_value(0);
+            _players[0]->set_color(white);
+            _players[1]->set_color(black);
+        }
         return true;
     } else {
         err = "Could not start game, as the game was already started";
