@@ -13,7 +13,7 @@ public:
     void display_moves(std::vector<std::vector<bool>>, player*);
     void color_board();
     void deselect_moves();
-
+    void OnPanelClick(int i, int j, game_state*, player* me);
 
 
 private:
