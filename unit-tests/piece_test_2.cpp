@@ -3,7 +3,7 @@
 //
 
 #include "gtest/gtest.h"
-#include "../src/common/exceptions/LamaException.h"
+#include "../src/common/exceptions/ChessException.h"
 #include "../src/common/game_state/piece/piece.h"
 #include "../src/common/game_state/board.h"
 #include "../src/common/serialization/json_utils.h"
