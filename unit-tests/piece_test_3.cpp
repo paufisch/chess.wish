@@ -29,6 +29,7 @@ protected:
     std::vector<std::vector<bool>> _legal_moves_output;
     std::vector<std::vector<bool>> _legal_moves_expected;
 
+    //Hint: The set_piece lines can be copy pasted into game_state::setup_board() for the display of this setup.
     virtual void SetUp() {
 
         _board = new board;
