@@ -266,6 +266,8 @@ bool game_state::start_game(std::string &err) {
             _players[1]->set_color(black);
         }
         return true;
+    } else if (get_round_number() == 0 || get_round_number == 1) {
+        return true;
     } else {
         err = "Could not start game, as the game was already started";
         return false;
