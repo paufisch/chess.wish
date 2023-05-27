@@ -34,18 +34,19 @@ private:
     wxColor high_pink;
 
     //chess pieces
-    wxBitmap b_pawn;
-    wxBitmap b_king;
-    wxBitmap b_queen;
-    wxBitmap b_rook;
-    wxBitmap b_knight;
-    wxBitmap b_bishop;
-    wxBitmap w_pawn;
-    wxBitmap w_king;
-    wxBitmap w_queen;
-    wxBitmap w_rook;
-    wxBitmap w_knight;
-    wxBitmap w_bishop;
+    wxString b_pawn;
+    wxString b_king;
+    wxString b_queen;
+    wxString b_rook;
+    wxString b_knight;
+    wxString b_bishop;
+
+    wxString w_pawn;
+    wxString w_king;
+    wxString w_queen;
+    wxString w_rook;
+    wxString w_knight;
+    wxString w_bishop;
 
 };
 
