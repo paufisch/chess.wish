@@ -167,27 +167,28 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     // fill the panels with the pieces contained in board
     color_board();
 
-    for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j){
+    for (int i = 7; i >= 0; --i) {
+        for (int j = 0; j < 8; ++j) {
 
             auto *vbox = new wxBoxSizer(wxVERTICAL);
             // Add chess figures as bitmaps to the panels
             // get the piece
             Piece *_piece = nullptr;
-            if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
+            if (me->get_color() == white) { //white is a value of the enum "color" defined in color.h
                 _piece = gameState->get_board()->get_piece(i, j);
             } else {
-                _piece = gameState->get_board()->get_piece(7-i,7-j);
+                _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
             }
 
             if (_piece != nullptr) {
 
                 //add bitmap which represents the piece to the panel
-                if(_piece->get_color() == white){
-                    if(_piece->get_type() == pawn){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn); //maybe set ID to the ID of the piece
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == king){
+                if (_piece->get_color() == white) {
+                    if (_piece->get_type() == pawn) {
+                        //auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn); //maybe set ID to the ID of the piece
+                        //vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                        panels[i * 8 + j]->SetImage("../assets/white-pawn.png");
+                    }/* else if (_piece->get_type() == king){
                         auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
                         vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                     } else if (_piece->get_type() == queen){
@@ -202,9 +203,11 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                     } else if (_piece->get_type() == bishop){
                         auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_bishop);
                         vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    }
 
-                } else {
+                    }
+                    */
+
+                }/* else {
                     if(_piece->get_type() == pawn){
                         auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn); //maybe set ID to the ID of the piece
                         vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
@@ -224,31 +227,30 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                         auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_bishop);
                         vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
                     }
+                    */
                 }
-            }
 
-            panels[i*8+j]->SetSizer(vbox);
+                panels[i * 8 + j]->SetSizer(vbox);
 
-            //add functionality to the button
-            panels[i*8+j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
-                OnPanelClick(i,j,gameState,me);
-            });
-
-            //if panel contains a piece we also add the functionality to the piece
-            wxStaticBitmap* staticBitmap = wxDynamicCast(panels[i*8+j]->FindWindowById(wxID_ANY), wxStaticBitmap);
-            if (staticBitmap) {
-                staticBitmap->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
-                    OnPanelClick(i,j,gameState,me);
+                //add functionality to the button
+                panels[i * 8 + j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent &event) {
+                    OnPanelClick(i, j, gameState, me);
                 });
+
+                //if panel contains a piece we also add the functionality to the piece
+                wxStaticBitmap *staticBitmap = wxDynamicCast(panels[i * 8 + j]->FindWindowById(wxID_ANY),
+                                                             wxStaticBitmap);
+                if (staticBitmap) {
+                    //staticBitmap->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
+                    //staticBitmap->Connect(wxID_ANY, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
+                }
+
+
+                grid->Add(panels[i * 8 + j], 1, wxEXPAND | wxALL, 0);
             }
-
-
-            grid->Add(panels[i*8+j],1, wxEXPAND | wxALL, 0);
         }
-    }
-
-    grid->SetMinSize(wxSize(800, 800));
-    return grid;
+        grid->SetMinSize(wxSize(800, 800));
+        return grid;
 }
 
 void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me) {
@@ -339,12 +341,17 @@ void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me
 }
 
 
+void OnPaint(wxPaintEvent& event){
+
+
+}
+
 
 void MainGamePanel::color_board(){
 
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j) {
-            panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+            panels[i * 8 + j] = new MyPanel(this);
             //color panels
             if ((i + j) % 2 == 0) {
                 panels[i * 8 + j]->SetBackgroundColour(pink);
@@ -355,6 +362,8 @@ void MainGamePanel::color_board(){
     }
     this->Refresh();
 }
+
+
 
 void MainGamePanel::deselect_moves(){
     for (int i = 7; i >= 0; --i){

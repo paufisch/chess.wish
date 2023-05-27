@@ -3,6 +3,7 @@
 
 #include <wx/wx.h>
 #include "../../common/game_state/game_state.h"
+#include "MyPanel.h"
 
 
 class MainGamePanel : public wxPanel {
@@ -16,13 +17,15 @@ public:
     void OnPanelClick(int i, int j, game_state*, player* me);
 
 
+
 private:
     wxGridSizer* board{};
     void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
     wxGridSizer* buildBoard(game_state* gameState, player* me);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
     unsigned int* selected;
-    wxPanel *panels[64];
+    MyPanel *panels[64];
+    void OnPaint(wxPaintEvent& event);
 
     //colors
     wxColor yellow;
