@@ -18,20 +18,20 @@ MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDef
 
 
     //black pieces
-    b_pawn = wxBitmap("../assets/black-pawn.png", wxBITMAP_TYPE_PNG);
-    b_king = wxBitmap("../assets/black-king.png", wxBITMAP_TYPE_PNG);
-    b_queen = wxBitmap("../assets/black-queen.png", wxBITMAP_TYPE_PNG);
-    b_rook = wxBitmap("../assets/black-rook.png", wxBITMAP_TYPE_PNG);
-    b_knight = wxBitmap("../assets/black-knight.png", wxBITMAP_TYPE_PNG);
-    b_bishop = wxBitmap("../assets/black-bishop.png", wxBITMAP_TYPE_PNG);
+    b_pawn = "../assets/black-pawn.png";
+    b_king = "../assets/black-king.png";
+    b_queen = "../assets/black-queen.png";
+    b_rook = "../assets/black-rook.png";
+    b_knight = "../assets/black-knight.png";
+    b_bishop = "../assets/black-bishop.png";
 
     //white pieces
-    w_pawn = wxBitmap("../assets/white-pawn.png", wxBITMAP_TYPE_PNG);
-    w_king = wxBitmap("../assets/white-king.png", wxBITMAP_TYPE_PNG);
-    w_queen = wxBitmap("../assets/white-queen.png", wxBITMAP_TYPE_PNG);
-    w_rook = wxBitmap("../assets/white-rook.png", wxBITMAP_TYPE_PNG);
-    w_knight= wxBitmap("../assets/white-knight.png", wxBITMAP_TYPE_PNG);
-    w_bishop = wxBitmap("../assets/white-bishop.png", wxBITMAP_TYPE_PNG);
+    w_pawn = "../assets/white-pawn.png";
+    w_king = "../assets/white-king.png";
+    w_queen = "../assets/white-queen.png";
+    w_rook = "../assets/white-rook.png";
+    w_knight= "../assets/white-knight.png";
+    w_bishop = "../assets/white-bishop.png";
 
 }
 
@@ -167,88 +167,73 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
     // fill the panels with the pieces contained in board
     color_board();
 
-    for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j){
+    for (int i = 7; i >= 0; --i) {
+        for (int j = 0; j < 8; ++j) {
 
-            auto *vbox = new wxBoxSizer(wxVERTICAL);
             // Add chess figures as bitmaps to the panels
             // get the piece
             Piece *_piece = nullptr;
-            if(me->get_color() == white) { //white is a value of the enum "color" defined in color.h
+            if (me->get_color() == white) { //white is a value of the enum "color" defined in color.h
                 _piece = gameState->get_board()->get_piece(i, j);
             } else {
-                _piece = gameState->get_board()->get_piece(7-i,7-j);
+                _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
             }
 
             if (_piece != nullptr) {
 
                 //add bitmap which represents the piece to the panel
-                if(_piece->get_color() == white){
-                    if(_piece->get_type() == pawn){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_pawn); //maybe set ID to the ID of the piece
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == king){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_king);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == queen){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_queen);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == rook){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_rook);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == knight){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_knight);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == bishop){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, w_bishop);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                if (_piece->get_color() == white) {
+                    if (_piece->get_type() == pawn) {
+                        panels[i * 8 + j]->SetImage(w_pawn);
+                    } else if (_piece->get_type() == king) {
+                        panels[i * 8 + j]->SetImage(w_king);
+                    } else if (_piece->get_type() == queen) {
+                        panels[i * 8 + j]->SetImage(w_queen);
+                    } else if (_piece->get_type() == rook) {
+                        panels[i * 8 + j]->SetImage(w_rook);
+                    } else if (_piece->get_type() == knight) {
+                        panels[i * 8 + j]->SetImage(w_knight);
+                    } else if (_piece->get_type() == bishop) {
+                        panels[i * 8 + j]->SetImage(w_bishop);
                     }
 
                 } else {
-                    if(_piece->get_type() == pawn){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_pawn); //maybe set ID to the ID of the piece
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == king){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_king);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == queen){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_queen);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == rook){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_rook);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == knight){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_knight);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
-                    } else if (_piece->get_type() == bishop){
-                        auto *sbmp = new wxStaticBitmap(panels[i*8+j], wxID_ANY, b_bishop);
-                        vbox->Add(sbmp, 1, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL | wxSHAPED | wxALL, 5);
+                    if (_piece->get_type() == pawn) {
+                        panels[i * 8 + j]->SetImage(b_pawn);
+                    } else if (_piece->get_type() == king) {
+                        panels[i * 8 + j]->SetImage(b_king);
+                    } else if (_piece->get_type() == queen) {
+                        panels[i * 8 + j]->SetImage(b_queen);
+                    } else if (_piece->get_type() == rook) {
+                        panels[i * 8 + j]->SetImage(b_rook);
+                    } else if (_piece->get_type() == knight) {
+                        panels[i * 8 + j]->SetImage(b_knight);
+                    } else if (_piece->get_type() == bishop) {
+                        panels[i * 8 + j]->SetImage(b_bishop);
                     }
                 }
             }
 
-            panels[i*8+j]->SetSizer(vbox);
-
-            //add functionality to the button
-            panels[i*8+j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
-                OnPanelClick(i,j,gameState,me);
-            });
-
-            //if panel contains a piece we also add the functionality to the piece
-            wxStaticBitmap* staticBitmap = wxDynamicCast(panels[i*8+j]->FindWindowById(wxID_ANY), wxStaticBitmap);
-            if (staticBitmap) {
-                staticBitmap->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {
-                    OnPanelClick(i,j,gameState,me);
+                //add functionality to the button
+                panels[i * 8 + j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent &event) {
+                    OnPanelClick(i, j, gameState, me);
                 });
+
+                //if panel contains a piece we also add the functionality to the piece
+                wxStaticBitmap *staticBitmap = wxDynamicCast(panels[i * 8 + j]->FindWindowById(wxID_ANY),
+                                                             wxStaticBitmap);
+                if (staticBitmap) {
+                    //staticBitmap->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
+                    //staticBitmap->Connect(wxID_ANY, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
+                }
+
+
+                grid->Add(panels[i * 8 + j], 1, wxEXPAND | wxALL, 0);
             }
-
-
-            grid->Add(panels[i*8+j],1, wxEXPAND | wxALL, 0);
         }
-    }
 
-    grid->SetMinSize(wxSize(800, 800));
-    return grid;
+        grid->SetMinSize(wxSize(800, 800));
+        return grid;
 }
 
 void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me) {
@@ -339,12 +324,17 @@ void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me
 }
 
 
+void OnPaint(wxPaintEvent& event){
+
+
+}
+
 
 void MainGamePanel::color_board(){
 
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j) {
-            panels[i * 8 + j] = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL);
+            panels[i * 8 + j] = new MyPanel(this);
             //color panels
             if ((i + j) % 2 == 0) {
                 panels[i * 8 + j]->SetBackgroundColour(pink);
@@ -355,6 +345,8 @@ void MainGamePanel::color_board(){
     }
     this->Refresh();
 }
+
+
 
 void MainGamePanel::deselect_moves(){
     for (int i = 7; i >= 0; --i){
