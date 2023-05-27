@@ -19,8 +19,11 @@
  * objects, and googletest always deletes a test fixture before it creates the
  * next one. googletest does not reuse the same test fixture for multiple
  * tests. Any changes one test makes to the fixture do not affect other tests.
+ *
+ * Move_Test_4 is based on Piece_Test_4 in order to have a working setup with fitting legal_moves.
+ *
  */
-class Piece_Test_4 : public ::testing::Test {
+class Move_Test_4 : public ::testing::Test {
 
 protected:
 
@@ -101,55 +104,3 @@ protected:
 
 };
 
-
-
-TEST_F(Piece_Test_4, Pawn) {
-    _legal_moves_expected[7][6] = true;
-    _legal_moves_expected[7][7] = true;
-    _legal_moves_output = _board->get_piece(6,6)->legal_moves(6,6);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-
-}
-
-TEST_F(Piece_Test_4, King) {
-    _legal_moves_expected[2][2] = true;
-    _legal_moves_expected[3][2] = true;
-    _legal_moves_expected[4][2] = true;
-
-    _legal_moves_expected[2][4] = true;
-    _legal_moves_expected[3][4] = true;
-    _legal_moves_expected[4][4] = true;
-
-    _legal_moves_expected[2][3] = true;
-    _legal_moves_expected[4][3] = true;
-
-    _legal_moves_output = _board->get_piece(3,3)->legal_moves(3,3);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}
-
-TEST_F(Piece_Test_4, Bishop) {
-    _legal_moves_expected[4][4] = true;
-
-    _legal_moves_expected[4][6] = true;
-    _legal_moves_expected[3][7] = true;
-
-    _legal_moves_expected[6][4] = true;
-    _legal_moves_expected[7][3] = true;
-
-    _legal_moves_output = _board->get_piece(5,5)->legal_moves(5,5);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}
-
-TEST_F(Piece_Test_4, Knight) {
-    _legal_moves_expected[5][0] = true;
-    _legal_moves_expected[5][2] = true;
-
-    _legal_moves_expected[6][3] = true;
-
-    _legal_moves_output = _board->get_piece(7,1)->legal_moves(7,1);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}

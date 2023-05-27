@@ -19,8 +19,11 @@
  * objects, and googletest always deletes a test fixture before it creates the
  * next one. googletest does not reuse the same test fixture for multiple
  * tests. Any changes one test makes to the fixture do not affect other tests.
+ *
+ * Move_Test_2 is based on Piece_Test_2 in order to have a working setup with fitting legal_moves.
+ *
  */
-class Piece_Test_2 : public ::testing::Test {
+class Move_Test_2 : public ::testing::Test {
 
 protected:
 
@@ -100,66 +103,3 @@ protected:
     }
 
 };
-
-
-
-TEST_F(Piece_Test_2, Pawn) {
-    _legal_moves_expected[4][1] = true;
-    _legal_moves_output = _board->get_piece(3,0)->legal_moves(3,0);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-
-}
-
-TEST_F(Piece_Test_2, Rook) {
-    _legal_moves_expected[0][0] = true;
-    _legal_moves_expected[0][1] = true;
-
-    _legal_moves_expected[0][3] = true;
-    _legal_moves_expected[0][4] = true;
-    _legal_moves_expected[0][5] = true;
-
-    _legal_moves_expected[1][2] = true;
-    _legal_moves_expected[2][2] = true;
-    _legal_moves_expected[3][2] = true;
-    _legal_moves_expected[4][2] = true;
-    _legal_moves_expected[5][2] = true;
-
-    _legal_moves_output = _board->get_piece(0,2)->legal_moves(0,2);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}
-
-TEST_F(Piece_Test_2, King) {
-    _legal_moves_expected[0][5] = true;
-    _legal_moves_expected[1][5] = true;
-    _legal_moves_expected[0][7] = true;
-
-    _legal_moves_output = _board->get_piece(0,6)->legal_moves(0,6);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}
-
-TEST_F(Piece_Test_2, Queen) {
-    _legal_moves_expected[6][1] = true;
-    _legal_moves_expected[6][2] = true;
-
-    _legal_moves_expected[6][4] = true;
-    _legal_moves_expected[6][5] = true;
-
-    _legal_moves_expected[5][3] = true;
-    _legal_moves_expected[7][3] = true;
-
-    _legal_moves_expected[7][4] = true;
-
-    _legal_moves_expected[7][2] = true;
-
-    _legal_moves_expected[5][4] = true;
-    _legal_moves_expected[4][5] = true;
-    _legal_moves_expected[3][6] = true;
-    _legal_moves_expected[2][7] = true;
-
-    _legal_moves_output = _board->get_piece(6,3)->legal_moves(6,3);
-
-    ASSERT_EQ(compare(_legal_moves_output, _legal_moves_expected), true);
-}
