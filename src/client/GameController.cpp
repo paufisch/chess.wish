@@ -155,8 +155,10 @@ void GameController::showGameOverMessage() {
         title = "You won!";
         if (_currentGameState->is_resigned()) {
             message = "your opponent resigned";
-        } else if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()){
+        } else if (_currentGameState->get_round_number() == _currentGameState->get_max_number_rounds()) {
             message = "your opponents king died of old age";
+        } else if (_currentGameState->get_players().size() == 1) {
+            message = "your opponent left the game or lost connection";
         } else {
             message = "you murdered your opponents king";
         }

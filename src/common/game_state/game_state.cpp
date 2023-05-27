@@ -204,6 +204,13 @@ int game_state::get_max_number_rounds() {
     return _max_number_rounds;
 }
 
+void game_state::set_is_finished(bool finished) {
+    _is_finished->set_value(finished);
+}
+
+void game_state::set_loser(player* loser) {
+    _loser = loser;
+}
 
 #ifdef CHESS_SERVER
 

@@ -8,9 +8,6 @@
 
 #include "game_instance_manager.h"
 
-#include "player_manager.h"
-#include "server_network_manager.h"
-
 // Initialize static map
 std::unordered_map<std::string, game_instance*> game_instance_manager::games_lut = {};
 
@@ -135,6 +132,7 @@ bool game_instance_manager::try_add_player(player *player, game_instance *&game_
     }
 }
 
+/*
 bool game_instance_manager::try_remove_player(player *player, const std::string& game_id, std::string &err) {
     game_instance* game_instance_ptr = nullptr;
     if (try_get_game_instance(game_id, game_instance_ptr)) {
@@ -143,9 +141,20 @@ bool game_instance_manager::try_remove_player(player *player, const std::string&
         err = "The requested src could not be found. Requested src id was " + game_id;
         return false;
     }
+}   */
+
+bool game_instance_manager::try_remove_player(std::string& player_id, std::string &err) {
+    player* player = nullptr;
+    game_instance* game_instance = nullptr;
+
+    if (try_get_player_and_game_instance(player_id, player, game_instance, err)) {
+        return try_remove_player(player, game_instance, err);
+    }
+    return false;
 }
 
 bool game_instance_manager::try_remove_player(player *player, game_instance *&game_instance_ptr, std::string &err) {
+    player_manager::remove_player(player->get_id());
     return game_instance_ptr->try_remove_player(player, err);
 }
 

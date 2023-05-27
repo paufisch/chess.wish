@@ -5,6 +5,7 @@
 // to all connected players of a game.
 
 #include "server_network_manager.h"
+#include "game_instance_manager.h"
 #include "request_handler.h"
 
 // include server address configurations
@@ -113,6 +114,13 @@ void server_network_manager::read_message(sockpp::tcp_socket socket, const std::
     }
 
     std::cout << "Closing connection to " << socket.peer_address() << std::endl;
+    std::string player_id = _address_to_player_id[socket.peer_address().to_string()];
+    std::string err = "";
+
+    if (!game_instance_manager::try_remove_player(player_id, err)){
+        std::cout << err;
+    }
+    on_player_left(player_id);
     socket.shutdown();
 }
 
@@ -134,6 +142,7 @@ void server_network_manager::handle_incoming_message(const std::string& msg, con
             std::cout << "New client with id " << player_id << std::endl;
             _rw_lock.lock();
             _player_id_to_address.emplace(player_id, peer_address.to_string());
+            _address_to_player_id.emplace(peer_address.to_string(), player_id);
             _rw_lock.unlock();
         } else {
             _rw_lock.unlock_shared();
@@ -171,6 +180,7 @@ void server_network_manager::on_player_left(std::string player_id) {
     _rw_lock.lock();
     std::string address = _player_id_to_address[player_id];
     _player_id_to_address.erase(player_id);
+    _address_to_player_id.erase(address);
     _address_to_socket.erase(address);
     _rw_lock.unlock();
 }

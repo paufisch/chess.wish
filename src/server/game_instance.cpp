@@ -136,10 +136,13 @@ bool game_instance::try_remove_player(player *player, std::string &err) {
     if (_game_state->remove_player(player, err)) {
         player->set_game_id("");
         // send state update to all other players
-        full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
-        server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
-        modification_lock.unlock();
-        return true;
+        _game_state->set_is_finished(true);
+        _game_state->set_loser(player);
+            full_state_response response = full_state_response(this->get_id(), *_game_state);
+            server_network_manager::broadcast_message(response, _game_state->get_players(), player);
+            modification_lock.unlock();
+            delete player;
+            return true;
     }
     modification_lock.unlock();
     return false;

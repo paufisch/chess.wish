@@ -13,6 +13,7 @@
 #include <shared_mutex>
 #include <unordered_map>
 
+#include "player_manager.h"
 #include "game_instance.h"
 
 class game_instance_manager {
@@ -41,7 +42,7 @@ public:
     static bool try_add_player(player* player, game_instance*& game_instance_ptr, std::string& err);
 
 
-    static bool try_remove_player(player* player, const std::string& game_id, std::string& err);
+    static bool try_remove_player(std::string& game_id, std::string& err);
     static bool try_remove_player(player* player, game_instance*& game_instance_ptr, std::string& err);
 
 };
