@@ -1,14 +1,14 @@
 
-# Suicide chess
+# chess.wish
 
-In this project implements a slightly simplified version of chess in C++, featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
+This project implements a slightly simplified version of chess in C++ featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
 
 ![Lama-logo](./assets/chess_logo.png?raw=true)
 
-Further rule simplification compared to normal chess:
+Further rule modifications compared to normal chess:
 - Castling is not possible
-- No en passant
-- ...
+- No en passant 
+- After 1000 moves one of the kings randomly dies of old age.
 
 
 
@@ -41,14 +41,15 @@ Execute the following commands in a console:
 2. Click `File > Open...` and there select the **/sockpp** folder of this project
 3. Click `Build > Build all in 'Debug'`
 4. Wait until sockpp is compiled (from now on you never have to touch sockpp again ;))
-5. Click `File > Open...` select the **/cse-lama-example-project** folder
+5. Click `File > Open...` select the **/chess.wish** folder
 6. Click `Build > Build all in 'Debug'`
-7. Wait until Lama-server, Lama-client and Lama-tests are compiled
+   7. If you want to run the project on a Mac  M1 you need to replace `libsockpp.so` with `libsockpp.dylib` in the `CMakeLists.txt` file.
+7. Wait until Chess-server, Chess-client and Chess-tests are compiled
 
 ## 2. Run the Game
 1. Open a console in the project folder, navigate into "cmake-build-debug" `cd cmake-build-debug`
-2. Run server `./Lama-server`
-3. In new consoles run as many clients as you want players `./Lama-client`
+2. Run server `./Chess-server`
+3. In new consoles run as many clients as you want players `./Chess-client`
 
 ## 3. Run the Unit Tests
 1. CLion should automatically create a Google Test configuration Lama-tests which will run all tests. See [Google Test run/debug configuration﻿](https://www.jetbrains.com/help/clion/creating-google-test-run-debug-configuration-for-test.html#gtest-config) for more information.
@@ -65,7 +66,7 @@ The code for the game can be found in **/src**, where it is separated into follo
 - **/common** contains code that is shared between server and client.
     - **/exceptions** contains the exception class used on server and client side. You don't need to change anything in here (unless you want to rename the LamaException class ;))
     - **/game_state** contains the `game_state` that is synchronized between client and server. We use the [conditional pre-compile directive](https://www.cplusplus.com/doc/tutorial/preprocessor/) LAMA_SERVER to enable certain parts of the code only on the server side. Namely, these are the state update functions, as they should only happen on the server. The client simply reflects the current game state as sent by the server without modifying it directly. 
-    - **/network** contains all the messages that are being passed between client and server. We use the LAMA_CLIENT pre-compile directive to make `server_repsonses` only executable on the client side (through the function `Process()`) .
+    - **/network** contains all the messages that are being passed between client and server. We use the CHESS_CLIENT pre-compile directive to make `server_repsonses` only executable on the client side (through the function `Process()`) .
     - **/serialization** contains base classes for serializing `game_state`, `client_request` and `server_response` objects. **Serialization** is the process of transforming an object instance into a string that can be sent over a network, where the receiver deserializes it, i.e. recreates the object from the string. If you are interested, [read me on Wikipedia](https://en.wikipedia.org/wiki/Serialization).
 - **/server** contains only code that is relevant for the server (e.g. player management, game instance management, receiving messages)
 
@@ -78,7 +79,7 @@ The **/unit-tests** folder contains all unit tests, which validate the correct b
 First off, this project consists of a **server** and a **client**, each with their own main.cpp file. 
 
 The client renders the GUI that is presented to the player, whereas the server is a console application without a user interface. Every action a player performs in the client application (for example playing a card) is sent as a formatted message to the server application, which processes the request.   
-- If the **player's move was valid**, the server will update the game state (e.g. move a card from the player's hand to the discard pile) and broadcast this new game state to all players of the game. Whenever the client application receives a game state update, it will re-render the GUI accordingly and allow new interactions.   
+- If the **player's move was valid**, the server will update the game state (e.g. move the chess piece to the new position) and broadcast this new game state to all players of the game. Whenever the client application receives a game state update, it will re-render the GUI accordingly and allow new interactions.   
 - If the **move was invalid**, the game state will not be updated and only the requesting player will get a response containing the error message. 
 
 ### 4.2 Network Interface
