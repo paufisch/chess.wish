@@ -34,6 +34,10 @@ private:
     // from_diff constructor
     game_state(std::string id);
 
+    // returns the index of 'player' in the '_players' vector
+    int get_player_index(player* player) const;
+public:
+
     // deserialization constructor
     game_state(
             std::string id,
@@ -47,9 +51,6 @@ private:
             serializable_value<int>* round_number,
             serializable_value<int>* starting_player_idx);
 
-    // returns the index of 'player' in the '_players' vector
-    int get_player_index(player* player) const;
-public:
     game_state();
     ~game_state();
 

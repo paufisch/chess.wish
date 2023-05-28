@@ -162,11 +162,11 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
             _board->set_piece(i_to, j_to, new Piece(_moving_piece->get_piece_ID(), _moving_piece->get_color(), queen, _board));
         }
 
-        _round_number->set_value(_round_number->get_value() + 1);
         if (_round_number->get_value() == _max_number_rounds) {
             _is_finished->set_value(true);
             _loser = get_players().at(rand()%2);
         }
+        _round_number->set_value(_round_number->get_value() + 1);
 
         next_turn();
 
