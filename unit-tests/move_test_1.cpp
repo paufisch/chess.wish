@@ -6,6 +6,7 @@
 #include "../src/common/exceptions/ChessException.h"
 #include "../src/common/game_state/piece/piece.h"
 #include "../src/common/game_state/board.h"
+#include "../src/common/game_state/game_state.h"
 #include "../src/common/serialization/json_utils.h"
 #include <vector>
 
@@ -28,17 +29,16 @@ class Move_Test_1 : public ::testing::Test {
 protected:
 
     board* _board;
+    game_state* _game_state;
 
-    std::vector<std::vector<bool>> _legal_moves_output;
-    std::vector<std::vector<bool>> _legal_moves_expected;
+    std::vector<std::vector<bool>> _legal_moves;
 
     //This board setup is the game start setup.
     virtual void SetUp() {
 
         _board = new board;
 
-        _legal_moves_output   = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
-        _legal_moves_expected = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
+        _legal_moves  = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
 
         _board->set_piece(0, 4, new Piece( "5", white, king, _board));
         _board->set_piece(7, 4, new Piece("29", black, king, _board));
@@ -81,25 +81,87 @@ protected:
 
         _board->set_piece(7, 2, new Piece("27", black, bishop, _board));
         _board->set_piece(7, 5, new Piece("30", black, bishop, _board));
+
+        std::string id;
+        player *player_1;
+        player *player_2;
+        std::vector<player *> players = {player_1, player_2};
+        player *loser = nullptr;
+        serializable_value<bool> *is_started              = new serializable_value<bool>(false);
+        serializable_value<bool> *is_finished             = new serializable_value<bool>(false);
+        serializable_value<bool> *is_resigned             = new serializable_value<bool>(false);
+        serializable_value<int>  *current_player_idx      = new serializable_value<int>(0);
+        serializable_value<int>  *round_number            = new serializable_value<int>(0);
+        serializable_value<int>  *starting_player_idx     = new serializable_value<int>(0);
+
+        _game_state = new game_state(id,
+                                     players,
+                                     _board,
+                                     loser,
+                                     is_started,
+                                     is_finished,
+                                     is_resigned,
+                                     current_player_idx,
+                                     round_number,
+                                     starting_player_idx);
+
     }
 
     virtual void TearDown() {
-        delete _board;
+        delete _game_state;
     }
-
-    bool compare(std::vector<std::vector<bool>>& legal_moves_output,
-                 std::vector<std::vector<bool>>& legal_moves_expected){
-
-        for(int i = 0; i < 8; i++ ){
-            for(int j = 0; j < 8; j++ ){
-                if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
 
 };
+
+//Pawn from (1,4) to (2,4)
+TEST_F(Move_Test_1, Pawn_Move_1){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(1,4);
+    EXPECT_EQ(_game_state->move_piece(1,4,2,4), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(1,4) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(2,4) == moving_piece, true);
+
+}
+
+
+//Pawn from (1,4) to (3,4)
+TEST_F(Move_Test_1, Pawn_Move_2){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(1,4);
+    EXPECT_EQ(_game_state->move_piece(1,4,3,4), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(1,4) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(3,4) == moving_piece, true);
+
+}
+
+//Knight from (7,6) to (5,7)
+TEST_F(Move_Test_1, Knight_Move_1){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(7,6);
+    EXPECT_EQ(_game_state->move_piece(7,6,5,7), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(7,6) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(5,7) == moving_piece, true);
+
+}
+
+//Knight from (7,6) to (5,5)
+TEST_F(Move_Test_1, Knight_Move_2){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(7,6);
+    EXPECT_EQ(_game_state->move_piece(7,6,5,5), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(7,6) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(5,5) == moving_piece, true);
+
+}

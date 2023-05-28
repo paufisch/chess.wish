@@ -6,6 +6,7 @@
 #include "../src/common/exceptions/ChessException.h"
 #include "../src/common/game_state/piece/piece.h"
 #include "../src/common/game_state/board.h"
+#include "../src/common/game_state/game_state.h"
 #include "../src/common/serialization/json_utils.h"
 #include <vector>
 
@@ -28,6 +29,7 @@ class Move_Test_2 : public ::testing::Test {
 protected:
 
     board* _board;
+    game_state* _game_state;
 
     std::vector<std::vector<bool>> _legal_moves_output;
     std::vector<std::vector<bool>> _legal_moves_expected;
@@ -82,24 +84,74 @@ protected:
 
         //_board->set_piece(7, 2, new Piece("27", black, bishop, _board));
         //_board->set_piece(7, 5, new Piece("30", black, bishop, _board));
+
+        std::string id;
+        player *player_1;
+        player *player_2;
+        std::vector<player *> players = {player_1, player_2};
+        player *loser = nullptr;
+        serializable_value<bool> *is_started              = new serializable_value<bool>(false);
+        serializable_value<bool> *is_finished             = new serializable_value<bool>(false);
+        serializable_value<bool> *is_resigned             = new serializable_value<bool>(false);
+        serializable_value<int>  *current_player_idx      = new serializable_value<int>(0);
+        serializable_value<int>  *round_number            = new serializable_value<int>(0);
+        serializable_value<int>  *starting_player_idx     = new serializable_value<int>(0);
+
+        _game_state = new game_state(id,
+                                     players,
+                                     _board,
+                                     loser,
+                                     is_started,
+                                     is_finished,
+                                     is_resigned,
+                                     current_player_idx,
+                                     round_number,
+                                     starting_player_idx);
+
     }
 
     virtual void TearDown() {
-        delete _board;
-    }
-
-    bool compare(std::vector<std::vector<bool>>& legal_moves_output,
-                 std::vector<std::vector<bool>>& legal_moves_expected){
-
-        for(int i = 0; i < 8; i++ ){
-            for(int j = 0; j < 8; j++ ){
-                if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        delete _game_state;
     }
 
 };
+
+//Pawn from (3,0) to (4,1)
+TEST_F(Move_Test_2, Pawn_Move_1){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(3,0);
+    EXPECT_EQ(_game_state->move_piece(3,0,4,1), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(3,0) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(4,1) == moving_piece, true);
+
+}
+
+//Rook from (0,2) to (5,2)
+TEST_F(Move_Test_2, Rook_Move_1){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(0,2);
+    EXPECT_EQ(_game_state->move_piece(0,2,5,2), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(0,2) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(5,2) == moving_piece, true);
+
+}
+
+//Rook from (0,2) to (0,3)
+TEST_F(Move_Test_2, Rook_Move_2){
+
+    Piece* moving_piece = _game_state->get_board()->get_piece(0,2);
+    EXPECT_EQ(_game_state->move_piece(0,2,0,3), true);
+    EXPECT_EQ(_game_state->is_finished(), false);
+    EXPECT_EQ(_game_state->get_loser() == nullptr, true);
+    EXPECT_EQ(_game_state->get_round_number(), 1);
+    EXPECT_EQ(_game_state->get_board()->get_piece(0,2) == nullptr, true);
+    EXPECT_EQ(_game_state->get_board()->get_piece(0,3) == moving_piece, true);
+
+}
+

@@ -89,7 +89,7 @@ protected:
 
         for(int i = 0; i < 8; i++ ){
             for(int j = 0; j < 8; j++ ){
-                if(_legal_moves_output[i][j] != _legal_moves_expected[i][j]){
+                if(legal_moves_output[i][j] != legal_moves_expected[i][j]){
                     return false;
                 }
             }
