@@ -1,9 +1,9 @@
 
 # chess.wish
 
-This project implements a slightly simplified version of chess in C++ featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position. Hence the name suicide chess.
+This project implements a slightly simplified version of chess in C++ featuring a client/server architecture. The main difference from normal chess is that the game ends if one king is taken. It is not required to move out of a check position and it is even possible to move the own king into a check position.
 
-![Lama-logo](./assets/chess_logo.png?raw=true)
+![Chess-logo](./assets/chess_logo.png?raw=true)
 
 Further rule modifications compared to normal chess:
 - Castling is not possible
