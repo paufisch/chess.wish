@@ -1,7 +1,7 @@
-#include "server_network_manager.h"
+#include "ServerNetworkManager.h"
 
 int main() {
-    // create server_network_manager, which listens endlessly for new connections
-    server_network_manager server;
+    // create ServerNetworkManager, which listens endlessly for new connections
+    ServerNetworkManager server;
     return 0;
 }

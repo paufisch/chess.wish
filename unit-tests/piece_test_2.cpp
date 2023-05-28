@@ -4,9 +4,9 @@
 
 #include "gtest/gtest.h"
 #include "../src/common/exceptions/ChessException.h"
-#include "../src/common/game_state/piece/piece.h"
-#include "../src/common/game_state/board.h"
-#include "../src/common/serialization/json_utils.h"
+#include "../src/common/game_state/piece/Piece.h"
+#include "../src/common/game_state/Board.h"
+#include "../src/common/serialization/JsonUtils.h"
 #include <vector>
 
 /* A test fixture allows to reuse the same configuration of objects for all
@@ -24,15 +24,15 @@ class Piece_Test_2 : public ::testing::Test {
 
 protected:
 
-    board* _board;
+    Board* _board;
 
     std::vector<std::vector<bool>> _legal_moves_output;
     std::vector<std::vector<bool>> _legal_moves_expected;
 
-    //Hint: The set_piece lines can be copy pasted into game_state::setup_board() for the display of this setup.
+    //Hint: The set_piece lines can be copy pasted into GameState::setup_board() for the display of this setup.
     virtual void SetUp() {
 
-        _board = new board;
+        _board = new Board;
 
         _legal_moves_output   = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
         _legal_moves_expected = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));

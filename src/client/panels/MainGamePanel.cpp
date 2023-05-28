@@ -28,31 +28,31 @@ MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDef
 }
 
 
-void MainGamePanel::buildGameState(game_state* gameState, player* me) {
+void MainGamePanel::buildGameState(GameState* gameState, Player* me) {
 
     // remove any existing UI
     this->DestroyChildren();
 
     //get all players
-    std::vector<player*> players = gameState->get_players();
+    std::vector<Player*> players = gameState->get_players();
 
-    // find our own player object in the list of players
+    // find our own Player object in the list of players
     int myPosition = -1;
-    auto it = std::find_if(players.begin(), players.end(), [me](const player* x) {
+    auto it = std::find_if(players.begin(), players.end(), [me](const Player* x) {
         return x->get_id() == me->get_id();
     });
     if (it < players.end()) {
         me = *it;
         myPosition = it - players.begin();
     } else {
-        GameController::showError("Game state error", "Could not find this player among players of server game.");
+        GameController::showError("Game state error", "Could not find this Player among players of server game.");
         return;
     }
 
-    //get other player
-    player* otherPlayer = players.at((myPosition + 1) % 2);
+    //get other Player
+    Player* otherPlayer = players.at((myPosition + 1) % 2);
 
-    // show our own player
+    // show our own Player
     this->buildThisPlayer(gameState, me, otherPlayer);
 
     // update layout
@@ -60,7 +60,7 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 }
 
 
-void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* otherPlayer) {
+void MainGamePanel::buildThisPlayer(GameState* gameState, Player* me, Player* otherPlayer) {
 
     // Setup two nested box sizer structure
     auto* outerLayout = new wxBoxSizer(wxHORIZONTAL);
@@ -76,7 +76,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
     auto* myInformation = new wxBoxSizer(wxVERTICAL);
     innerLayout->Add(myInformation, 1, wxEXPAND | wxBOTTOM, 5);
 
-    //build board
+    //build Board
     MainGamePanel::board = MainGamePanel::buildBoard(gameState, me);//this is actually the grid sizer
     boardLayout->Add(MainGamePanel::board, 0, wxALIGN_CENTER);
 
@@ -102,7 +102,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
         //display other players name
         wxStaticText *other_name = buildStaticText(otherPlayer->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
         otherInformation->Add(other_name, 1, wxEXPAND);
-        //display that other player is waiting
+        //display that other Player is waiting
         std::string statusText = "waiting...";
         wxStaticText *status_txt = buildStaticText(statusText,wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
         otherInformation->Add(status_txt, 1, wxEXPAND);
@@ -115,28 +115,28 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
         // show our name
         wxStaticText* playerName = buildStaticText(me->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
         myInformation->Add(playerName, 1, wxEXPAND);
-        // Show other player name
+        // Show other Player name
         wxStaticText *other_name = buildStaticText(otherPlayer->get_player_name(),wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,true);
         otherInformation->Add(other_name, 1, wxEXPAND);
-        // Show other player's status label
+        // Show other Player's status label
         wxStaticText *status_txt = buildStaticText("their turn",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
         otherInformation->Add(status_txt, 1, wxEXPAND);
     }
 }
 
 
-wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
+wxGridSizer* MainGamePanel::buildBoard(GameState* gameState, Player* me) {
     /*
-     * builds the chess board from gameState
+     * builds the chess Board from gameState
      */
 
-    //the board is a grid sizer containing 64 panels
+    //the Board is a grid sizer containing 64 panels
     auto *grid = new wxGridSizer(8, 8, 0, 0);
 
-    // fill the panels with the pieces contained in board
+    // fill the panels with the pieces contained in Board
     color_board();
 
-    //add pieces to the board
+    //add pieces to the Board
     add_pieces(gameState, me);
 
     //add functionality to the pieces
@@ -156,7 +156,7 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
 }
 
 
-void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me) {
+void MainGamePanel::OnPanelClick(int i, int j, GameState *gameState, Player *me) {
     /*
      * Adds functionality to the panels such as:
             -selecting a piece
@@ -256,7 +256,7 @@ void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me
 
 void MainGamePanel::color_board(){
     /*
-     * builds up the colored chess board by initializing the panels
+     * builds up the colored chess Board by initializing the panels
      */
 
     for (int i = 7; i >= 0; --i){
@@ -273,9 +273,9 @@ void MainGamePanel::color_board(){
 }
 
 
-void MainGamePanel::add_pieces(game_state *gameState, player *me){
+void MainGamePanel::add_pieces(GameState *gameState, Player *me){
     /*
-     * adds pieces to the board
+     * adds pieces to the Board
      */
 
     for (int i = 7; i >= 0; --i) {
@@ -328,7 +328,7 @@ void MainGamePanel::add_pieces(game_state *gameState, player *me){
 }
 
 
-void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves, player* me) {
+void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves, Player* me) {
     /*
      * displays possible moves by coloring the panels of possible moves differently
      */
@@ -364,7 +364,7 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
 
 void MainGamePanel::deselect_moves(){
     /*
-     * paints the chess board in original coloring and therefor can be used to not show the possible moves anymore
+     * paints the chess Board in original coloring and therefor can be used to not show the possible moves anymore
      */
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j) {

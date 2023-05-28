@@ -1,14 +1,14 @@
 //
 // Created by Manuel on 10.02.2021.
 //
-// Helper functions to serialize vectors containing objects that implement the 'serializable' class.
+// Helper functions to serialize vectors containing objects that implement the 'Serializable' class.
 
 #ifndef CHESS_VECTOR_UTILS_H
 #define CHESS_VECTOR_UTILS_H
 
 #include <vector>
-#include "serializable.h"
-#include "unique_serializable.h"
+#include "Serializable.h"
+#include "UniqueSerializable.h"
 #include "../../rapidjson/include/rapidjson/document.h"
 
 
@@ -20,9 +20,9 @@ namespace vector_utils {
     };
 
     template<class T>
-    /* WARNING: can only be called with vectors containing elements of type T that derives from "serializable" */
+    /* WARNING: can only be called with vectors containing elements of type T that derives from "Serializable" */
     static rapidjson::Value serialize_vector(const std::vector<T*>& serializables, rapidjson::Document::AllocatorType& allocator) {
-        derived_from<T,serializable>(); // ensure T derives from serializable
+        derived_from<T,Serializable>(); // ensure T derives from Serializable
         rapidjson::Value arr_val(rapidjson::kArrayType);
         for (int i = 0; i < serializables.size(); i++) {
             rapidjson::Value elem(rapidjson::kObjectType);

@@ -4,10 +4,10 @@
 
 #include "gtest/gtest.h"
 #include "../src/common/exceptions/ChessException.h"
-#include "../src/common/game_state/piece/piece.h"
-#include "../src/common/game_state/board.h"
-#include "../src/common/game_state/game_state.h"
-#include "../src/common/serialization/json_utils.h"
+#include "../src/common/game_state/piece/Piece.h"
+#include "../src/common/game_state/Board.h"
+#include "../src/common/game_state/GameState.h"
+#include "../src/common/serialization/JsonUtils.h"
 #include <vector>
 
 /* A test fixture allows to reuse the same configuration of objects for all
@@ -28,16 +28,16 @@ class Move_Test_2 : public ::testing::Test {
 
 protected:
 
-    board* _board;
-    game_state* _game_state;
+    Board* _board;
+    GameState* _game_state;
 
     std::vector<std::vector<bool>> _legal_moves_output;
     std::vector<std::vector<bool>> _legal_moves_expected;
 
-    //Hint: The set_piece lines can be copy pasted into game_state::setup_board() for the display of this setup.
+    //Hint: The set_piece lines can be copy pasted into GameState::setup_board() for the display of this setup.
     virtual void SetUp() {
 
-        _board = new board;
+        _board = new Board;
 
         _legal_moves_output   = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
         _legal_moves_expected = std::vector<std::vector<bool>> (8, std::vector<bool>(8, false));
@@ -86,27 +86,27 @@ protected:
         //_board->set_piece(7, 5, new Piece("30", black, bishop, _board));
 
         std::string id;
-        player *player_1;
-        player *player_2;
-        std::vector<player *> players = {player_1, player_2};
-        player *loser = nullptr;
-        serializable_value<bool> *is_started              = new serializable_value<bool>(false);
-        serializable_value<bool> *is_finished             = new serializable_value<bool>(false);
-        serializable_value<bool> *is_resigned             = new serializable_value<bool>(false);
-        serializable_value<int>  *current_player_idx      = new serializable_value<int>(0);
-        serializable_value<int>  *round_number            = new serializable_value<int>(0);
-        serializable_value<int>  *starting_player_idx     = new serializable_value<int>(0);
+        Player *player_1;
+        Player *player_2;
+        std::vector<Player *> players = {player_1, player_2};
+        Player *loser = nullptr;
+        SerializableValue<bool> *is_started              = new SerializableValue<bool>(false);
+        SerializableValue<bool> *is_finished             = new SerializableValue<bool>(false);
+        SerializableValue<bool> *is_resigned             = new SerializableValue<bool>(false);
+        SerializableValue<int>  *current_player_idx      = new SerializableValue<int>(0);
+        SerializableValue<int>  *round_number            = new SerializableValue<int>(0);
+        SerializableValue<int>  *starting_player_idx     = new SerializableValue<int>(0);
 
-        _game_state = new game_state(id,
-                                     players,
-                                     _board,
-                                     loser,
-                                     is_started,
-                                     is_finished,
-                                     is_resigned,
-                                     current_player_idx,
-                                     round_number,
-                                     starting_player_idx);
+        _game_state = new GameState(id,
+                                    players,
+                                    _board,
+                                    loser,
+                                    is_started,
+                                    is_finished,
+                                    is_resigned,
+                                    current_player_idx,
+                                    round_number,
+                                    starting_player_idx);
 
     }
 

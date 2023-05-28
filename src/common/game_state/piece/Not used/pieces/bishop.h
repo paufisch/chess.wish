@@ -6,7 +6,7 @@
 #define BISHOP_H
 
 
-#include "../../piece.h"
+#include "../../Piece.h"
 
 class Bishop : public Piece {
 private:

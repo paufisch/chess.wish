@@ -5,7 +5,7 @@
 #include "panels/ConnectionPanel.h"
 #include "panels/MainGamePanel.h"
 #include "network/ResponseListenerThread.h"
-#include "../common/game_state/game_state.h"
+#include "../common/game_state/GameState.h"
 
 
 class GameController {
@@ -13,7 +13,7 @@ class GameController {
 public:
     static void init(GameWindow* gameWindow);
     static void connectToServer();
-    static void updateGameState(game_state* newGameState);
+    static void updateGameState(GameState* newGameState);
     static void startGame();
     static void resign();
     static wxEvtHandler* getMainThreadEventHandler();
@@ -26,8 +26,8 @@ private:
     static GameWindow* _gameWindow;
     static ConnectionPanel* _connectionPanel;
     static MainGamePanel* _mainGamePanel;
-    static player* _me;
-    static game_state* _currentGameState;
+    static Player* _me;
+    static GameState* _currentGameState;
 
 };
 

@@ -1,7 +1,7 @@
 //
 // Created by Manuel on 09.02.2021.
 //
-// Helper functions for serializing and deserializing instances of serializable_value.
+// Helper functions for serializing and deserializing instances of SerializableValue.
 
 #ifndef CHESS_VALUE_TYPE_HELPERS_H
 #define CHESS_VALUE_TYPE_HELPERS_H

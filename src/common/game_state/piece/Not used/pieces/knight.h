@@ -6,7 +6,7 @@
 #define KNIGHT_H
 
 
-#include "../../piece.h"
+#include "../../Piece.h"
 
 
 

@@ -25,61 +25,61 @@ set(CLIENT_SOURCE_FILES
         src/client/network/ClientNetworkManager.cpp src/client/network/ClientNetworkManager.h
         src/client/network/ResponseListenerThread.cpp src/client/network/ResponseListenerThread.h
         # game state
-        src/common/game_state/game_state.cpp src/common/game_state/game_state.h
-        src/common/game_state/player/player.cpp src/common/game_state/player/player.h
-        src/common/game_state/board.cpp src/common/game_state/board.h
-        src/common/game_state/color.h
-        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        src/common/game_state/GameState.cpp src/common/game_state/GameState.h
+        src/common/game_state/player/Player.cpp src/common/game_state/player/Player.h
+        src/common/game_state/Board.cpp src/common/game_state/Board.h
+        src/common/game_state/Color.h
+        src/common/game_state/piece/Piece.cpp src/common/game_state/piece/Piece.h
         # client requests
-        src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
-        src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
-        src/common/network/requests/start_game_request.cpp src/common/network/requests/start_game_request.h
-        src/common/network/requests/move_piece_request.cpp src/common/network/requests/move_piece_request.h
-        src/common/network/requests/resign_request.cpp src/common/network/requests/resign_request.h
+        src/common/network/requests/ClientRequest.cpp src/common/network/requests/ClientRequest.h
+        src/common/network/requests/JoinGameRequest.cpp src/common/network/requests/JoinGameRequest.h
+        src/common/network/requests/StartGameRequest.cpp src/common/network/requests/StartGameRequest.h
+        src/common/network/requests/MovePieceRequest.cpp src/common/network/requests/MovePieceRequest.h
+        src/common/network/requests/ResignRequest.cpp src/common/network/requests/ResignRequest.h
         # server responses
-        src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
-        src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
-        src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
+        src/common/network/responses/ServerResponse.cpp src/common/network/responses/ServerResponse.h
+        src/common/network/responses/RequestResponse.cpp src/common/network/responses/RequestResponse.h
+        src/common/network/responses/FullStateResponse.cpp src/common/network/responses/FullStateResponse.h
         # serialization
-        src/common/serialization/serializable.h
+        src/common/serialization/Serializable.h
         src/common/serialization/value_type_helpers.h
         src/common/serialization/vector_utils.h
-        src/common/serialization/serializable_value.h
-        src/common/serialization/json_utils.h
-        src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h)
+        src/common/serialization/SerializableValue.h
+        src/common/serialization/JsonUtils.h
+        src/common/serialization/UuidGenerator.h
+        src/common/serialization/UniqueSerializable.cpp src/common/serialization/UniqueSerializable.h)
 # define a variable SERVER_SOURCE_FILES that contains the paths to all source files required to compile the server executable
 set(SERVER_SOURCE_FILES
         src/server/main.cpp
-        src/server/game_instance.cpp src/server/game_instance.h
-        src/server/game_instance_manager.cpp src/server/game_instance_manager.h
-        src/server/player_manager.cpp src/server/player_manager.h
-        src/server/server_network_manager.cpp src/server/server_network_manager.h
-        src/server/request_handler.cpp src/server/request_handler.h
+        src/server/GameInstance.cpp src/server/GameInstance.h
+        src/server/GameInstanceManager.cpp src/server/GameInstanceManager.h
+        src/server/PlayerManager.cpp src/server/PlayerManager.h
+        src/server/ServerNetworkManager.cpp src/server/ServerNetworkManager.h
+        src/server/RequestHandler.cpp src/server/RequestHandler.h
         # game state
-        src/common/game_state/game_state.cpp src/common/game_state/game_state.h
-        src/common/game_state/player/player.cpp src/common/game_state/player/player.h
-        src/common/game_state/board.cpp src/common/game_state/board.h
-        src/common/game_state/color.h
-        src/common/game_state/piece/piece.cpp src/common/game_state/piece/piece.h
+        src/common/game_state/GameState.cpp src/common/game_state/GameState.h
+        src/common/game_state/player/Player.cpp src/common/game_state/player/Player.h
+        src/common/game_state/Board.cpp src/common/game_state/Board.h
+        src/common/game_state/Color.h
+        src/common/game_state/piece/Piece.cpp src/common/game_state/piece/Piece.h
         # client requests
-        src/common/network/requests/client_request.cpp src/common/network/requests/client_request.h
-        src/common/network/requests/join_game_request.cpp src/common/network/requests/join_game_request.h
-        src/common/network/requests/start_game_request.cpp src/common/network/requests/start_game_request.h
-        src/common/network/requests/move_piece_request.cpp src/common/network/requests/move_piece_request.h
-        src/common/network/requests/resign_request.cpp src/common/network/requests/resign_request.h
+        src/common/network/requests/ClientRequest.cpp src/common/network/requests/ClientRequest.h
+        src/common/network/requests/JoinGameRequest.cpp src/common/network/requests/JoinGameRequest.h
+        src/common/network/requests/StartGameRequest.cpp src/common/network/requests/StartGameRequest.h
+        src/common/network/requests/MovePieceRequest.cpp src/common/network/requests/MovePieceRequest.h
+        src/common/network/requests/ResignRequest.cpp src/common/network/requests/ResignRequest.h
         # server responses
-        src/common/network/responses/server_response.cpp src/common/network/responses/server_response.h
-        src/common/network/responses/request_response.cpp src/common/network/responses/request_response.h
-        src/common/network/responses/full_state_response.cpp src/common/network/responses/full_state_response.h
+        src/common/network/responses/ServerResponse.cpp src/common/network/responses/ServerResponse.h
+        src/common/network/responses/RequestResponse.cpp src/common/network/responses/RequestResponse.h
+        src/common/network/responses/FullStateResponse.cpp src/common/network/responses/FullStateResponse.h
         # serialization
-        src/common/serialization/serializable.h
+        src/common/serialization/Serializable.h
         src/common/serialization/value_type_helpers.h
         src/common/serialization/vector_utils.h
-        src/common/serialization/serializable_value.h
-        src/common/serialization/json_utils.h
-        src/common/serialization/uuid_generator.h
-        src/common/serialization/unique_serializable.cpp src/common/serialization/unique_serializable.h)
+        src/common/serialization/SerializableValue.h
+        src/common/serialization/JsonUtils.h
+        src/common/serialization/UuidGenerator.h
+        src/common/serialization/UniqueSerializable.cpp src/common/serialization/UniqueSerializable.h)
 # set source files for client-executable
 add_executable(Chess-client ${CLIENT_SOURCE_FILES})
 # set compile directives for client-executable

@@ -2,7 +2,7 @@
 
 
 #include "../GameController.h"
-#include "../../common/network/responses/server_response.h"
+#include "../../common/network/responses/ServerResponse.h"
 #include <sockpp/exception.h>
 
 
@@ -69,7 +69,7 @@ bool ClientNetworkManager::connect(const std::string& host, const uint16_t port)
 }
 
 
-void ClientNetworkManager::sendRequest(const client_request &request) {
+void ClientNetworkManager::sendRequest(const ClientRequest &request) {
 
     // wait until network is connected (max. 5 seconds)
     int connectionCheckCounter = 0;
@@ -89,7 +89,7 @@ void ClientNetworkManager::sendRequest(const client_request &request) {
 
         // serialize request into JSON string
         rapidjson::Document* jsonDocument = request.to_json();
-        std::string message = json_utils::to_string(jsonDocument);
+        std::string message = JsonUtils::to_string(jsonDocument);
         delete jsonDocument;
 
         // turn message into stream and prepend message length
@@ -127,7 +127,7 @@ void ClientNetworkManager::parseResponse(const std::string& message) {
     json.Parse(message.c_str());
 
     try {
-        server_response* res = server_response::from_json(json);
+        ServerResponse* res = ServerResponse::from_json(json);
         res->Process();
 
     } catch (std::exception e) {

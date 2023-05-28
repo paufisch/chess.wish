@@ -6,7 +6,7 @@
 #define QUEEN_H
 
 
-#include "../../piece.h"
+#include "../../Piece.h"
 //#include "../piece.cpp"
 
 class Queen : public Piece {

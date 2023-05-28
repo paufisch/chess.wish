@@ -1,8 +1,8 @@
 #include "GameController.h"
-#include "../common/network/requests/join_game_request.h"
-#include "../common/network/requests/start_game_request.h"
-#include "../common/network/requests/resign_request.h"
-#include "../common/network/requests/move_piece_request.h"
+#include "../common/network/requests/JoinGameRequest.h"
+#include "../common/network/requests/StartGameRequest.h"
+#include "../common/network/requests/ResignRequest.h"
+#include "../common/network/requests/MovePieceRequest.h"
 #include "network/ClientNetworkManager.h"
 
 
@@ -11,8 +11,8 @@ GameWindow* GameController::_gameWindow = nullptr;
 ConnectionPanel* GameController::_connectionPanel = nullptr;
 MainGamePanel* GameController::_mainGamePanel = nullptr;
 
-player* GameController::_me = nullptr;
-game_state* GameController::_currentGameState = nullptr;
+Player* GameController::_me = nullptr;
+GameState* GameController::_currentGameState = nullptr;
 
 
 
@@ -53,7 +53,7 @@ void GameController::connectToServer() {
         return;
     }
     if(inputPlayerName.IsEmpty()) {
-        GameController::showError("Input error", "Please enter your desired player name");
+        GameController::showError("Input error", "Please enter your desired Player name");
         return;
     }
 
@@ -68,21 +68,21 @@ void GameController::connectToServer() {
     }
     uint16_t port = (uint16_t) portAsLong;
 
-    // convert player name from wxString to std::string
+    // convert Player name from wxString to std::string
     std::string playerName = inputPlayerName.ToStdString();
 
     // connect to network
     ClientNetworkManager::init(host, port);
 
     // send request to join game
-    GameController::_me = new player(playerName);
-    join_game_request request = join_game_request(GameController::_me->get_id(), GameController::_me->get_player_name());
+    GameController::_me = new Player(playerName);
+    JoinGameRequest request = JoinGameRequest(GameController::_me->get_id(), GameController::_me->get_player_name());
     ClientNetworkManager::sendRequest(request);
 
 }
 
 
-void GameController::updateGameState(game_state* newGameState) {
+void GameController::updateGameState(GameState* newGameState) {
 
     // save the new game state as our current game state
     GameController::_currentGameState = newGameState;
@@ -105,13 +105,13 @@ void GameController::updateGameState(game_state* newGameState) {
 
 
 void GameController::startGame() {
-    start_game_request request = start_game_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
+    StartGameRequest request = StartGameRequest(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
 }
 
 
 void GameController::resign() {
-    resign_request request = resign_request(GameController::_currentGameState->get_id(), GameController::_me->get_id());
+    ResignRequest request = ResignRequest(GameController::_currentGameState->get_id(), GameController::_me->get_id());
     ClientNetworkManager::sendRequest(request);
 }
 
@@ -119,7 +119,7 @@ void GameController::resign() {
 void GameController::movePiece(int from_i, int from_j, int i, int j) {
     //i,j are indices of the destination panel
     //i,j are the indices of the selected piece
-    move_piece_request request = move_piece_request(GameController::_currentGameState->get_id(), GameController::_me->get_id(),from_i, from_j, i,j);
+    MovePieceRequest request = MovePieceRequest(GameController::_currentGameState->get_id(), GameController::_me->get_id(), from_i, from_j, i, j);
     ClientNetworkManager::sendRequest(request);
 }
 

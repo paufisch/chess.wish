@@ -2,7 +2,7 @@
 #define CHESS_CLIENT_MAINGAMEPANEL_H
 
 #include <wx/wx.h>
-#include "../../common/game_state/game_state.h"
+#include "../../common/game_state/GameState.h"
 #include "MyPanel.h"
 
 
@@ -10,7 +10,7 @@ class MainGamePanel : public wxPanel {
 
 public:
     explicit MainGamePanel(wxWindow* parent);
-    void buildGameState(game_state* gameState, player* me);
+    void buildGameState(GameState* gameState, Player* me);
 
 
 private:
@@ -18,13 +18,13 @@ private:
     unsigned int* selected;
     MyPanel *panels[64];
 
-    wxGridSizer* buildBoard(game_state* gameState, player* me);
-    void buildThisPlayer(game_state* gameState, player* me, player* otherPlayer);
+    wxGridSizer* buildBoard(GameState* gameState, Player* me);
+    void buildThisPlayer(GameState* gameState, Player* me, Player* otherPlayer);
     void color_board();
-    void add_pieces(game_state* gameState, player* me);
-    void display_moves(std::vector<std::vector<bool>>, player*);
+    void add_pieces(GameState* gameState, Player* me);
+    void display_moves(std::vector<std::vector<bool>>, Player*);
     void deselect_moves();
-    void OnPanelClick(int i, int j, game_state*, player* me);
+    void OnPanelClick(int i, int j, GameState*, Player* me);
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
 
     //colors
