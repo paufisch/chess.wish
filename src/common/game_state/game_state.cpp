@@ -155,11 +155,17 @@ bool game_state::move_piece(int i_from, int j_from, int i_to, int j_to){
         //the piece pointer at _from is now empty
         _board->set_piece(i_from, j_from, nullptr);
 
-        //checks if we want to move a pawn to the base line
-        if( (i_to == 7 || i_to == 0) && (pawn == _moving_piece->get_type()) ){
-            //the piece pointer at _to gets overwritten with the piece pointer at _from
-            delete _board->get_piece(i_to, j_to);
-            _board->set_piece(i_to, j_to, new Piece(_moving_piece->get_piece_ID(), _moving_piece->get_color(), queen, _board));
+        //checks if we want to move a pawn to the baseline
+        if(i_to==0 && _moving_piece->get_type()==pawn && _moving_piece->get_color()==black){
+            std::string id = _moving_piece->get_piece_ID();
+            delete _moving_piece;
+            Piece* new_queen = new Piece(id, black, queen, _board);
+            _board->set_piece(i_to, j_to, new_queen);
+        } else if(i_to==7 && _moving_piece->get_type()==pawn && _moving_piece->get_color()==white) {
+            std::string id = _moving_piece->get_piece_ID();
+            delete _moving_piece;
+            Piece* new_queen = new Piece(id, white, queen, _board);
+            _board->set_piece(i_to, j_to, new_queen);
         }
 
         if (_round_number->get_value() == _max_number_rounds) {
