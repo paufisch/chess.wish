@@ -71,11 +71,15 @@ std::vector<std::vector<bool>> game_instance::legal_moves(player* player, int co
 
 bool game_instance::move_piece(player *player, int coordinate_from_1, int coordinate_from_2, int coordinate_to_1, int coordinate_to_2, std::string &err) {
     modification_lock.lock();
-    if (_game_state->move_piece(coordinate_from_1, coordinate_from_2, coordinate_to_1, coordinate_to_2)) {
-        full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
-        server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
-        modification_lock.unlock();
-        return true;
+    if (_game_state->is_started() && !_game_state->is_finished()) {
+        if (_game_state->move_piece(coordinate_from_1, coordinate_from_2, coordinate_to_1, coordinate_to_2)) {
+            full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
+            server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
+            modification_lock.unlock();
+            return true;
+        }
+    } else {
+        err = "The game isn't running!";
     }
     modification_lock.unlock();
     return false;
