@@ -20,6 +20,7 @@ set(CLIENT_SOURCE_FILES
         src/client/panels/MainGamePanel.cpp src/client/panels/MainGamePanel.h
         src/client/uiElements/InputField.cpp src/client/uiElements/InputField.h
         src/client/uiElements/ImagePanel.cpp src/client/uiElements/ImagePanel.h
+        src/client/panels/MyPanel.h src/client/panels/MyPanel.cpp
         # network
         src/client/network/ClientNetworkManager.cpp src/client/network/ClientNetworkManager.h
         src/client/network/ResponseListenerThread.cpp src/client/network/ResponseListenerThread.h
