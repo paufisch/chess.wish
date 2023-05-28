@@ -1,19 +1,7 @@
-//
-// Created by Manuel on 08.02.2022.
-//
-
 #ifndef CHESS_REQUEST_HANDLER_CPP
 #define CHESS_REQUEST_HANDLER_CPP
 
 #include "request_handler.h"
-
-#include "player_manager.h"
-#include "game_instance_manager.h"
-#include "game_instance.h"
-
-#include "../common/network/requests/join_game_request.h"
-#include "../common/network/requests/move_piece_request.h"
-
 
 server_response* request_handler::handle_request(const client_request* const req) {
 

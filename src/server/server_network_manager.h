@@ -1,6 +1,3 @@
-//
-// Created by Manuel on 12.02.2021.
-//
 // The server_network_manager handles all incoming messages and offers functionality to broadcast messages
 // to all connected players of a game.
 
@@ -35,10 +32,10 @@ private:
     void connect(const std::string& url, const uint16_t  port);
 
     static void listener_loop();
-    static void read_message(sockpp::tcp_socket socket,
-                             const std::function<void(const std::string&, const sockpp::tcp_socket::addr_t&)>& message_handler);
+    static void read_message(sockpp::tcp_socket socket, const std::function<void(const std::string&, const sockpp::tcp_socket::addr_t&)>& message_handler);
     static void handle_incoming_message(const std::string& msg, const sockpp::tcp_socket::addr_t& peer_address);
     static ssize_t send_message(const std::string& msg, const std::string& address);
+
 public:
     server_network_manager();
     ~server_network_manager();

@@ -1,6 +1,3 @@
-//
-// Created by Manuel on 29.01.2021.
-//
 // The game_instance_manager only exists on the server side. It stores all currently active games and offers
 // functionality to retrieve game instances by id and adding players to games.
 // If a new player requests to join a game but no valid game_instance is available, then this class
@@ -49,7 +46,6 @@ game_instance* game_instance_manager::create_new_game() {
     return new_game;
 }
 
-
 bool game_instance_manager::try_get_game_instance(const std::string& game_id, game_instance *&game_instance_ptr) {
     game_instance_ptr = nullptr;
     games_lut_lock.lock_shared();
@@ -61,8 +57,7 @@ bool game_instance_manager::try_get_game_instance(const std::string& game_id, ga
     return game_instance_ptr != nullptr;
 }
 
-bool
-game_instance_manager::try_get_player_and_game_instance(const std::string& player_id, player *&player, game_instance *&game_instance_ptr, std::string& err) {
+bool game_instance_manager::try_get_player_and_game_instance(const std::string& player_id, player *&player, game_instance *&game_instance_ptr, std::string& err) {
     if (player_manager::try_get_player(player_id, player)) {
         if (game_instance_manager::try_get_game_instance(player->get_game_id(), game_instance_ptr)) {
             return true;
@@ -74,7 +69,6 @@ game_instance_manager::try_get_player_and_game_instance(const std::string& playe
     }
     return false;
 }
-
 
 bool game_instance_manager::try_add_player_to_any_game(player *player, game_instance*& game_instance_ptr, std::string& err) {
 
@@ -105,7 +99,6 @@ bool game_instance_manager::try_add_player_to_any_game(player *player, game_inst
     }
 }
 
-
 bool game_instance_manager::try_add_player(player *player, game_instance *&game_instance_ptr, std::string& err) {
     if (player->get_game_id() != "") {
         if (player->get_game_id() != game_instance_ptr->get_id()) {
@@ -131,17 +124,6 @@ bool game_instance_manager::try_add_player(player *player, game_instance *&game_
         return false;
     }
 }
-
-/*
-bool game_instance_manager::try_remove_player(player *player, const std::string& game_id, std::string &err) {
-    game_instance* game_instance_ptr = nullptr;
-    if (try_get_game_instance(game_id, game_instance_ptr)) {
-        return try_remove_player(player, game_instance_ptr, err);
-    } else {
-        err = "The requested src could not be found. Requested src id was " + game_id;
-        return false;
-    }
-}   */
 
 bool game_instance_manager::try_remove_player(std::string& player_id, std::string &err) {
     player* player = nullptr;
