@@ -82,6 +82,12 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 
     //if it's our turn
     if (gameState->get_current_player() == me) {
+
+        //start the game
+        if(!gameState->is_started()) {
+            GameController::startGame();
+        }
+
         //add the "resign" button
         auto *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
         resignButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
