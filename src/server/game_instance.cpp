@@ -71,11 +71,15 @@ std::vector<std::vector<bool>> game_instance::legal_moves(player* player, int co
 
 bool game_instance::move_piece(player *player, int coordinate_from_1, int coordinate_from_2, int coordinate_to_1, int coordinate_to_2, std::string &err) {
     modification_lock.lock();
-    if (_game_state->move_piece(coordinate_from_1, coordinate_from_2, coordinate_to_1, coordinate_to_2)) {
-        full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
-        server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
-        modification_lock.unlock();
-        return true;
+    if (_game_state->is_started() && !_game_state->is_finished()) {
+        if (_game_state->move_piece(coordinate_from_1, coordinate_from_2, coordinate_to_1, coordinate_to_2)) {
+            full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
+            server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
+            modification_lock.unlock();
+            return true;
+        }
+    } else {
+        err = "The game isn't running!";
     }
     modification_lock.unlock();
     return false;
@@ -136,10 +140,13 @@ bool game_instance::try_remove_player(player *player, std::string &err) {
     if (_game_state->remove_player(player, err)) {
         player->set_game_id("");
         // send state update to all other players
-        full_state_response state_update_msg = full_state_response(this->get_id(), *_game_state);
-        server_network_manager::broadcast_message(state_update_msg, _game_state->get_players(), player);
-        modification_lock.unlock();
-        return true;
+        _game_state->set_is_finished(true);
+        _game_state->set_loser(player);
+            full_state_response response = full_state_response(this->get_id(), *_game_state);
+            server_network_manager::broadcast_message(response, _game_state->get_players(), player);
+            modification_lock.unlock();
+            delete player;
+            return true;
     }
     modification_lock.unlock();
     return false;

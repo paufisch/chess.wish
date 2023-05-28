@@ -29,6 +29,7 @@ private:
     inline static sockpp::tcp_acceptor _acc;
 
     inline static std::unordered_map<std::string, std::string> _player_id_to_address;
+    inline static std::unordered_map<std::string, std::string> _address_to_player_id;
     inline static std::unordered_map<std::string, sockpp::tcp_socket> _address_to_socket;
 
     void connect(const std::string& url, const uint16_t  port);

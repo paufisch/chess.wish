@@ -72,6 +72,8 @@ public:
     void next_turn();
     player* get_loser();
     int get_max_number_rounds();
+    void set_is_finished(bool finished);
+    void set_loser(player* loser);
 
 #ifdef CHESS_SERVER
 // server-side state update functions
