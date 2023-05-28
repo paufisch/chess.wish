@@ -1,6 +1,4 @@
 #include "ConnectionPanel.h"
-
-
 #include "../uiElements/ImagePanel.h"
 #include "../../common/network/default.conf"
 #include "../GameController.h"

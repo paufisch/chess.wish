@@ -9,7 +9,6 @@ class ConnectionPanel : public wxPanel {
 
 public:
     explicit ConnectionPanel(wxWindow* parent);
-
     wxString getServerAddress();
     wxString getServerPort();
     wxString getPlayerName();

@@ -1,12 +1,6 @@
 #include "MainGamePanel.h"
 #include "../uiElements/ImagePanel.h"
 #include "../GameController.h"
-//not jet existing includes:
-#include "../../common/game_state/board.h"
-#include "../../common/game_state/piece/piece.h"
-#include "../../common/game_state/color.h"
-
-
 
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
@@ -15,7 +9,6 @@ MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDef
     pink = wxColor(245, 175, 230);
     high_yellow = wxColor(77, 245, 113);
     high_pink = wxColor(245, 52, 204);
-
 
     //black pieces
     b_pawn = "../assets/black-pawn.png";
@@ -32,14 +25,15 @@ MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDef
     w_rook = "../assets/white-rook.png";
     w_knight= "../assets/white-knight.png";
     w_bishop = "../assets/white-bishop.png";
-
 }
+
 
 void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 
     // remove any existing UI
     this->DestroyChildren();
 
+    //get all players
     std::vector<player*> players = gameState->get_players();
 
     // find our own player object in the list of players
@@ -67,6 +61,10 @@ void MainGamePanel::buildGameState(game_state* gameState, player* me) {
 
 
 void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* otherPlayer) {
+    /*
+
+
+     */
 
     // Setup two nested box sizer structure
     auto* outerLayout = new wxBoxSizer(wxHORIZONTAL);
@@ -82,8 +80,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
     auto* myInformation = new wxBoxSizer(wxVERTICAL);
     innerLayout->Add(myInformation, 1, wxEXPAND | wxBOTTOM, 5);
 
-
-    // if the game has not yet started we say so
+    // if the game has not yet started we display the start window
     if(!gameState->is_started()) {
 
         // show button that allows our player to start the game
@@ -115,12 +112,11 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 
         //if it's our turn
         if (gameState->get_current_player() == me) {
-
+            //add the "resign" button
             auto *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
             resignButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
                 GameController::resign();
             });
-
             myInformation->Add(resignButton, 1, wxEXPAND);
 
             // Show our name
@@ -136,7 +132,7 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
             wxStaticText *status_txt = buildStaticText(statusText,wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
             otherInformation->Add(status_txt, 1, wxEXPAND);
 
-        // if it's not our turn, display "waiting..."
+        // if it's not our turn
         } else {
              //display waiting
              wxStaticText *playerStatus = buildStaticText("waiting...",wxDefaultPosition,wxSize(200, 18),wxALIGN_CENTER,false);
@@ -158,22 +154,166 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 }
 
 
-//this function builds the chess board
 wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
+    /*
+     * builds the chess board from gameState
+     */
 
-    //the board is a grid sizer containing panels
+    //the board is a grid sizer containing 64 panels
     auto *grid = new wxGridSizer(8, 8, 0, 0);
 
     // fill the panels with the pieces contained in board
     color_board();
 
+    //add pieces to the board
+    add_pieces(gameState, me);
+
+    //add functionality to the pieces
+    for (int i = 7; i >= 0; --i) {
+        for (int j = 0; j < 8; ++j) {
+            //add functionality to the panel
+            panels[i * 8 + j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent &event) {
+                OnPanelClick(i, j, gameState, me);
+            });
+
+            grid->Add(panels[i * 8 + j], 1, wxEXPAND | wxALL, 0);
+        }
+    }
+
+    grid->SetMinSize(wxSize(800, 800));
+    return grid;
+}
+
+
+void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me) {
+    /*
+     * Adds functionality to the panels such as:
+            -selecting a piece
+            - displaying valid moves
+            -moving a piece
+     */
+
+    //if it's our turn we can move pieces
+    if (gameState->get_current_player() == me) {
+
+        //if no panel is selected, select one!
+        if (MainGamePanel::selected == nullptr) {
+
+            //get the piece from the selected panel
+            Piece *_piece = nullptr;
+            std::vector<std::vector<bool>> possible_moves;
+            if (me->get_color() == white && gameState->get_board()->get_piece(i, j) != nullptr) {
+                _piece = gameState->get_board()->get_piece(i, j);
+                possible_moves = _piece->legal_moves(i, j);
+            } else if (me->get_color() == black && gameState->get_board()->get_piece(7 - i, 7 - j) != nullptr) {
+                _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
+                possible_moves = _piece->legal_moves(7 - i, 7 - j);
+            }
+
+            //if the panel contains a piece
+            if (_piece != nullptr) {
+
+                //sum the total number of possible moves
+                int sum = 0;
+                for (const auto &row: possible_moves) {
+                    for (bool value: row) {
+                        sum += value;
+                    }
+                }
+
+                //if the selected piece is our piece and has possible moves we select it
+                if (_piece->get_color() == me->get_color() && sum > 0) {
+                    MainGamePanel::selected = new unsigned int[2];
+                    MainGamePanel::selected[0] = i;
+                    MainGamePanel::selected[1] = j;
+                    //display valid moves
+                    display_moves(possible_moves, me);
+                } else {
+                    GameController::showError("Error", "Select a different piece!");
+                }
+
+            //if the panel doesn't contain a piece we display an error
+            } else {
+                GameController::showError("Error", "No piece here!");
+            }
+
+        //if we click the selected piece again we deselect it
+        } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]) {
+            std::cout << "deselected piece in position " << i << " " << j << std::endl;
+            delete[] MainGamePanel::selected;
+            MainGamePanel::selected = nullptr;
+            //remove the highlighted valid moves
+            deselect_moves();
+
+        //if a piece already has been selected we check if we can move the piece
+        } else {
+
+            //position of the previously selected piece
+            unsigned int from_i = MainGamePanel::selected[0];
+            unsigned int from_j = MainGamePanel::selected[1];
+
+            //check if selected destination is a possible move of the selected piece
+            std::vector<std::vector<bool>> possible_moves;
+            if (me->get_color() == white) {
+                possible_moves = gameState->select_piece(from_i, from_j);
+                if (possible_moves[i][j] == true) {
+                    GameController::movePiece(from_i, from_j, i, j);
+                    //deselect piece
+                    delete[] MainGamePanel::selected;
+                    MainGamePanel::selected = nullptr;
+                } else {
+                    GameController::showError("Error", "Not a valid move!");
+                }
+            } else {
+                //check if selected destination is a possible move
+                possible_moves = gameState->select_piece(7 - from_i, 7 - from_j);
+                if (possible_moves[7 - i][7 - j] == true) {
+                    GameController::movePiece(7 - from_i, 7 - from_j, 7 - i, 7 - j);
+                    //deselect piece
+                    delete[] MainGamePanel::selected;
+                    MainGamePanel::selected = nullptr;
+                } else {
+                    GameController::showError("Error", "Not a valid move!");
+                }
+            }
+        }
+    // if it's not our turn we display an error message
+    } else {
+        GameController::showError("Error", "It's not your turn!");
+    }
+}
+
+
+void MainGamePanel::color_board(){
+    /*
+     * builds up the colored chess board by initializing the panels
+     */
+
+    for (int i = 7; i >= 0; --i){
+        for (int j = 0; j < 8; ++j) {
+            panels[i * 8 + j] = new MyPanel(this);
+            if ((i + j) % 2 == 0) {
+                panels[i * 8 + j]->SetBackgroundColour(pink);
+            } else {
+                panels[i * 8 + j]->SetBackgroundColour(yellow);
+            }
+        }
+    }
+    this->Refresh();
+}
+
+
+void MainGamePanel::add_pieces(game_state *gameState, player *me){
+    /*
+     * adds pieces to the board
+     */
+
     for (int i = 7; i >= 0; --i) {
         for (int j = 0; j < 8; ++j) {
 
-            // Add chess figures as bitmaps to the panels
             // get the piece
             Piece *_piece = nullptr;
-            if (me->get_color() == white) { //white is a value of the enum "color" defined in color.h
+            if (me->get_color() == white) {
                 _piece = gameState->get_board()->get_piece(i, j);
             } else {
                 _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
@@ -213,157 +353,15 @@ wxGridSizer* MainGamePanel::buildBoard(game_state* gameState, player* me) {
                     }
                 }
             }
-
-                //add functionality to the button
-                panels[i * 8 + j]->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent &event) {
-                    OnPanelClick(i, j, gameState, me);
-                });
-
-                //if panel contains a piece we also add the functionality to the piece
-                wxStaticBitmap *staticBitmap = wxDynamicCast(panels[i * 8 + j]->FindWindowById(wxID_ANY),
-                                                             wxStaticBitmap);
-                if (staticBitmap) {
-                    //staticBitmap->Bind(wxEVT_LEFT_DOWN, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
-                    //staticBitmap->Connect(wxID_ANY, [=](wxMouseEvent& event) {OnPanelClick(i,j,gameState,me);});
-                }
-
-
-                grid->Add(panels[i * 8 + j], 1, wxEXPAND | wxALL, 0);
-            }
-        }
-
-        grid->SetMinSize(wxSize(800, 800));
-        return grid;
-}
-
-void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me) {
-    //if it's our turn we can move pieces
-    if (gameState->get_current_player() == me) {
-        //if no panel is selected, select one!
-        if (MainGamePanel::selected == nullptr) {
-
-            //get the selected piece
-            Piece *_piece = nullptr;
-            std::vector<std::vector<bool>> possible_moves;
-
-            if (me->get_color() == white && gameState->get_board()->get_piece(i, j) != nullptr) {
-                _piece = gameState->get_board()->get_piece(i, j);
-                possible_moves = _piece->legal_moves(i, j);
-
-            } else if (me->get_color() == black &&
-                       gameState->get_board()->get_piece(7 - i, 7 - j) != nullptr) {
-                _piece = gameState->get_board()->get_piece(7 - i, 7 - j);
-                possible_moves = _piece->legal_moves(7 - i, 7 - j);
-            }
-
-            if (_piece != nullptr) {
-                //sum the total number of possible moves
-                int sum = 0;
-                for (const auto &row: possible_moves) {
-                    for (bool value: row) {
-                        sum += value;
-                    }
-                }
-
-                //if the selected piece is our piece and has possible moves we select it
-                if (_piece->get_color() == me->get_color() && sum > 0) {
-                    MainGamePanel::selected = new unsigned int[2];
-                    MainGamePanel::selected[0] = i;
-                    MainGamePanel::selected[1] = j;
-                    //display valid moves
-                    display_moves(possible_moves, me);
-                } else {
-                    GameController::showError("Error", "Select a different piece!");
-                }
-            } else {
-                GameController::showError("Error", "No piece here!");
-            }
-
-            //if we click the selected piece again we deselect it
-        } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]) {
-            std::cout << "deselected piece in position " << i << " " << j << std::endl;
-            delete[] MainGamePanel::selected;
-            MainGamePanel::selected = nullptr;
-            //remove the highlighted valid moves
-            deselect_moves();
-
-            //else if move previously selected piece to new position
-        } else {
-            unsigned int from_i = MainGamePanel::selected[0];
-            unsigned int from_j = MainGamePanel::selected[1];
-
-            std::vector<std::vector<bool>> possible_moves;
-            if (me->get_color() == white) {
-                //check if selected destination is a possible move
-                possible_moves = gameState->select_piece(from_i, from_j);
-                if (possible_moves[i][j] == true) {
-                    GameController::movePiece(from_i, from_j, i, j);
-                    //deselect piece
-                    delete[] MainGamePanel::selected;
-                    MainGamePanel::selected = nullptr;
-                } else {
-                    GameController::showError("Error", "Not a valid move!");
-                }
-            } else {
-                //check if selected destination is a possible move
-                possible_moves = gameState->select_piece(7 - from_i, 7 - from_j);
-                if (possible_moves[7 - i][7 - j] == true) {
-                    GameController::movePiece(7 - from_i, 7 - from_j, 7 - i, 7 - j);
-                    //deselect piece
-                    delete[] MainGamePanel::selected;
-                    MainGamePanel::selected = nullptr;
-                } else {
-                    GameController::showError("Error", "Not a valid move!");
-                }
-            }
-        }
-        // if it's not our turn we display an error message
-    } else {
-        GameController::showError("Error", "It's not your turn!");
-    }
-}
-
-
-void OnPaint(wxPaintEvent& event){
-
-
-}
-
-
-void MainGamePanel::color_board(){
-
-    for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j) {
-            panels[i * 8 + j] = new MyPanel(this);
-            //color panels
-            if ((i + j) % 2 == 0) {
-                panels[i * 8 + j]->SetBackgroundColour(pink);
-            } else {
-                panels[i * 8 + j]->SetBackgroundColour(yellow);
-            }
         }
     }
-    this->Refresh();
-}
-
-
-
-void MainGamePanel::deselect_moves(){
-    for (int i = 7; i >= 0; --i){
-        for (int j = 0; j < 8; ++j) {
-            //color panels
-            if ((i + j) % 2 == 0) {
-                panels[i * 8 + j]->SetBackgroundColour(pink);
-            } else {
-                panels[i * 8 + j]->SetBackgroundColour(yellow);
-            }
-        }
-    }
-    this->Refresh();
 }
 
 
 void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves, player* me) {
+    /*
+     * displays possible moves by coloring the panels of possible moves differently
+     */
 
     if(me->get_color() == white){
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
@@ -387,6 +385,25 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
                         panels[(7-k)*8+7-l]->SetOwnBackgroundColour(high_yellow);
                     }
                 }
+            }
+        }
+    }
+    this->Refresh();
+}
+
+
+void MainGamePanel::deselect_moves(){
+    /*
+     * paints the chess board in original coloring and therefor can be used to not show the possible moves anymore
+     */
+
+    for (int i = 7; i >= 0; --i){
+        for (int j = 0; j < 8; ++j) {
+            //color panels
+            if ((i + j) % 2 == 0) {
+                panels[i * 8 + j]->SetBackgroundColour(pink);
+            } else {
+                panels[i * 8 + j]->SetBackgroundColour(yellow);
             }
         }
     }
