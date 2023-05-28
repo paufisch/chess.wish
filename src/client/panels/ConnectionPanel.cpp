@@ -11,7 +11,8 @@ ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
 
     auto* verticalLayout = new wxBoxSizer(wxVERTICAL);
 
-    auto* logo = new ImagePanel(this, "../assets/chess_logo.png", wxBITMAP_TYPE_ANY, wxDefaultPosition, wxSize(200, 250));
+    auto* logo = new ImagePanel(this, "../assets/chess_logo.png", wxBITMAP_TYPE_ANY,
+                                wxDefaultPosition, wxSize(200, 250));
     verticalLayout->Add(logo, 0, wxALIGN_CENTER | wxTOP | wxLEFT | wxRIGHT, 10);
 
     this->_serverAddressField = new InputField(
@@ -42,7 +43,8 @@ ConnectionPanel::ConnectionPanel(wxWindow* parent) : wxPanel(parent, wxID_ANY) {
     );
     verticalLayout->Add(this->_playerNameField, 0, wxTOP | wxLEFT | wxRIGHT, 10);
 
-    auto* connectButton = new wxButton(this, wxID_ANY, "Connect", wxDefaultPosition, wxSize(100, 40));
+    auto* connectButton = new wxButton(this, wxID_ANY, "Connect", wxDefaultPosition,
+                                       wxSize(100, 40));
     connectButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
         GameController::connectToServer();
     });
