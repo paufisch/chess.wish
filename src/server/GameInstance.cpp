@@ -86,11 +86,13 @@ bool GameInstance::try_remove_player(Player *player, std::string &err) {
     modification_lock.lock();
     if (_game_state->remove_player(player, err)) {
         player->set_game_id("");
-        _game_state->set_is_finished(true);
-        _game_state->set_loser(player);
-        // notify the clients
-        FullStateResponse response = FullStateResponse(this->get_id(), *_game_state);
-        ServerNetworkManager::broadcast_message(response, _game_state->get_players(), player);
+        if (!_game_state->is_finished()) {
+            _game_state->set_is_finished(true);
+            _game_state->set_loser(player);
+            // notify the clients
+            FullStateResponse response = FullStateResponse(this->get_id(), *_game_state);
+            ServerNetworkManager::broadcast_message(response, _game_state->get_players(), player);
+        }
         modification_lock.unlock();
         delete player;
         return true;
