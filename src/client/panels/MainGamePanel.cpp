@@ -7,7 +7,8 @@ MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDef
     selected = nullptr;
     weiss = wxColor(255, 255, 255);
     green = wxColor(175, 245, 190);
-    orange = wxColor(241, 179, 133);
+    orange = wxColor(255, 180, 100);
+    light_orange = wxColor(255,195,133);
 
     //black pieces
     b_pawn = "../assets/black-pawn.png";
@@ -89,6 +90,8 @@ void MainGamePanel::buildThisPlayer(game_state* gameState, player* me, player* o
 
         //add the "resign" button
         auto *resignButton = new wxButton(this, wxID_ANY, "Resign", wxDefaultPosition, wxSize(200, 18));
+        resignButton->SetForegroundColour(wxColor(0,0,0));
+
         resignButton->Bind(wxEVT_BUTTON, [](wxCommandEvent& event) {
             GameController::resign();
         });
@@ -207,7 +210,6 @@ void MainGamePanel::OnPanelClick(int i, int j, game_state *gameState, player *me
 
         //if we click the selected piece again we deselect it
         } else if (i == MainGamePanel::selected[0] && j == MainGamePanel::selected[1]) {
-            std::cout << "deselected piece in position " << i << " " << j << std::endl;
             delete[] MainGamePanel::selected;
             MainGamePanel::selected = nullptr;
             //remove the highlighted valid moves
@@ -335,7 +337,11 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    panels[k*8+l]->SetOwnBackgroundColour(orange);
+                    if ((k + l) % 2 == 0) {
+                        panels[k * 8 + l]->SetBackgroundColour(orange);
+                    } else {
+                        panels[k * 8 + l]->SetBackgroundColour(light_orange);
+                    }
                 }
             }
         }
@@ -343,7 +349,11 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    panels[(7-k)*8+7-l]->SetOwnBackgroundColour(orange);
+                    if ((7-k + 7-l) % 2 == 0) {
+                        panels[(7-k)*8+7-l]->SetBackgroundColour(orange);
+                    } else {
+                        panels[(7-k)*8+7-l]->SetBackgroundColour(light_orange);
+                    }
                 }
             }
         }
@@ -356,14 +366,12 @@ void MainGamePanel::deselect_moves(){
     /*
      * paints the chess board in original coloring and therefor can be used to not show the possible moves anymore
      */
-
     for (int i = 7; i >= 0; --i){
         for (int j = 0; j < 8; ++j) {
-            //color panels
             if ((i + j) % 2 == 0) {
                 panels[i * 8 + j]->SetBackgroundColour(green);
             } else {
-                panels[i * 8 + j]->SetBackgroundColour(white);
+                panels[i * 8 + j]->SetBackgroundColour(weiss);
             }
         }
     }

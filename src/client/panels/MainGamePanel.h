@@ -31,6 +31,7 @@ private:
     wxColor green;
     wxColor weiss;
     wxColor orange;
+    wxColor light_orange;
 
     //paths to chess pieces
     wxString b_pawn;
