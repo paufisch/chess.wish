@@ -1,13 +1,4 @@
-//
-// Created by Manuel on 29.01.2021.
-//
-
 #include "start_game_request.h"
-
-#ifdef CHESS_SERVER
-#include "../../../server/game_instance_manager.h"
-#include "../../../server/game_instance.h"
-#endif
 
 // Public constructor
 start_game_request::start_game_request(std::string game_id, std::string player_id)

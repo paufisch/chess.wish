@@ -1,16 +1,4 @@
-//
-// Created by Manuel on 15.02.2021.
-//
-
 #include "request_response.h"
-#include "../../serialization/json_utils.h"
-#include "../../exceptions/ChessException.h"
-#include "../../game_state/game_state.h"
-
-#ifdef CHESS_CLIENT
-#include "../../../client/GameController.h"
-#endif
-
 
 request_response::request_response(server_response::base_class_properties props, std::string req_id, bool success, rapidjson::Value* state_json, std::string &err) :
     server_response(props),
@@ -27,7 +15,6 @@ request_response::request_response(std::string game_id, std::string req_id, bool
     _success(success),
     _err(err)
 { }
-
 
 request_response::~request_response() {
     if (_state_json != nullptr) {
@@ -52,7 +39,6 @@ void request_response::write_into_json(rapidjson::Value &json,
         json.AddMember("state_json", *_state_json, allocator);
     }
 }
-
 
 request_response *request_response::from_json(const rapidjson::Value& json) {
     if (json.HasMember("err") && json.HasMember("success")) {

@@ -1,7 +1,3 @@
-//
-// Created by jann on 5/3/23.
-//
-
 #include "move_piece_request.h"
 
 // Public constructor

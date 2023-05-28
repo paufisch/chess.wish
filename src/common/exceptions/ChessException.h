@@ -1,7 +1,3 @@
-//
-// Created by Manuel on 09.03.2021.
-//
-
 #ifndef CHESS_CHESSEXCEPTION_H
 #define CHESS_CHESSEXCEPTION_H
 

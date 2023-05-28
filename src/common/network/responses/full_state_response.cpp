@@ -1,15 +1,4 @@
-//
-// Created by Manuel on 15.02.2021.
-//
-
 #include "full_state_response.h"
-
-#include "../../exceptions/ChessException.h"
-#include "../../serialization/json_utils.h"
-
-#ifdef CHESS_CLIENT
-#include "../../../client/GameController.h"
-#endif
 
 full_state_response::full_state_response(server_response::base_class_properties props, rapidjson::Value* state_json) :
         server_response(props),
@@ -21,7 +10,6 @@ full_state_response::full_state_response(std::string game_id, const game_state& 
 {
     this->_state_json = state.to_json();
 }
-
 
 void full_state_response::write_into_json(rapidjson::Value &json,
                                        rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {

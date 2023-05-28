@@ -1,21 +1,24 @@
-//
-// Created by Manuel on 29.01.2021.
-//
-
 #ifndef CHESS_JOIN_GAME_REQUEST_H
 #define CHESS_JOIN_GAME_REQUEST_H
-
 
 #include <string>
 #include "client_request.h"
 #include "../../../../rapidjson/include/rapidjson/document.h"
 
+#ifdef CHESS_SERVER
+#include <string>
+#include "../../../server/game_instance_manager.h"
+#include "../../../server/player_manager.h"
+#include "../../../server/game_instance.h"
+#endif
+
 class join_game_request : public client_request{
 
 private:
-    std::string _player_name;
 
+    std::string _player_name;
     static std::string undefined_game_id;
+
     /*
      * Private constructor for deserialization
      */
@@ -24,15 +27,11 @@ private:
 public:
 
     [[nodiscard]] std::string get_player_name() const {return this->_player_name;}
+
     /*
      * Constructor to join any game
      */
     join_game_request(std::string player_id, std::string name);
-
-    /*
-     * Constructor to join a specific game
-     */
-    join_game_request(std::string game_id, std::string player_id, std::string name);
 
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
     static join_game_request* from_json(const rapidjson::Value& json);

@@ -1,7 +1,3 @@
-//
-// Created by Manuel on 15.02.2021.
-//
-
 #include "server_response.h"
 #include "request_response.h"
 #include "full_state_response.h"
@@ -32,9 +28,7 @@ std::string server_response::get_game_id() const {
     return this->_game_id;
 }
 
-
-server_response::base_class_properties
-server_response::create_base_class_properties(ResponseType type, const std::string &game_id) {
+server_response::base_class_properties server_response::create_base_class_properties(ResponseType type, const std::string &game_id) {
     server_response::base_class_properties params;
     params.type = type;
     params.game_id = game_id;
@@ -54,7 +48,6 @@ server_response::base_class_properties server_response::extract_base_class_prope
         throw ChessException("Server Response did not contain game_id");
     }
 }
-
 
 server_response *server_response::from_json(const rapidjson::Value& json) {
 
@@ -81,6 +74,3 @@ void server_response::write_into_json(rapidjson::Value &json,
     rapidjson::Value game_id_val(_game_id.c_str(), allocator);
     json.AddMember("game_id", game_id_val, allocator);
 }
-
-
-

@@ -1,26 +1,10 @@
-//
-// Created by Manuel on 29.01.2021.
-//
-
 #include "join_game_request.h"
-
-#ifdef CHESS_SERVER
-#include <string>
-#include "../../../server/game_instance_manager.h"
-#include "../../../server/player_manager.h"
-#include "../../../server/game_instance.h"
-#endif
 
 std::string join_game_request::undefined_game_id {""};
 
 // Public constructor
 join_game_request::join_game_request(std::string player_id, std::string name) :
         client_request( client_request::create_base_class_properties(RequestType::join_game, uuid_generator::generate_uuid_v4(), player_id, join_game_request::undefined_game_id) ),
-        _player_name(name)
-{ }
-
-join_game_request::join_game_request(std::string game_id, std::string player_id, std::string name) :
-        client_request( client_request::create_base_class_properties(RequestType::join_game, uuid_generator::generate_uuid_v4(), player_id, game_id) ),
         _player_name(name)
 { }
 
@@ -42,4 +26,3 @@ join_game_request* join_game_request::from_json(const rapidjson::Value& json) {
         throw ChessException("Could not parse join_game_request from json. player_name is missing.");
     }
 }
-

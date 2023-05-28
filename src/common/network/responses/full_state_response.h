@@ -1,12 +1,14 @@
-//
-// Created by Manuel on 15.02.2021.
-//
-
 #ifndef CHESS_FULL_STATE_RESPONSE_H
 #define CHESS_FULL_STATE_RESPONSE_H
 
 #include "server_response.h"
 #include "../../game_state/game_state.h"
+
+#include "../../exceptions/ChessException.h"
+
+#ifdef CHESS_CLIENT
+#include "../../../client/GameController.h"
+#endif
 
 class full_state_response : public server_response {
 private:

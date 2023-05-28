@@ -1,13 +1,16 @@
-//
-// Created by Manuel on 15.02.2021.
-//
-
 #ifndef CHESS_REQUEST_RESPONSE_H
 #define CHESS_REQUEST_RESPONSE_H
 
 #include <string>
 #include "server_response.h"
 
+#include "../../serialization/json_utils.h"
+#include "../../exceptions/ChessException.h"
+#include "../../game_state/game_state.h"
+
+#ifdef CHESS_CLIENT
+#include "../../../client/GameController.h"
+#endif
 
 class request_response : public server_response {
 private:

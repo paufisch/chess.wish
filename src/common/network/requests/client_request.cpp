@@ -17,6 +17,7 @@ const std::unordered_map<std::string, RequestType> client_request::_string_to_re
         {"move_piece", RequestType::move_piece},
         {"resign", RequestType::resign}
 };
+
 // for serialization
 const std::unordered_map<RequestType, std::string> client_request::_request_type_to_string = {
         { RequestType::join_game, "join_game" },
@@ -32,7 +33,6 @@ client_request::client_request(client_request::base_class_properties props) :
         _player_id(props._player_id),
         _game_id(props._game_id)
 { }
-
 
 // used by subclasses to retrieve information from the json stored by this superclass
 client_request::base_class_properties client_request::extract_base_class_properties(const rapidjson::Value& json) {
@@ -66,7 +66,6 @@ client_request::base_class_properties client_request::create_base_class_properti
     res._type = type;
     return res;
 }
-
 
 void client_request::write_into_json(rapidjson::Value &json,
                                      rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
@@ -107,13 +106,6 @@ client_request* client_request::from_json(const rapidjson::Value &json) {
     throw ChessException("Could not determine type of ClientRequest. JSON was:\n" + json_utils::to_string(&json));
 }
 
-
 std::string client_request::to_string() const {
     return "client_request of type " + client_request::_request_type_to_string.at(_type) + " for playerId " + _player_id + " and gameId " + _game_id;
 }
-
-
-
-
-
-
