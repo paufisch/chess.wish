@@ -1,6 +1,3 @@
-//
-// Created by Manuel on 12.02.2021.
-//
 // The server_network_manager handles all incoming messages and offers functionality to broadcast messages
 // to all connected players of a game.
 
@@ -10,8 +7,6 @@
 
 // include server address configurations
 #include "../common/network/default.conf"
-#include "../common/network/responses/request_response.h"
-
 
 server_network_manager::server_network_manager() {
     if (_instance == nullptr) {
@@ -147,9 +142,11 @@ void server_network_manager::handle_incoming_message(const std::string& msg, con
         } else {
             _rw_lock.unlock_shared();
         }
+
 #ifdef PRINT_NETWORK_MESSAGES
         std::cout << "Received valid request : " << msg << std::endl;
 #endif
+
         // execute client request
         server_response* res = request_handler::handle_request(req);
         delete req;
