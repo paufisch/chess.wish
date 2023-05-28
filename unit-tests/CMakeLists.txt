@@ -5,6 +5,7 @@ set(TEST_SOURCE_FILES
         move_test_2.cpp
         move_test_3.cpp
         move_test_4.cpp
+        move_test_5.cpp
         piece_test_1.cpp
         piece_test_2.cpp
         piece_test_3.cpp
