@@ -1,8 +1,8 @@
 #include "GameWindow.h"
 
 
-
-GameWindow::GameWindow(const wxString& title, const wxPoint& pos, const wxSize& size) : wxFrame(nullptr, wxID_ANY, title, pos, size)
+GameWindow::GameWindow(const wxString& title, const wxPoint& pos, const wxSize& size)
+: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
     // Set up layout that will contain and center all content
 
@@ -17,7 +17,8 @@ GameWindow::GameWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 
     // Set background
     wxColor lightBlue = wxColor(213, 231, 239);
-    this->SetBackgroundColour(lightBlue);
+    wxColor grey= wxColor(226,226,226);
+    this->SetBackgroundColour(grey);
 
     // Set the minimum size of the window. The user won't be able to resize the window to a size smaller than this
     this->SetMinSize(wxSize(500, 500));

@@ -5,10 +5,9 @@
 
 MainGamePanel::MainGamePanel(wxWindow* parent) : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxSize(960, 680)) {
     selected = nullptr;
-    yellow = wxColor(175, 245, 190);
-    pink = wxColor(245, 175, 230);
-    high_yellow = wxColor(77, 245, 113);
-    high_pink = wxColor(245, 52, 204);
+    weiss = wxColor(255, 255, 255);
+    green = wxColor(175, 245, 190);
+    orange = wxColor(241, 179, 133);
 
     //black pieces
     b_pawn = "../assets/black-pawn.png";
@@ -262,9 +261,9 @@ void MainGamePanel::color_board(){
         for (int j = 0; j < 8; ++j) {
             panels[i * 8 + j] = new MyPanel(this);
             if ((i + j) % 2 == 0) {
-                panels[i * 8 + j]->SetBackgroundColour(pink);
+                panels[i * 8 + j]->SetBackgroundColour(green);
             } else {
-                panels[i * 8 + j]->SetBackgroundColour(yellow);
+                panels[i * 8 + j]->SetBackgroundColour(weiss);
             }
         }
     }
@@ -336,11 +335,7 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    if ((k + l) % 2 == 0) {
-                        panels[k*8+l]->SetOwnBackgroundColour(high_pink);
-                    } else {
-                        panels[k*8+l]->SetOwnBackgroundColour(high_yellow);
-                    }
+                    panels[k*8+l]->SetOwnBackgroundColour(orange);
                 }
             }
         }
@@ -348,11 +343,7 @@ void MainGamePanel::display_moves(std::vector<std::vector<bool>> possible_moves,
         for (int k = possible_moves.size() - 1; k >= 0; --k) {
             for (int l = 0; l < possible_moves.at(k).size(); ++l) {
                 if(possible_moves.at(k).at(l) == true){
-                    if ((k + l) % 2 == 0) {
-                        panels[(7-k)*8+7-l]->SetOwnBackgroundColour(high_pink);
-                    } else {
-                        panels[(7-k)*8+7-l]->SetOwnBackgroundColour(high_yellow);
-                    }
+                    panels[(7-k)*8+7-l]->SetOwnBackgroundColour(orange);
                 }
             }
         }
@@ -370,9 +361,9 @@ void MainGamePanel::deselect_moves(){
         for (int j = 0; j < 8; ++j) {
             //color panels
             if ((i + j) % 2 == 0) {
-                panels[i * 8 + j]->SetBackgroundColour(pink);
+                panels[i * 8 + j]->SetBackgroundColour(green);
             } else {
-                panels[i * 8 + j]->SetBackgroundColour(yellow);
+                panels[i * 8 + j]->SetBackgroundColour(white);
             }
         }
     }

@@ -28,10 +28,9 @@ private:
     wxStaticText* buildStaticText(const std::string& content, wxPoint position, wxSize size, long textAlignment, bool bold = false);
 
     //colors
-    wxColor yellow;
-    wxColor pink;
-    wxColor high_yellow;
-    wxColor high_pink;
+    wxColor green;
+    wxColor weiss;
+    wxColor orange;
 
     //paths to chess pieces
     wxString b_pawn;
