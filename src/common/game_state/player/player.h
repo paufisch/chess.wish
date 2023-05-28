@@ -1,10 +1,5 @@
-//
-// Created by Manuel on 25.01.2021.
-//
-
 #ifndef CHESS_PLAYER_H
 #define CHESS_PLAYER_H
-
 
 #include <string>
 #include "../color.h"
@@ -22,17 +17,12 @@ private:
     std::string _game_id;
 #endif
 
-    /*
-     * Deserialization constructor
-     */
-
     player(std::string id, serializable_value<std::string>* name, Color color);
 
     player(std::string id, serializable_value<std::string>* name, std::string color);
 
     static const std::unordered_map<std::string, Color> _string_to_color;
     static const std::unordered_map<Color, std::string> _color_to_string;
-
 
 public:
 // constructors
@@ -52,13 +42,7 @@ public:
     bool get_color() const noexcept;
     void set_color(Color color);
 
-#ifdef CHESS_SERVER
-    // state update functions
-    //bool fold(std::string& err);
 
-    void wrap_up_round(std::string& err);
-    void setup_round(std::string& err);
-#endif
 
 
     // serialization

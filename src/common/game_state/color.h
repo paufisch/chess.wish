@@ -1,10 +1,7 @@
-//
-// Created by jann on 5/11/23.
-//
-
 #ifndef CHESS_COLOR_H
 #define CHESS_COLOR_H
 
+// enum used mostly by piece and player classes
 enum Color {
     white,
     black

@@ -1,12 +1,8 @@
-//
-// Created by marcel on 04.05.23.
-//
-
 #ifndef PIECE_H
 #define PIECE_H
 
 #include <string>
-#include "vector"
+#include <vector>
 #include <unordered_map>
 #include "../../serialization/unique_serializable.h"
 #include "../../serialization/serializable_value.h"
@@ -14,10 +10,6 @@
 #include "../../serialization/json_utils.h"
 #include "../color.h"
 #include "../board.h"
-
-
-
-
 
 enum PieceType {
     rook,
@@ -69,11 +61,11 @@ public:
     [[nodiscard]] Color get_color() const { return this->_color; }
     [[nodiscard]] board* get_board() const { return this->_board; }
 
-
     // serializable interface
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
     static Piece* from_json(const rapidjson::Value& json, board* board);
 
+    // helper function for knight_moves
     void position(std::vector<std::vector<bool>> &possible_moves, int init_row, int init_col, int row_offset, int col_offset);
 
     // checks for legal moves

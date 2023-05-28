@@ -1,7 +1,3 @@
-//
-// Created by Fabian 18.05.2023
-//
-
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -14,38 +10,34 @@
 #include "../serialization/unique_serializable.h"
 #include "piece/piece.h"
 
-
-
-
 class board {
 private:
 
     std::vector<std::vector<class Piece*>> _board_layout;
 
-    // from_diff constructor
-    //board(std::string id);
-
     // deserialization constructor
     board(std::vector<std::vector<class Piece*>>& board_layout);
 
 public:
+
+    // helper functions for serialization and deserialization
     static std::vector<std::vector<Piece*>> vector_to_board(std::vector<Piece*> vector) ;
-
     std::vector<Piece*> board_to_vector(std::vector<std::vector<Piece*>> board) const;
-
 
     board();
     ~board();
 
-// accessors
+    // accessor
     Piece* get_piece(int i, int j);
 
+    // setters
     void set_piece(int i, int j, Piece* piece);
     void set_board_layout(std::vector<std::vector<Piece*>> board);
 
+    // reset board
     void clear_board();
 
-// fill_board (0,0) = a1, (8,0) = a8
+    // fill_board (0,0) = a1, (8,0) = a8
     void fill_white_king();
     void fill_black_king();
 
@@ -64,7 +56,7 @@ public:
     void fill_white_bishops();
     void fill_black_bishops();
 
-// serializable interface
+    // serializable interface
     static board* from_json(const rapidjson::Value& json);
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const;
 

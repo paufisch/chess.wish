@@ -1,7 +1,3 @@
-//
-// Created by Fabian 18.05.2023
-//
-
 #ifndef CHESS_GAME_STATE_H
 #define CHESS_GAME_STATE_H
 
@@ -13,6 +9,7 @@
 #include "../serialization/serializable_value.h"
 #include "../serialization/unique_serializable.h"
 #include "board.h"
+
 
 class game_state : public unique_serializable {
 private:
@@ -54,24 +51,25 @@ public:
     game_state();
     ~game_state();
 
-// accessors
+    // accessors
     bool is_full() const;
     bool is_started() const;
     bool is_finished() const;
     bool is_resigned() const;
-    bool is_player_in_game(player* player) const;
     bool is_allowed_to_play_now(player* player) const;
     std::vector<player*>& get_players();
     int get_round_number() const;
-
-    player* get_current_player() const;
-    std::vector<std::vector<bool>> select_piece(int i, int j);
-    bool move_piece(int i_from, int j_from, int i_to, int j_to);
-    player* resign(player* loser);
     board* get_board();
-    void next_turn();
+    player* get_current_player() const;
     player* get_loser();
     int get_max_number_rounds();
+
+    std::vector<std::vector<bool>> select_piece(int i, int j);
+
+    // state update functions
+    bool move_piece(int i_from, int j_from, int i_to, int j_to);
+    player* resign(player* loser);
+    void next_turn();
     void set_is_finished(bool finished);
     void set_loser(player* loser);
 
@@ -87,10 +85,9 @@ public:
 
 #endif
 
-// serializable interface
+    // serializable interface
     static game_state* from_json(const rapidjson::Value& json);
     virtual void write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const override;
-
 };
 
 

@@ -1,7 +1,3 @@
-//
-// Created by Manuel on 25.01.2021.
-//
-
 #include "player.h"
 
 #include "../../exceptions/ChessException.h"
@@ -23,7 +19,6 @@ player::player(std::string name) : unique_serializable() {
     } else {
         this->_color = black;
     }
-
 }
 
 player::player(std::string name, Color color) : unique_serializable() {
@@ -36,9 +31,6 @@ player::player(std::string id, serializable_value<std::string>* name, Color colo
         _player_name(name),
         _color(color)
 { }
-
-
-
 
 player::player(std::string id, serializable_value<std::string>* name, std::string color) :
         unique_serializable(id),
@@ -83,28 +75,6 @@ bool player::get_color() const noexcept {
 void player::set_color(Color color) {
     _color = color;
 }
-
-
-#ifdef CHESS_SERVER
-void player::setup_round(std::string& err) {
-    //_color = ?
-}
-
-void player::wrap_up_round(std::string &err) {
-    // ?????
-}
-
-//bool player::fold(std::string &err) {
-//    if (has_folded()) {
-//        err = "This player has already folded.";
-//        return false;
-//    }
-//    _has_folded->set_value(true);
-//   return true;
-//}
-
-#endif
-
 
 void player::write_into_json(rapidjson::Value& json, rapidjson::Document::AllocatorType& allocator) const {
     unique_serializable::write_into_json(json, allocator);

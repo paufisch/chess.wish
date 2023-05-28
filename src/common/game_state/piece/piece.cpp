@@ -1,16 +1,12 @@
-//
-// Created by marcel on 04.05.23.
-//
-
 #include "piece.h"
 #include "../../exceptions/ChessException.h"
+
 //#include "pieces/queen.h"
 //#include "pieces/king.h"
 //#include "pieces/pawn.h"
 //#include "pieces/knight.h"
 //#include "pieces/bishop.h"
 //#include "pieces/rook.h"
-
 
 // for deserialization
 const std::unordered_map<std::string, PieceType> Piece::_string_to_piece_type = {
@@ -23,12 +19,10 @@ const std::unordered_map<std::string, PieceType> Piece::_string_to_piece_type = 
         {"empty", PieceType::empty}
 };
 
-
 const std::unordered_map<std::string, Color> Piece::_string_to_color = {
         {"white", Color::white},
         {"black", Color::black},
 };
-
 
 // for serialization
 const std::unordered_map<PieceType, std::string> Piece::_piece_type_to_string = {
@@ -41,13 +35,11 @@ const std::unordered_map<PieceType, std::string> Piece::_piece_type_to_string = 
         { PieceType::empty, "empty"}
 };
 
-
 const std::unordered_map<Color, std::string> Piece::_color_to_string = {
         { Color::white, "white" },
         { Color::black, "black"},
 
 };
-
 
 // used by subclasses to retrieve information from the json stored by this superclass
 Piece::base_class_properties Piece::extract_base_class_properties(const rapidjson::Value& json) {
@@ -67,7 +59,6 @@ Piece::base_class_properties Piece::extract_base_class_properties(const rapidjso
     }
 }
 
-
 Piece::base_class_properties Piece::create_base_class_properties(
         PieceType type,
         std::string piece_ID,
@@ -80,14 +71,12 @@ Piece::base_class_properties Piece::create_base_class_properties(
     return res;
 }
 
-
 Piece::Piece(std::string id) : unique_serializable(id) { }
 
 
 Piece::Piece(std::string piece_ID, Color color, PieceType type, board* board)
         : _piece_ID(piece_ID), _color(color), _type(type), _board(board)
 { }
-
 
 // protected constructor. only used by subclasses
 Piece::Piece(Piece::base_class_properties props) :
@@ -110,7 +99,6 @@ void Piece::write_into_json(rapidjson::Value &json, rapidjson::MemoryPoolAllocat
     json.AddMember("color", color_val, allocator);
 }
 
-
 Piece* Piece::from_json(const rapidjson::Value& json, board* board) {
     if (json.HasMember("type") && json["type"].IsString()) {
         const std::string type = json["type"].GetString();
@@ -122,33 +110,6 @@ Piece* Piece::from_json(const rapidjson::Value& json, board* board) {
         std::string piece_ID = json["piece_ID"].GetString();
 
         return new Piece(piece_ID, color, piece_type, board);
-
-        /*
-        if (piece_type == PieceType::rook) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::knight) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::bishop) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::king) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::queen) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::pawn) {
-            return new Piece(piece_ID, color, piece_type);
-        }
-        else if (piece_type == PieceType::empty) {
-            return new Piece(piece_ID, color, piece_type);
-
-        } else {
-            throw ChessException("Encountered unknown Piece type " + type);
-        }
-         */
     }
     throw ChessException("Could not determine type of Piece. JSON was:\n" + json_utils::to_string(&json));
 }
@@ -158,7 +119,6 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
     //Decide if the color is white or black because of the direction the pawns can go ("up" or "down")
     if (this->_color == white) {
         //Checking if a piece is in front of the pawn
-        //We can go left or right but just when a piece from the other color is there
         if (init_row < 7 && _board->get_piece(init_row + 1, init_col) == nullptr) {
             possible_moves[init_row + 1][init_col] = true;
             if (init_row == 1) {
@@ -167,6 +127,8 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
                 }
             }
         }
+
+        //We can move diagonally left or right but just when a piece of the other color is there
         //If a piece is on the left
         if (init_col > 0 && _board->get_piece(init_row + 1, init_col - 1) != nullptr) {
             //Need the piece to find out its color
@@ -185,7 +147,6 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
         }
     } else if (this->_color == black) {
         //Checking if a piece is in front of the pawn
-        //We can go left or right but just when a piece from the other color is there
         if (init_row > 0 && _board->get_piece(init_row - 1, init_col) == nullptr) {
             possible_moves[init_row - 1][init_col] = true;
             if (init_row == 6) {
@@ -194,6 +155,8 @@ std::vector<std::vector<bool>> Piece::pawn_moves(int init_row, int init_col, std
                 }
             }
         }
+
+        //We can move diagonally left or right but just when a piece of the other color is there
         //If a piece is on the left
         if (_board->get_piece(init_row - 1, init_col - 1) != nullptr && init_col > 0) {
             //Need the piece to find out its color
@@ -268,6 +231,7 @@ std::vector<std::vector<bool>> Piece::rook_moves(int init_row, int init_col, std
     return possible_moves;
 }
 
+// helper function for knight_moves
 void Piece::position(std::vector<std::vector<bool>>& possible_moves, int init_row, int init_col, int row_offset, int col_offset) {
     if (_board->get_piece(init_row + row_offset, init_col + col_offset) != nullptr) {
         Piece* piece = _board->get_piece(init_row + row_offset, init_col + col_offset);
@@ -283,36 +247,30 @@ std::vector<std::vector<bool>> Piece::knight_moves(int init_row, int init_col, s
     if (init_row < 6 && init_col < 7) {
         position(possible_moves, init_row, init_col, 2, 1);
     }
-
     if (init_row < 6 && init_col > 0) {
         position(possible_moves, init_row, init_col, 2, -1);
     }
-
     if (init_row > 1 && init_col < 7) {
         position(possible_moves, init_row, init_col, -2, 1);
     }
-
     if (init_row > 1 && init_col > 0) {
         position(possible_moves, init_row, init_col, -2, -1);
     }
-
     if (init_row < 7 && init_col < 6) {
         position(possible_moves, init_row, init_col, 1, 2);
     }
-
     if (init_row > 0 && init_col < 6) {
         position(possible_moves, init_row, init_col, -1, 2);
     }
-
     if (init_row < 7 && init_col > 1) {
         position(possible_moves, init_row, init_col, 1, -2);
     }
-
     if (init_row > 0 && init_col > 1) {
         position(possible_moves, init_row, init_col, -1, -2);
     }
     return possible_moves;
 }
+
 std::vector<std::vector<bool>> Piece::bishop_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     for (int i = 1; ((init_row + i < 8) && (init_col + i < 8)); ++i) {
         Piece* piece = _board->get_piece(init_row + i, init_col + i);
@@ -363,6 +321,7 @@ std::vector<std::vector<bool>> Piece::bishop_moves(int init_row, int init_col, s
     }
     return possible_moves;
 }
+
 std::vector<std::vector<bool>> Piece::king_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     for (int row = init_row - 1; row < init_row + 2; ++row) {
         for (int col = init_col - 1; col < init_col + 2; ++col) {
@@ -379,9 +338,11 @@ std::vector<std::vector<bool>> Piece::king_moves(int init_row, int init_col, std
     return possible_moves;
 }
 
+// queen can go anywhere either a rook or a bishop can go
 std::vector<std::vector<bool>> Piece::queen_moves(int init_row, int init_col, std::vector<std::vector<bool>>& possible_moves) {
     possible_moves = rook_moves(init_row, init_col, possible_moves);
-    return bishop_moves(init_row, init_col, possible_moves);
+    possible_moves = bishop_moves(init_row, init_col, possible_moves);
+    return possible_moves;
 }
 
 std::vector<std::vector<bool>> Piece::legal_moves(int init_row, int init_col) {

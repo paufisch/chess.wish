@@ -1,10 +1,4 @@
-//
-// Created by Fabian 18.05.2023
-//
-
 #include "game_state.h"
-#include "piece/piece.h"
-#include "board.h"
 
 #include "../exceptions/ChessException.h"
 #include "../serialization/vector_utils.h"
@@ -57,9 +51,7 @@ game_state::game_state() : unique_serializable() {
     #ifdef CHESS_SERVER
         setup_board();
     #endif
-
 }
-
 
 game_state::~game_state() {
     if (_is_started != nullptr) {
@@ -80,7 +72,6 @@ game_state::~game_state() {
     }
 }
 
-// accessors
 player* game_state::get_current_player() const {
     if(_current_player_idx == nullptr || _players.size() == 0) {
         return nullptr;
@@ -117,11 +108,6 @@ int game_state::get_player_index(player *player) const {
     }
 }
 
-bool game_state::is_player_in_game(player *player) const {
-    return std::find(_players.begin(), _players.end(), player) < _players.end();
-}
-
-//Maybe further restrictions needed !resign !king_taken !round_limit
 bool game_state::is_allowed_to_play_now(player *player) const {
     return (player == get_current_player()) && (0 == (_is_finished->get_value()));
 }
@@ -223,7 +209,6 @@ void game_state::set_loser(player* loser) {
 // state modification functions without diff
 void game_state::setup_board() {
 
-
     _board->fill_white_king();
     _board->fill_black_king();
 
@@ -241,11 +226,8 @@ void game_state::setup_board() {
 
     _board->fill_white_bishops();
     _board->fill_black_bishops();
-
-
 }
 
-//for securitiy reasons here, no new funtionality
 void game_state::update_current_player(std::string& err) {
     next_turn();
 }
@@ -302,7 +284,6 @@ bool game_state::remove_player(player *player_ptr, std::string &err) {
     }
 }
 
-
 bool game_state::add_player(player* player_ptr, std::string& err) {
     if (_is_started->get_value()) {
         err = "Could not join game, because the requested game is already started.";
@@ -327,8 +308,6 @@ bool game_state::add_player(player* player_ptr, std::string& err) {
 
 #endif
 
-
-// Serializable interface
 void game_state::write_into_json(rapidjson::Value &json,
                                  rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator> &allocator) const {
     unique_serializable::write_into_json(json, allocator);
@@ -370,7 +349,6 @@ void game_state::write_into_json(rapidjson::Value &json,
     }
 
 }
-
 
 game_state* game_state::from_json(const rapidjson::Value &json) {
     if (json.HasMember("id")
